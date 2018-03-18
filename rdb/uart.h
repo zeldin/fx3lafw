@@ -31,7 +31,7 @@
 #define FX3_UART_SOCKET                   0xE0000818 /* UART Socket Register */
 #define FX3_UART_RX_BYTE_COUNT            0xE000081C /* UART Receive Byte Count Register */
 #define FX3_UART_TX_BYTE_COUNT            0xE0000820 /* UART Transmit Byte Count Register */
-#define FX3_I2C_ID                        0xE0000BF0 /* Block Identification and Version Number */
+#define FX3_UART_ID                       0xE0000BF0 /* Block Identification and Version Number */
 #define FX3_UART_POWER                    0xE0000BF4 /* Power, Clock, and Reset Control */
 
 #define FX3_UART_CONFIG_ENABLE                           (1UL << 31)
@@ -109,12 +109,12 @@
 #define FX3_UART_SOCKET_EGRESS_SOCKET_BITS               8
 #define FX3_UART_SOCKET_EGRESS_SOCKET_MASK               (0xffUL << 0)
 
-#define FX3_I2C_ID_BLOCK_VERSION_SHIFT                   16
-#define FX3_I2C_ID_BLOCK_VERSION_BITS                    16
-#define FX3_I2C_ID_BLOCK_VERSION_MASK                    (0xffffUL << 16)
-#define FX3_I2C_ID_BLOCK_ID_SHIFT                        0
-#define FX3_I2C_ID_BLOCK_ID_BITS                         16
-#define FX3_I2C_ID_BLOCK_ID_MASK                         (0xffffUL << 0)
+#define FX3_UART_ID_BLOCK_VERSION_SHIFT                  16
+#define FX3_UART_ID_BLOCK_VERSION_BITS                   16
+#define FX3_UART_ID_BLOCK_VERSION_MASK                   (0xffffUL << 16)
+#define FX3_UART_ID_BLOCK_ID_SHIFT                       0
+#define FX3_UART_ID_BLOCK_ID_BITS                        16
+#define FX3_UART_ID_BLOCK_ID_MASK                        (0xffffUL << 0)
 
 #define FX3_UART_POWER_RESETN                            (1UL << 31)
 #define FX3_UART_POWER_ACTIVE                            (1UL << 0)

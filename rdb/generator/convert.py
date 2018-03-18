@@ -35,6 +35,10 @@ class Register:
     pad_size_field=45
     
     def __init__(self, group, name, description, address, fields):
+        # Fix for typo in TRM
+        if group == 'uart' and name == 'I2C_ID':
+            name = 'UART_ID'
+
         self.group = group
         self.name = name
         self.description = description
@@ -50,6 +54,8 @@ class Register:
             for field in self.fields:
                 bits = field[0].split(':')
                 name = field[1].split('[')
+                if len(bits) == 1 and len(name) == 2 and (name[0] == 'EN_GPIO' or name[0] == 'EV_GPIO' or name[0] == 'POL_GPIO'):
+                    name = [name[0]+'_'+name[1].split(']')[0]]
                 pad_size = self.pad_size_field
                 while pad_size <= len(self.name+'_'+name[0]+'_SHIFT'):
                     pad_size = pad_size + 1
