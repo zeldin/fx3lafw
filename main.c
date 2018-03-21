@@ -1,5 +1,6 @@
 
 #include <bsp/gctl.h>
+#include <bsp/gpio.h>
 #include <bsp/uart.h>
 #include <bsp/util.h>
 
@@ -12,6 +13,14 @@ int main(void)
   Fx3UartTxString("\nGood moaning!\n");
   Fx3UartTxFlush();
 
-  for(;;)
-    ;
+  Fx3GpioSetupSimple(54,
+		     FX3_GPIO_SIMPLE_ENABLE |
+		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
+		     FX3_GPIO_SIMPLE_DRIVE_LO_EN);
+  for(;;) {
+    Fx3GpioSetOutputValue(54, 1);
+    Fx3UtilDelayUs(500000);
+    Fx3GpioSetOutputValue(54, 0);
+    Fx3UtilDelayUs(500000);
+  }
 }

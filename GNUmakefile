@@ -11,7 +11,7 @@ LDFLAGS = -static -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(basename $@).ma
 
 VPATH = bsp
 
-OBJS = main.o gctl.o uart.o util.o
+OBJS = main.o gctl.o gpio.o uart.o util.o
 
 all : fx3lafw.img
 
