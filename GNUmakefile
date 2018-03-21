@@ -13,10 +13,13 @@ VPATH = bsp
 
 OBJS = main.o gctl.o uart.o util.o
 
-all : fx3lafw.elf
+all : fx3lafw.img
+
+fx3lafw.img : fx3lafw.elf
+	python3 elf2img.py $< $@
 
 clean :
-	rm -f fx3lafw.elf fx3lafw.map $(OBJS)
+	rm -f fx3lafw.img fx3lafw.elf fx3lafw.map $(OBJS)
 
 fx3lafw.elf : $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
