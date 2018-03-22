@@ -13,6 +13,9 @@ int main(void)
   Fx3UartTxString("\nGood moaning!\n");
   Fx3UartTxFlush();
 
+  Fx3GpioSetupSimple(45,
+		     FX3_GPIO_SIMPLE_ENABLE |
+		     FX3_GPIO_SIMPLE_INPUT_EN);
   Fx3GpioSetupSimple(54,
 		     FX3_GPIO_SIMPLE_ENABLE |
 		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
@@ -20,6 +23,11 @@ int main(void)
   for(;;) {
     Fx3GpioSetOutputValue(54, 1);
     Fx3UtilDelayUs(500000);
+    if (!Fx3GpioGetInputValue(45)) {
+      Fx3UartTxString("BUTTON\n");
+      Fx3UartTxFlush();
+      Fx3GctlHardReset();
+    }
     Fx3GpioSetOutputValue(54, 0);
     Fx3UtilDelayUs(500000);
   }

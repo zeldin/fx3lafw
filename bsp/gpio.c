@@ -42,3 +42,12 @@ void Fx3GpioSetOutputValue(uint8_t num, uint8_t value)
 		  (value & FX3_GPIO_SIMPLE_OUT_VALUE));
   }
 }
+
+uint8_t Fx3GpioGetInputValue(uint8_t num)
+{
+  if (num < 61) {
+    return (Fx3ReadReg32(FX3_GPIO_SIMPLE + (num << 2)) & FX3_GPIO_SIMPLE_IN_VALUE) >> 1;
+  } else {
+    return 0;
+  }
+}

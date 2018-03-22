@@ -27,5 +27,6 @@
 
 extern void Fx3GpioSetupSimple(uint8_t num, uint32_t config);
 extern void Fx3GpioSetOutputValue(uint8_t num, uint8_t value);
+extern uint8_t Fx3GpioGetInputValue(uint8_t num);
 
 #endif /* BSP_GPIO_H_ */
