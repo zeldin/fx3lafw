@@ -24,8 +24,6 @@
 
 #define FX3_UIB_INTR                      0xE0030000 /* USB Interrupt Register */
 #define FX3_UIB_INTR_MASK                 0xE0030004 /* USB Interrupt Mask Register */
-#define FX3_UIB_ID                        0xE0037F00 /* Block Identification and Version Number Register */
-#define FX3_UIB_POWER                     0xE0037F04 /* Power, Clock, and Reset Control Registers */
 #define FX3_PHY_CLK_AND_TEST              0xE0031008 /* USB PHY Clocks and Testability Configuration Register */
 #define FX3_PHY_CONF                      0xE003100C /* USB PHY Programmability and Serial Interface Register */
 #define FX3_PHY_CHIRP                     0xE0031014 /* USB PHY Chirp Control Register */
@@ -60,11 +58,11 @@
 #define FX3_HOST_EP_INTR_MASK             0xE0032008 /* Host End Point Interrupt Mask Register */
 #define FX3_HOST_TOGGLE                   0xE003200C /* Data Toggle for Endpoints Register */
 #define FX3_HOST_SHDL_CS                  0xE0032010 /* Scheduler Memory Pointer Register */
+#define FX3_OHCI_REVISION                 0xE0032010 /* OHCI Host Controller Revision Number Register */
 #define FX3_HOST_SHDL_SLEEP               0xE0032014 /* Scheduler Sleep Register */
 #define FX3_HOST_RESP_BASE                0xE0032018 /* Response Base Address Register */
 #define FX3_HOST_RESP_CS                  0xE003201C /* Scheduler Response Command and Control Register */
 #define FX3_HOST_ACTIVE_EP                0xE0032020 /* Active Endpoint Register */
-#define FX3_OHCI_REVISION                 0xE0032010 /* OHCI Host Controller Revision Number Register */
 #define FX3_OHCI_CONTROL                  0xE0032028 /* Host Controller Operating Mode Control Register */
 #define FX3_OHCI_COMMAND_STATUS           0xE003202C /* Command and Status Register */
 #define FX3_OHCI_INTERRUPT_STATUS         0xE0032030 /* OHCI Host Controller Interrupt Status Register */
@@ -132,6 +130,8 @@
 #define FX3_PROT_EPO_CS2                  0xE0033640 /* SuperSpeed OUT Endpoint Control and Status */
 #define FX3_PROT_EPO_UNMAPPED_STREAM      0xE0033680 /* Unmapped Stream Request */
 #define FX3_PROT_EPO_MAPPED_STREAM        0xE00336C0 /* Mapped Streams Register */
+#define FX3_UIB_ID                        0xE0037F00 /* Block Identification and Version Number Register */
+#define FX3_UIB_POWER                     0xE0037F04 /* Power, Clock, and Reset Control Registers */
 
 #define FX3_UIB_INTR_EPM_URUN_TIMEOUT                    (1UL << 12)
 #define FX3_UIB_INTR_EPM_URUN                            (1UL << 11)
@@ -160,16 +160,6 @@
 #define FX3_UIB_INTR_MASK_EHCI_INT                       (1UL << 2)
 #define FX3_UIB_INTR_MASK_HOST_EP_INT                    (1UL << 1)
 #define FX3_UIB_INTR_MASK_HOST_INT                       (1UL << 0)
-
-#define FX3_UIB_ID_BLOCK_VERSION_SHIFT                   16
-#define FX3_UIB_ID_BLOCK_VERSION_BITS                    16
-#define FX3_UIB_ID_BLOCK_VERSION_MASK                    (0xffffUL << 16)
-#define FX3_UIB_ID_BLOCK_ID_SHIFT                        0
-#define FX3_UIB_ID_BLOCK_ID_BITS                         16
-#define FX3_UIB_ID_BLOCK_ID_MASK                         (0xffffUL << 0)
-
-#define FX3_UIB_POWER_RESETN                             (1UL << 31)
-#define FX3_UIB_POWER_ACTIVE                             (1UL << 0)
 
 #define FX3_PHY_CLK_AND_TEST_ON_DCD                      (1UL << 30)
 #define FX3_PHY_CLK_AND_TEST_SUSPEND_N                   (1UL << 29)
@@ -515,6 +505,10 @@
 #define FX3_HOST_SHDL_CS_BULK_CNTRL_PTR0_BITS            8
 #define FX3_HOST_SHDL_CS_BULK_CNTRL_PTR0_MASK            (0xffUL << 0)
 
+#define FX3_OHCI_REVISION_REV_SHIFT                      0
+#define FX3_OHCI_REVISION_REV_BITS                       8
+#define FX3_OHCI_REVISION_REV_MASK                       (0xffUL << 0)
+
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_SHIFT     1
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_BITS      9
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_MASK      (0x1ffUL << 1)
@@ -538,10 +532,6 @@
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_SHIFT           0
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_BITS            16
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_MASK            (0xffffUL << 0)
-
-#define FX3_OHCI_REVISION_REV_SHIFT                      0
-#define FX3_OHCI_REVISION_REV_BITS                       8
-#define FX3_OHCI_REVISION_REV_MASK                       (0xffUL << 0)
 
 #define FX3_OHCI_CONTROL_HCFS_SHIFT                      6
 #define FX3_OHCI_CONTROL_HCFS_BITS                       2
@@ -1299,5 +1289,15 @@
 #define FX3_PROT_EPO_MAPPED_STREAM_STREAM_ID_SHIFT       0
 #define FX3_PROT_EPO_MAPPED_STREAM_STREAM_ID_BITS        16
 #define FX3_PROT_EPO_MAPPED_STREAM_STREAM_ID_MASK        (0xffffUL << 0)
+
+#define FX3_UIB_ID_BLOCK_VERSION_SHIFT                   16
+#define FX3_UIB_ID_BLOCK_VERSION_BITS                    16
+#define FX3_UIB_ID_BLOCK_VERSION_MASK                    (0xffffUL << 16)
+#define FX3_UIB_ID_BLOCK_ID_SHIFT                        0
+#define FX3_UIB_ID_BLOCK_ID_BITS                         16
+#define FX3_UIB_ID_BLOCK_ID_MASK                         (0xffffUL << 0)
+
+#define FX3_UIB_POWER_RESETN                             (1UL << 31)
+#define FX3_UIB_POWER_ACTIVE                             (1UL << 0)
 
 #endif /* RDB_UIB_H_ */

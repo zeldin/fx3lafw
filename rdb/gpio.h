@@ -22,6 +22,10 @@
 #ifndef RDB_GPIO_H_
 #define RDB_GPIO_H_
 
+#define FX3_PIN_STATUS                    0xE0001000 /* Configuration, mode and status of IO Pin */
+#define FX3_PIN_TIMER                     0xE0001004 /* Timer/counter for pulse and measurement modes */
+#define FX3_PIN_PERIOD                    0xE0001008 /* Period length for revolving counter GPIO_TIMER */
+#define FX3_PIN_THRESHOLD                 0xE000100C /* Threshold or Measurement Register */
 #define FX3_GPIO_SIMPLE                   0xE0001100 /* Simple General Purpose IO Register (one pin) */
 #define FX3_GPIO_INVALUE0                 0xE00013D0 /* GPIO Input Value Vector */
 #define FX3_GPIO_INVALUE1                 0xE00013D4 /* GPIO Input Value Vector */
@@ -30,10 +34,23 @@
 #define FX3_GPIO_INTR                     0xE00013E8 /* GPIO Interrupt Vector for PINs */
 #define FX3_GPIO_ID                       0xE00013F0 /* Block Identification and Version Number */
 #define FX3_GPIO_POWER                    0xE00013F4 /* Power, Clock, and Reset Control */
-#define FX3_PIN_STATUS                    0xE0001000 /* Configuration, mode and status of IO Pin */
-#define FX3_PIN_TIMER                     0xE0001004 /* Timer/counter for pulse and measurement modes */
-#define FX3_PIN_PERIOD                    0xE0001008 /* Period length for revolving counter GPIO_TIMER */
-#define FX3_PIN_THRESHOLD                 0xE000100C /* Threshold or Measurement Register */
+
+#define FX3_PIN_STATUS_ENABLE                            (1UL << 31)
+#define FX3_PIN_STATUS_TIMER_MODE_SHIFT                  28
+#define FX3_PIN_STATUS_TIMER_MODE_BITS                   3
+#define FX3_PIN_STATUS_TIMER_MODE_MASK                   (0x7UL << 28)
+#define FX3_PIN_STATUS_INTR                              (1UL << 27)
+#define FX3_PIN_STATUS_INTRMODE_SHIFT                    24
+#define FX3_PIN_STATUS_INTRMODE_BITS                     3
+#define FX3_PIN_STATUS_INTRMODE_MASK                     (0x7UL << 24)
+#define FX3_PIN_STATUS_MODE_SHIFT                        8
+#define FX3_PIN_STATUS_MODE_BITS                         4
+#define FX3_PIN_STATUS_MODE_MASK                         (0xfUL << 8)
+#define FX3_PIN_STATUS_INPUT_EN                          (1UL << 6)
+#define FX3_PIN_STATUS_DRIVE_HI_EN                       (1UL << 5)
+#define FX3_PIN_STATUS_DRIVE_LO_EN                       (1UL << 4)
+#define FX3_PIN_STATUS_IN_VALUE                          (1UL << 1)
+#define FX3_PIN_STATUS_OUT_VALUE                         (1UL << 0)
 
 #define FX3_GPIO_SIMPLE_ENABLE                           (1UL << 31)
 #define FX3_GPIO_SIMPLE_INTR                             (1UL << 27)
@@ -72,22 +89,5 @@
 
 #define FX3_GPIO_POWER_RESETN                            (1UL << 31)
 #define FX3_GPIO_POWER_ACTIVE                            (1UL << 0)
-
-#define FX3_PIN_STATUS_ENABLE                            (1UL << 31)
-#define FX3_PIN_STATUS_TIMER_MODE_SHIFT                  28
-#define FX3_PIN_STATUS_TIMER_MODE_BITS                   3
-#define FX3_PIN_STATUS_TIMER_MODE_MASK                   (0x7UL << 28)
-#define FX3_PIN_STATUS_INTR                              (1UL << 27)
-#define FX3_PIN_STATUS_INTRMODE_SHIFT                    24
-#define FX3_PIN_STATUS_INTRMODE_BITS                     3
-#define FX3_PIN_STATUS_INTRMODE_MASK                     (0x7UL << 24)
-#define FX3_PIN_STATUS_MODE_SHIFT                        8
-#define FX3_PIN_STATUS_MODE_BITS                         4
-#define FX3_PIN_STATUS_MODE_MASK                         (0xfUL << 8)
-#define FX3_PIN_STATUS_INPUT_EN                          (1UL << 6)
-#define FX3_PIN_STATUS_DRIVE_HI_EN                       (1UL << 5)
-#define FX3_PIN_STATUS_DRIVE_LO_EN                       (1UL << 4)
-#define FX3_PIN_STATUS_IN_VALUE                          (1UL << 1)
-#define FX3_PIN_STATUS_OUT_VALUE                         (1UL << 0)
 
 #endif /* RDB_GPIO_H_ */

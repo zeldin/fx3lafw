@@ -22,6 +22,14 @@
 #ifndef RDB_GCTL_H_
 #define RDB_GCTL_H_
 
+#define FX3_GCTL_CONTROL                  0xE0050000 /* Global control */
+#define FX3_GCTL_WAKEUP_EN                0xE0050004 /* Wakeup Enable Register */
+#define FX3_GCTL_WAKEUP_POLARITY          0xE0050008 /* Wakeup Signal Polarity Register */
+#define FX3_GCTL_WAKEUP_EVENT             0xE005000C /* Wakeup Event Register */
+#define FX3_GCTL_FREEZE                   0xE0050010 /* I/O Freeze Control Register */
+#define FX3_GCTL_WATCHDOG_CS              0xE0050014 /* Watchdog Timers Command and Control Register */
+#define FX3_GCTL_WATCHDOG_TIMER0          0xE0050018 /* Watchdog Timer Value 0 Register */
+#define FX3_GCTL_WATCHDOG_TIMER1          0xE005001C /* Watchdog Timer Value 1 Register */
 #define FX3_GCTL_IOMATRIX                 0xE0051008 /* I/O Matrix Configuration Register */
 #define FX3_GCTL_GPIO_SIMPLE              0xE005100C /* GPIO Override Configuration Register */
 #define FX3_GCTL_GPIO_COMPLEX             0xE0051014 /* GPIO Override Configuration Register */
@@ -42,14 +50,102 @@
 #define FX3_GCTL_UART_CORE_CLK            0xE0052024 /* UART Core Clock Configuration Register */
 #define FX3_GCTL_SPI_CORE_CLK             0xE005202C /* SPI Core Clock Configuration Register */
 #define FX3_GCTL_I2S_CORE_CLK             0xE0052034 /* I2S Core Clock Configuration Register */
-#define FX3_GCTL_WAKEUP_EN                0xE0050004 /* Wakeup Enable Register */
-#define FX3_GCTL_WAKEUP_POLARITY          0xE0050008 /* Wakeup Signal Polarity Register */
-#define FX3_GCTL_WAKEUP_EVENT             0xE005000C /* Wakeup Event Register */
-#define FX3_GCTL_FREEZE                   0xE0050010 /* I/O Freeze Control Register */
-#define FX3_GCTL_WATCHDOG_CS              0xE0050014 /* Watchdog Timers Command and Control Register */
-#define FX3_GCTL_WATCHDOG_TIMER0          0xE0050018 /* Watchdog Timer Value 0 Register */
-#define FX3_GCTL_WATCHDOG_TIMER1          0xE005001C /* Watchdog Timer Value 1 Register */
-#define FX3_GCTL_CONTROL                  0xE0050000 /* Global control */
+
+#define FX3_GCTL_CONTROL_HARD_RESET_N                    (1UL << 31)
+#define FX3_GCTL_CONTROL_CPU_RESET_N                     (1UL << 30)
+#define FX3_GCTL_CONTROL_WARM_BOOT                       (1UL << 29)
+#define FX3_GCTL_CONTROL_BOOTROM_EN                      (1UL << 28)
+#define FX3_GCTL_CONTROL_MAIN_POWER_EN                   (1UL << 26)
+#define FX3_GCTL_CONTROL_MAIN_CLOCK_EN                   (1UL << 25)
+#define FX3_GCTL_CONTROL_FREEZE_IO                       (1UL << 24)
+#define FX3_GCTL_CONTROL_USB_VBAT_EN                     (1UL << 22)
+#define FX3_GCTL_CONTROL_USB_POWER_EN                    (1UL << 21)
+#define FX3_GCTL_CONTROL_ANALOG_SWITCH                   (1UL << 18)
+#define FX3_GCTL_CONTROL_WDT_PROTECT_SHIFT               16
+#define FX3_GCTL_CONTROL_WDT_PROTECT_BITS                2
+#define FX3_GCTL_CONTROL_WDT_PROTECT_MASK                (0x3UL << 16)
+#define FX3_GCTL_CONTROL_NO_SBYWFI                       (1UL << 15)
+#define FX3_GCTL_CONTROL_SYSMEM_BIST_EN                  (1UL << 14)
+#define FX3_GCTL_CONTROL_WAKEUP_CPU_INT                  (1UL << 12)
+#define FX3_GCTL_CONTROL_WAKEUP_AP_INT                   (1UL << 11)
+#define FX3_GCTL_CONTROL_RAM_SLEEP                       (1UL << 10)
+#define FX3_GCTL_CONTROL_DEBUG_MODE                      (1UL << 9)
+#define FX3_GCTL_CONTROL_BOOT_COMPLETE                   (1UL << 8)
+#define FX3_GCTL_CONTROL_WAKEUP_CLK                      (1UL << 4)
+#define FX3_GCTL_CONTROL_WAKEUP_PWR                      (1UL << 3)
+#define FX3_GCTL_CONTROL_WDT_RESET                       (1UL << 2)
+#define FX3_GCTL_CONTROL_SW_RESET                        (1UL << 1)
+#define FX3_GCTL_CONTROL_POR                             (1UL << 0)
+
+#define FX3_GCTL_WAKEUP_EN_EN_WATCHDOG2                  (1UL << 13)
+#define FX3_GCTL_WAKEUP_EN_EN_WATCHDOG1                  (1UL << 12)
+#define FX3_GCTL_WAKEUP_EN_EN_UIB_VBUS                   (1UL << 11)
+#define FX3_GCTL_WAKEUP_EN_EN_UIB_SSRX                   (1UL << 10)
+#define FX3_GCTL_WAKEUP_EN_EN_UIB_OTGID                  (1UL << 9)
+#define FX3_GCTL_WAKEUP_EN_EN_UIB_DM                     (1UL << 8)
+#define FX3_GCTL_WAKEUP_EN_EN_UIB_DP                     (1UL << 7)
+#define FX3_GCTL_WAKEUP_EN_EN_UART_CTS                   (1UL << 6)
+#define FX3_GCTL_WAKEUP_EN_EN_GPIO_44                    (1UL << 5)
+#define FX3_GCTL_WAKEUP_EN_EN_GPIO_47                    (1UL << 4)
+#define FX3_GCTL_WAKEUP_EN_EN_GPIO_34                    (1UL << 3)
+#define FX3_GCTL_WAKEUP_EN_EN_PIB_CLK                    (1UL << 2)
+#define FX3_GCTL_WAKEUP_EN_EN_PIB_CMD                    (1UL << 1)
+#define FX3_GCTL_WAKEUP_EN_EN_PIB_CTRL0                  (1UL << 0)
+
+#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_VBUS            (1UL << 11)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_DM              (1UL << 8)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_DP              (1UL << 7)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_UART_CTS            (1UL << 6)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_44             (1UL << 5)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_47             (1UL << 4)
+#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_34             (1UL << 3)
+
+#define FX3_GCTL_WAKEUP_EVENT_EV_WATCHDOG2               (1UL << 13)
+#define FX3_GCTL_WAKEUP_EVENT_EV_WATCHDOG1               (1UL << 12)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_VBUS                (1UL << 11)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_SSRX                (1UL << 10)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_OTGID               (1UL << 9)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_DM                  (1UL << 8)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_DP                  (1UL << 7)
+#define FX3_GCTL_WAKEUP_EVENT_EV_UART_CTS                (1UL << 6)
+#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_44                 (1UL << 5)
+#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_47                 (1UL << 4)
+#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_34                 (1UL << 3)
+#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CLK                 (1UL << 2)
+#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CMD                 (1UL << 1)
+#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CTRL0               (1UL << 0)
+
+#define FX3_GCTL_FREEZE_VIO4IO_FRZ_SHIFT                 6
+#define FX3_GCTL_FREEZE_VIO4IO_FRZ_BITS                  2
+#define FX3_GCTL_FREEZE_VIO4IO_FRZ_MASK                  (0x3UL << 6)
+#define FX3_GCTL_FREEZE_VIO3IO_FRZ_SHIFT                 4
+#define FX3_GCTL_FREEZE_VIO3IO_FRZ_BITS                  2
+#define FX3_GCTL_FREEZE_VIO3IO_FRZ_MASK                  (0x3UL << 4)
+#define FX3_GCTL_FREEZE_VIO2IO_FRZ_SHIFT                 2
+#define FX3_GCTL_FREEZE_VIO2IO_FRZ_BITS                  2
+#define FX3_GCTL_FREEZE_VIO2IO_FRZ_MASK                  (0x3UL << 2)
+#define FX3_GCTL_FREEZE_VIO1IO_FRZ_SHIFT                 0
+#define FX3_GCTL_FREEZE_VIO1IO_FRZ_BITS                  2
+#define FX3_GCTL_FREEZE_VIO1IO_FRZ_MASK                  (0x3UL << 0)
+
+#define FX3_GCTL_WATCHDOG_CS_BACKUP_CLK                  (1UL << 31)
+#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_SHIFT        16
+#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_BITS         15
+#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_MASK         (0x7fffUL << 16)
+#define FX3_GCTL_WATCHDOG_CS_BITS1_SHIFT                 11
+#define FX3_GCTL_WATCHDOG_CS_BITS1_BITS                  5
+#define FX3_GCTL_WATCHDOG_CS_BITS1_MASK                  (0x1fUL << 11)
+#define FX3_GCTL_WATCHDOG_CS_INTR1                       (1UL << 10)
+#define FX3_GCTL_WATCHDOG_CS_MODE1_SHIFT                 8
+#define FX3_GCTL_WATCHDOG_CS_MODE1_BITS                  2
+#define FX3_GCTL_WATCHDOG_CS_MODE1_MASK                  (0x3UL << 8)
+#define FX3_GCTL_WATCHDOG_CS_BITS0_SHIFT                 3
+#define FX3_GCTL_WATCHDOG_CS_BITS0_BITS                  5
+#define FX3_GCTL_WATCHDOG_CS_BITS0_MASK                  (0x1fUL << 3)
+#define FX3_GCTL_WATCHDOG_CS_INTR0                       (1UL << 2)
+#define FX3_GCTL_WATCHDOG_CS_MODE0_SHIFT                 0
+#define FX3_GCTL_WATCHDOG_CS_MODE0_BITS                  2
+#define FX3_GCTL_WATCHDOG_CS_MODE0_MASK                  (0x3UL << 0)
 
 #define FX3_GCTL_IOMATRIX_S1CFG_SHIFT                    8
 #define FX3_GCTL_IOMATRIX_S1CFG_BITS                     3
@@ -257,101 +353,5 @@
 #define FX3_GCTL_I2S_CORE_CLK_DIV_SHIFT                  0
 #define FX3_GCTL_I2S_CORE_CLK_DIV_BITS                   15
 #define FX3_GCTL_I2S_CORE_CLK_DIV_MASK                   (0x7fffUL << 0)
-
-#define FX3_GCTL_WAKEUP_EN_EN_WATCHDOG2                  (1UL << 13)
-#define FX3_GCTL_WAKEUP_EN_EN_WATCHDOG1                  (1UL << 12)
-#define FX3_GCTL_WAKEUP_EN_EN_UIB_VBUS                   (1UL << 11)
-#define FX3_GCTL_WAKEUP_EN_EN_UIB_SSRX                   (1UL << 10)
-#define FX3_GCTL_WAKEUP_EN_EN_UIB_OTGID                  (1UL << 9)
-#define FX3_GCTL_WAKEUP_EN_EN_UIB_DM                     (1UL << 8)
-#define FX3_GCTL_WAKEUP_EN_EN_UIB_DP                     (1UL << 7)
-#define FX3_GCTL_WAKEUP_EN_EN_UART_CTS                   (1UL << 6)
-#define FX3_GCTL_WAKEUP_EN_EN_GPIO_44                    (1UL << 5)
-#define FX3_GCTL_WAKEUP_EN_EN_GPIO_47                    (1UL << 4)
-#define FX3_GCTL_WAKEUP_EN_EN_GPIO_34                    (1UL << 3)
-#define FX3_GCTL_WAKEUP_EN_EN_PIB_CLK                    (1UL << 2)
-#define FX3_GCTL_WAKEUP_EN_EN_PIB_CMD                    (1UL << 1)
-#define FX3_GCTL_WAKEUP_EN_EN_PIB_CTRL0                  (1UL << 0)
-
-#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_VBUS            (1UL << 11)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_DM              (1UL << 8)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_UIB_DP              (1UL << 7)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_UART_CTS            (1UL << 6)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_44             (1UL << 5)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_47             (1UL << 4)
-#define FX3_GCTL_WAKEUP_POLARITY_POL_GPIO_34             (1UL << 3)
-
-#define FX3_GCTL_WAKEUP_EVENT_EV_WATCHDOG2               (1UL << 13)
-#define FX3_GCTL_WAKEUP_EVENT_EV_WATCHDOG1               (1UL << 12)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_VBUS                (1UL << 11)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_SSRX                (1UL << 10)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_OTGID               (1UL << 9)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_DM                  (1UL << 8)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UIB_DP                  (1UL << 7)
-#define FX3_GCTL_WAKEUP_EVENT_EV_UART_CTS                (1UL << 6)
-#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_44                 (1UL << 5)
-#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_47                 (1UL << 4)
-#define FX3_GCTL_WAKEUP_EVENT_EV_GPIO_34                 (1UL << 3)
-#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CLK                 (1UL << 2)
-#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CMD                 (1UL << 1)
-#define FX3_GCTL_WAKEUP_EVENT_EV_PIB_CTRL0               (1UL << 0)
-
-#define FX3_GCTL_FREEZE_VIO4IO_FRZ_SHIFT                 6
-#define FX3_GCTL_FREEZE_VIO4IO_FRZ_BITS                  2
-#define FX3_GCTL_FREEZE_VIO4IO_FRZ_MASK                  (0x3UL << 6)
-#define FX3_GCTL_FREEZE_VIO3IO_FRZ_SHIFT                 4
-#define FX3_GCTL_FREEZE_VIO3IO_FRZ_BITS                  2
-#define FX3_GCTL_FREEZE_VIO3IO_FRZ_MASK                  (0x3UL << 4)
-#define FX3_GCTL_FREEZE_VIO2IO_FRZ_SHIFT                 2
-#define FX3_GCTL_FREEZE_VIO2IO_FRZ_BITS                  2
-#define FX3_GCTL_FREEZE_VIO2IO_FRZ_MASK                  (0x3UL << 2)
-#define FX3_GCTL_FREEZE_VIO1IO_FRZ_SHIFT                 0
-#define FX3_GCTL_FREEZE_VIO1IO_FRZ_BITS                  2
-#define FX3_GCTL_FREEZE_VIO1IO_FRZ_MASK                  (0x3UL << 0)
-
-#define FX3_GCTL_WATCHDOG_CS_BACKUP_CLK                  (1UL << 31)
-#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_SHIFT        16
-#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_BITS         15
-#define FX3_GCTL_WATCHDOG_CS_BACKUP_DIVIDER_MASK         (0x7fffUL << 16)
-#define FX3_GCTL_WATCHDOG_CS_BITS1_SHIFT                 11
-#define FX3_GCTL_WATCHDOG_CS_BITS1_BITS                  5
-#define FX3_GCTL_WATCHDOG_CS_BITS1_MASK                  (0x1fUL << 11)
-#define FX3_GCTL_WATCHDOG_CS_INTR1                       (1UL << 10)
-#define FX3_GCTL_WATCHDOG_CS_MODE1_SHIFT                 8
-#define FX3_GCTL_WATCHDOG_CS_MODE1_BITS                  2
-#define FX3_GCTL_WATCHDOG_CS_MODE1_MASK                  (0x3UL << 8)
-#define FX3_GCTL_WATCHDOG_CS_BITS0_SHIFT                 3
-#define FX3_GCTL_WATCHDOG_CS_BITS0_BITS                  5
-#define FX3_GCTL_WATCHDOG_CS_BITS0_MASK                  (0x1fUL << 3)
-#define FX3_GCTL_WATCHDOG_CS_INTR0                       (1UL << 2)
-#define FX3_GCTL_WATCHDOG_CS_MODE0_SHIFT                 0
-#define FX3_GCTL_WATCHDOG_CS_MODE0_BITS                  2
-#define FX3_GCTL_WATCHDOG_CS_MODE0_MASK                  (0x3UL << 0)
-
-#define FX3_GCTL_CONTROL_HARD_RESET_N                    (1UL << 31)
-#define FX3_GCTL_CONTROL_CPU_RESET_N                     (1UL << 30)
-#define FX3_GCTL_CONTROL_WARM_BOOT                       (1UL << 29)
-#define FX3_GCTL_CONTROL_BOOTROM_EN                      (1UL << 28)
-#define FX3_GCTL_CONTROL_MAIN_POWER_EN                   (1UL << 26)
-#define FX3_GCTL_CONTROL_MAIN_CLOCK_EN                   (1UL << 25)
-#define FX3_GCTL_CONTROL_FREEZE_IO                       (1UL << 24)
-#define FX3_GCTL_CONTROL_USB_VBAT_EN                     (1UL << 22)
-#define FX3_GCTL_CONTROL_USB_POWER_EN                    (1UL << 21)
-#define FX3_GCTL_CONTROL_ANALOG_SWITCH                   (1UL << 18)
-#define FX3_GCTL_CONTROL_WDT_PROTECT_SHIFT               16
-#define FX3_GCTL_CONTROL_WDT_PROTECT_BITS                2
-#define FX3_GCTL_CONTROL_WDT_PROTECT_MASK                (0x3UL << 16)
-#define FX3_GCTL_CONTROL_NO_SBYWFI                       (1UL << 15)
-#define FX3_GCTL_CONTROL_SYSMEM_BIST_EN                  (1UL << 14)
-#define FX3_GCTL_CONTROL_WAKEUP_CPU_INT                  (1UL << 12)
-#define FX3_GCTL_CONTROL_WAKEUP_AP_INT                   (1UL << 11)
-#define FX3_GCTL_CONTROL_RAM_SLEEP                       (1UL << 10)
-#define FX3_GCTL_CONTROL_DEBUG_MODE                      (1UL << 9)
-#define FX3_GCTL_CONTROL_BOOT_COMPLETE                   (1UL << 8)
-#define FX3_GCTL_CONTROL_WAKEUP_CLK                      (1UL << 4)
-#define FX3_GCTL_CONTROL_WAKEUP_PWR                      (1UL << 3)
-#define FX3_GCTL_CONTROL_WDT_RESET                       (1UL << 2)
-#define FX3_GCTL_CONTROL_SW_RESET                        (1UL << 1)
-#define FX3_GCTL_CONTROL_POR                             (1UL << 0)
 
 #endif /* RDB_GCTL_H_ */

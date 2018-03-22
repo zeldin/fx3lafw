@@ -252,6 +252,7 @@ for m in missing:
     finder.add_missing(*m)
 
 for group, registers in finder.registers.items():
+    registers = sorted(registers, key=lambda r: int(r.address.replace('?', 'F'), 16))
     ppguard = '%s%s_H_' % (ppguard_prefix, group.upper())
     file = open('%s.h' % group, 'w')
     file.write(boilerplate)
