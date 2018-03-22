@@ -443,6 +443,16 @@
 #define FX3_IEPM_MULT_MULT_EN_BITS                       15
 #define FX3_IEPM_MULT_MULT_EN_MASK                       (0x7fffUL << 0)
 
+#define FX3_EEPM_ENDPOINT_SOCKET_FLUSH                   (1UL << 31)
+#define FX3_EEPM_ENDPOINT_EEPM_EP_READY                  (1UL << 30)
+#define FX3_EEPM_ENDPOINT_ZLP                            (1UL << 27)
+#define FX3_EEPM_ENDPOINT_EEPM_BYTE_COUNT_SHIFT          11
+#define FX3_EEPM_ENDPOINT_EEPM_BYTE_COUNT_BITS           16
+#define FX3_EEPM_ENDPOINT_EEPM_BYTE_COUNT_MASK           (0xffffUL << 11)
+#define FX3_EEPM_ENDPOINT_PACKET_SIZE_SHIFT              0
+#define FX3_EEPM_ENDPOINT_PACKET_SIZE_BITS               11
+#define FX3_EEPM_ENDPOINT_PACKET_SIZE_MASK               (0x7ffUL << 0)
+
 #define FX3_IEPM_ENDPOINT_SOCKET_FLUSH                   (1UL << 31)
 #define FX3_IEPM_ENDPOINT_EOT_EOP                        (1UL << 30)
 #define FX3_IEPM_ENDPOINT_EP_READY                       (1UL << 22)
@@ -610,6 +620,17 @@
 #define FX3_EHCI_HCCPARAMS_ISO_SHDL_THR_MASK             (0xfUL << 4)
 #define FX3_EHCI_HCCPARAMS_ASYNC_PARK_CAP                (1UL << 2)
 #define FX3_EHCI_HCCPARAMS_ADDR_64_BIT_CAP               (1UL << 0)
+
+#define FX3_EHCI_USBCMD_INT_THRESHOLD_CTRL_SHIFT         16
+#define FX3_EHCI_USBCMD_INT_THRESHOLD_CTRL_BITS          8
+#define FX3_EHCI_USBCMD_INT_THRESHOLD_CTRL_MASK          (0xffUL << 16)
+#define FX3_EHCI_USBCMD_ASYNC_SHDL_PRK_EN                (1UL << 11)
+#define FX3_EHCI_USBCMD_ASYNC_SHDL_PRK_CNT_SHIFT         8
+#define FX3_EHCI_USBCMD_ASYNC_SHDL_PRK_CNT_BITS          2
+#define FX3_EHCI_USBCMD_ASYNC_SHDL_PRK_CNT_MASK          (0x3UL << 8)
+#define FX3_EHCI_USBCMD_ASYNC_SHDL_EN                    (1UL << 5)
+#define FX3_EHCI_USBCMD_PER_SHDL_EN                      (1UL << 4)
+#define FX3_EHCI_USBCMD_RS                               (1UL << 0)
 
 #define FX3_EHCI_USBSTS_ASYNC_SHDL_ST                    (1UL << 15)
 #define FX3_EHCI_USBSTS_PER_SHDL_ST                      (1UL << 14)

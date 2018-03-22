@@ -121,22 +121,26 @@ class FontDatabase:
             color = ''
         self.fonts[id] = family+'/'+size+color
 
-    def getfont(self, id, bold):
+    def getfont(self, id, bold, italic):
         fontname = id and self.fonts[id]
         if bold and fontname:
             fontname = '*'+fontname
+        if italic and fontname:
+            fontname = '~'+fontname
         return fontname
 
 class RegDefParser:
     reg_detail_font = '*Times/9'
+    reg_detail_alt_font = 'Times/9'
     reg_detail_superscript_font = '*Times/7'
-    
+
     def __init__(self, group):
         self.group = group
         self.details = []
         self.detail = []
         self.info = []
         self.combine = False
+        self.fontsel = False
 
     def flush(self):
         if self.detail:
@@ -156,15 +160,17 @@ class RegDefParser:
             self.detail = []
             self.combine = False
 
-    def feedtext(self, font, text):
+    def feedtext(self, font, text, leftcol):
         if text.strip() == '':
             pass
-        elif font == self.reg_detail_font:
+        elif font == self.reg_detail_font or (leftcol and not self.fontsel and font == self.reg_detail_alt_font):
             if self.combine:
                 self.detail[-1] = self.detail[-1] + text
                 self.combine = False
             else:
                 self.detail.append(text)
+            if font == self.reg_detail_font:
+                self.fontsel = True
         elif font == self.reg_detail_superscript_font and self.detail:
             if text == '2':
                 text = '²'
@@ -229,7 +235,7 @@ class RegDefFinder:
                 self.registers[reg.group].append(reg)
         self.register = None
 
-    def feedtext(self, font, text):
+    def feedtext(self, font, text, left):
         if font == self.chapter_font:
             self.chapter_number = text.split('.')[0]
             self.section = None
@@ -245,7 +251,7 @@ class RegDefFinder:
                     if len(secnr) == 3:
                         self.register = RegDefParser(self.register_sections[secnr[1]])
         elif self.register:
-            self.register.feedtext(font, text)
+            self.register.feedtext(font, text, left < 250)
 
     def add_missing(self, group, name, *rest):
         if next((r for r in self.registers[group] if r.name == name), False):
@@ -260,7 +266,8 @@ file = open('trm.xml', 'r')
 
 for event, elem in ElementTree.iterparse(file):
     if elem.tag == 'text':
-        finder.feedtext(fontdb.getfont(elem.get('font'), elem.find('b') != None), ''.join(elem.itertext()))
+        finder.feedtext(fontdb.getfont(elem.get('font'), elem.find('b') != None, elem.find('i') != None),
+                        ''.join(elem.itertext()), int(elem.get('left')))
     elif elem.tag == 'fontspec':
         fontdb.addfont(**elem.attrib)
     elif elem.tag == 'page':
