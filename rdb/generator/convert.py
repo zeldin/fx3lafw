@@ -29,6 +29,20 @@ boilerplate = '''\
 
 ppguard_prefix = 'RDB_'
 
+# This register definition is mysteriously absent from the TRM, even though
+# it refers to it from other places...
+missing = [
+    ('gctl', 'GCTL_CONTROL', 'Global control', '0xE0050000',
+     [('31', 'HARD_RESET_N'), ('30', 'CPU_RESET_N'), ('29', 'WARM_BOOT'),
+      ('28', 'BOOTROM_EN'), ('26', 'MAIN_POWER_EN'), ('25', 'MAIN_CLOCK_EN'),
+      ('24', 'FREEZE_IO'), ('22', 'USB_VBAT_EN'), ('21', 'USB_POWER_EN'),
+      ('18', 'ANALOG_SWITCH'), ('17:16', 'WDT_PROTECT[1:0]'),
+      ('15', 'NO_SBYWFI'), ('14', 'SYSMEM_BIST_EN'), ('12', 'WAKEUP_CPU_INT'),
+      ('11', 'WAKEUP_AP_INT'), ('10', 'RAM_SLEEP'), ('9', 'DEBUG_MODE'),
+      ('8', 'BOOT_COMPLETE'), ('4', 'WAKEUP_CLK'), ('3', 'WAKEUP_PWR'),
+      ('2', 'WDT_RESET'), ('1', 'SW_RESET'), ('0', 'POR')]),
+]
+
 class Register:
     rdb_prefix='FX3_'
     pad_size=30
@@ -213,6 +227,12 @@ class RegDefFinder:
         elif self.register:
             self.register.feedtext(font, text)
 
+    def add_missing(self, group, name, *rest):
+        if next((r for r in self.registers[group] if r.name == name), False):
+            pass
+        else:
+            self.registers[group].append(Register(group, name, *rest))
+
 fontdb = FontDatabase()
 finder = RegDefFinder()
 
@@ -228,6 +248,8 @@ for event, elem in ElementTree.iterparse(file):
 
 file.close()
 finder.flush()
+for m in missing:
+    finder.add_missing(*m)
 
 for group, registers in finder.registers.items():
     ppguard = '%s%s_H_' % (ppguard_prefix, group.upper())

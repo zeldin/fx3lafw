@@ -49,6 +49,7 @@
 #define FX3_GCTL_WATCHDOG_CS              0xE0050014 /* Watchdog Timers Command and Control Register */
 #define FX3_GCTL_WATCHDOG_TIMER0          0xE0050018 /* Watchdog Timer Value 0 Register */
 #define FX3_GCTL_WATCHDOG_TIMER1          0xE005001C /* Watchdog Timer Value 1 Register */
+#define FX3_GCTL_CONTROL                  0xE0050000 /* Global control */
 
 #define FX3_GCTL_IOMATRIX_S1CFG_SHIFT                    8
 #define FX3_GCTL_IOMATRIX_S1CFG_BITS                     3
@@ -326,5 +327,31 @@
 #define FX3_GCTL_WATCHDOG_CS_MODE0_SHIFT                 0
 #define FX3_GCTL_WATCHDOG_CS_MODE0_BITS                  2
 #define FX3_GCTL_WATCHDOG_CS_MODE0_MASK                  (0x3UL << 0)
+
+#define FX3_GCTL_CONTROL_HARD_RESET_N                    (1UL << 31)
+#define FX3_GCTL_CONTROL_CPU_RESET_N                     (1UL << 30)
+#define FX3_GCTL_CONTROL_WARM_BOOT                       (1UL << 29)
+#define FX3_GCTL_CONTROL_BOOTROM_EN                      (1UL << 28)
+#define FX3_GCTL_CONTROL_MAIN_POWER_EN                   (1UL << 26)
+#define FX3_GCTL_CONTROL_MAIN_CLOCK_EN                   (1UL << 25)
+#define FX3_GCTL_CONTROL_FREEZE_IO                       (1UL << 24)
+#define FX3_GCTL_CONTROL_USB_VBAT_EN                     (1UL << 22)
+#define FX3_GCTL_CONTROL_USB_POWER_EN                    (1UL << 21)
+#define FX3_GCTL_CONTROL_ANALOG_SWITCH                   (1UL << 18)
+#define FX3_GCTL_CONTROL_WDT_PROTECT_SHIFT               16
+#define FX3_GCTL_CONTROL_WDT_PROTECT_BITS                2
+#define FX3_GCTL_CONTROL_WDT_PROTECT_MASK                (0x3UL << 16)
+#define FX3_GCTL_CONTROL_NO_SBYWFI                       (1UL << 15)
+#define FX3_GCTL_CONTROL_SYSMEM_BIST_EN                  (1UL << 14)
+#define FX3_GCTL_CONTROL_WAKEUP_CPU_INT                  (1UL << 12)
+#define FX3_GCTL_CONTROL_WAKEUP_AP_INT                   (1UL << 11)
+#define FX3_GCTL_CONTROL_RAM_SLEEP                       (1UL << 10)
+#define FX3_GCTL_CONTROL_DEBUG_MODE                      (1UL << 9)
+#define FX3_GCTL_CONTROL_BOOT_COMPLETE                   (1UL << 8)
+#define FX3_GCTL_CONTROL_WAKEUP_CLK                      (1UL << 4)
+#define FX3_GCTL_CONTROL_WAKEUP_PWR                      (1UL << 3)
+#define FX3_GCTL_CONTROL_WDT_RESET                       (1UL << 2)
+#define FX3_GCTL_CONTROL_SW_RESET                        (1UL << 1)
+#define FX3_GCTL_CONTROL_POR                             (1UL << 0)
 
 #endif /* RDB_GCTL_H_ */
