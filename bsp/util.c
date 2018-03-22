@@ -20,6 +20,7 @@
  */
 
 #include <bsp/util.h>
+#include <bsp/gctl.h>
 
 void Fx3UtilDelayUs(uint32_t delay_us)
 {
@@ -32,7 +33,8 @@ void exit(int status)
 {
   (void)status;
 
-  /* Should reboot here... */
+  Fx3GctlHardReset();
+
   for(;;)
     ;
 }

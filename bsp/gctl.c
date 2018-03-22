@@ -60,3 +60,10 @@ void Fx3GctlInitIoMatrix(Fx3GctlPinAltFunc_t alt_func)
 		(alt_func == FX3_GCTL_ALTFUNC_GPIF32BIT_UART_I2S?
 		 FX3_GCTL_IOMATRIX_S0CFG : 0));
 }
+
+void Fx3GctlHardReset(void)
+{
+  Fx3UtilDelayUs(5);
+  Fx3ClearReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_HARD_RESET_N);
+  Fx3UtilDelayUs(5);
+}

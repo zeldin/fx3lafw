@@ -36,5 +36,6 @@ typedef enum {
 
 extern void Fx3GctlInitClock(void);
 extern void Fx3GctlInitIoMatrix(Fx3GctlPinAltFunc_t alt_func);
+extern void Fx3GctlHardReset(void);
 
 #endif /* BSP_GCTL_H_ */
