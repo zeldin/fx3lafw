@@ -43,15 +43,29 @@ missing = [
       ('2', 'WDT_RESET'), ('1', 'SW_RESET'), ('0', 'POR')]),
 ]
 
+# Fixes for typos in TRM
+reg_name_fixups = {
+    '0xE0000BF0': ('I2C_ID', 'UART_ID'),
+    '0xE003151C': ('DEV_CTRL_INTR_MASK', 'DEV_CTRL_INTR'),
+    '0xE003205C': ('OHCI_RH_PORT_STATUS', 'EHCI_HCCPARAMS'),
+    '0xE0032060': ('OHCI_RH_PORT_STATUS', 'EHCI_USBCMD'),
+}
+field_name_fixups = {
+    'OTG_CTRL': {'11': ('B_SESS_VALID', 'B_END_SESS')},
+}
+
 class Register:
     rdb_prefix='FX3_'
     pad_size=30
     pad_size_field=45
     
     def __init__(self, group, name, description, address, fields):
-        # Fix for typo in TRM
-        if group == 'uart' and name == 'I2C_ID':
-            name = 'UART_ID'
+        try:
+            fixup = reg_name_fixups[address]
+            if name == fixup[0]:
+                name = fixup[1]
+        except KeyError:
+            pass
 
         self.group = group
         self.name = name
@@ -68,6 +82,12 @@ class Register:
             for field in self.fields:
                 bits = field[0].split(':')
                 name = field[1].split('[')
+                try:
+                    fixup = field_name_fixups[self.name][field[0]]
+                    if name[0] == fixup[0]:
+                        name[0] = fixup[1]
+                except KeyError:
+                    pass
                 if len(bits) == 1 and len(name) == 2 and (name[0] == 'EN_GPIO' or name[0] == 'EV_GPIO' or name[0] == 'POL_GPIO'):
                     name = [name[0]+'_'+name[1].split(']')[0]]
                 pad_size = self.pad_size_field

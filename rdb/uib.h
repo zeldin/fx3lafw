@@ -37,7 +37,7 @@
 #define FX3_DEV_EPO_CS                    0xE0031498 /* OUT Endpoint Control and Status Register */
 #define FX3_DEV_EPO_XFER_CNT              0xE00314D8 /* OUT Endpoint Remaining Transfer Length Register */
 #define FX3_DEV_CTRL_INTR_MASK            0xE0031518 /* CONTROL Interrupt Mask Register */
-#define FX3_DEV_CTRL_INTR_MASK            0xE003151C /* CONTROL Interrupt Request Register */
+#define FX3_DEV_CTRL_INTR                 0xE003151C /* CONTROL Interrupt Request Register */
 #define FX3_DEV_EP_INTR_MASK              0xE0031520 /* USB EP Interrupt Mask Register */
 #define FX3_DEV_EP_INTR                   0xE0031524 /* USB EP Interrupt Request Register */
 #define FX3_CHGDET_CTRL                   0xE0031800 /* Charger Detect Control and Configuration Register */
@@ -75,8 +75,8 @@
 #define FX3_OHCI_LS_THRESHOLD             0xE003204C /* LSTHRESHOLD Register */
 #define FX3_OHCI_RH_PORT_STATUS           0xE0032054 /* Root Hub Port Status Register */
 #define FX3_OHCI_EOF                      0xE0032058 /* OHCI End of Frame Times Register */
-#define FX3_OHCI_RH_PORT_STATUS           0xE003205C /* Root Hub Port Status Register */
-#define FX3_OHCI_RH_PORT_STATUS           0xE0032060 /* Root Hub Port Status Register */
+#define FX3_EHCI_HCCPARAMS                0xE003205C /* Root Hub Port Status Register */
+#define FX3_EHCI_USBCMD                   0xE0032060 /* Root Hub Port Status Register */
 #define FX3_EHCI_USBSTS                   0xE0032064 /* Host Controller States and Pending Interrupts Register */
 #define FX3_EHCI_USBINTR                  0xE0032068 /* EHCI Interrupt Register */
 #define FX3_EHCI_FRINDEX                  0xE003206C /* Frame Index Register */
@@ -335,15 +335,15 @@
 #define FX3_DEV_CTRL_INTR_MASK_SUSP                      (1UL << 2)
 #define FX3_DEV_CTRL_INTR_MASK_SOF                       (1UL << 1)
 
-#define FX3_DEV_CTRL_INTR_MASK_STATUS_STAGE              (1UL << 11)
-#define FX3_DEV_CTRL_INTR_MASK_URESUME                   (1UL << 8)
-#define FX3_DEV_CTRL_INTR_MASK_ERRLIMIT                  (1UL << 7)
-#define FX3_DEV_CTRL_INTR_MASK_SUDAV                     (1UL << 6)
-#define FX3_DEV_CTRL_INTR_MASK_SUTOK                     (1UL << 5)
-#define FX3_DEV_CTRL_INTR_MASK_HSGRANT                   (1UL << 4)
-#define FX3_DEV_CTRL_INTR_MASK_URESET                    (1UL << 3)
-#define FX3_DEV_CTRL_INTR_MASK_SUSP                      (1UL << 2)
-#define FX3_DEV_CTRL_INTR_MASK_SOF                       (1UL << 1)
+#define FX3_DEV_CTRL_INTR_STATUS_STAGE                   (1UL << 11)
+#define FX3_DEV_CTRL_INTR_URESUME                        (1UL << 8)
+#define FX3_DEV_CTRL_INTR_ERRLIMIT                       (1UL << 7)
+#define FX3_DEV_CTRL_INTR_SUDAV                          (1UL << 6)
+#define FX3_DEV_CTRL_INTR_SUTOK                          (1UL << 5)
+#define FX3_DEV_CTRL_INTR_HSGRANT                        (1UL << 4)
+#define FX3_DEV_CTRL_INTR_URESET                         (1UL << 3)
+#define FX3_DEV_CTRL_INTR_SUSP                           (1UL << 2)
+#define FX3_DEV_CTRL_INTR_SOF                            (1UL << 1)
 
 #define FX3_DEV_EP_INTR_MASK_EP_OUT_SHIFT                16
 #define FX3_DEV_EP_INTR_MASK_EP_OUT_BITS                 16
@@ -388,7 +388,7 @@
 #define FX3_OTG_CTRL_SSDEV_ENABLE                        (1UL << 14)
 #define FX3_OTG_CTRL_DEV_ENABLE                          (1UL << 13)
 #define FX3_OTG_CTRL_HOST_ENABLE                         (1UL << 12)
-#define FX3_OTG_CTRL_B_SESS_VALID                        (1UL << 11)
+#define FX3_OTG_CTRL_B_END_SESS                          (1UL << 11)
 #define FX3_OTG_CTRL_B_SESS_VALID                        (1UL << 10)
 #define FX3_OTG_CTRL_A_SESS_VALID                        (1UL << 9)
 #define FX3_OTG_CTRL_DSCHG_VBUS                          (1UL << 8)
@@ -605,11 +605,11 @@
 #define FX3_OHCI_EOF_EOF1_BITS                           16
 #define FX3_OHCI_EOF_EOF1_MASK                           (0xffffUL << 0)
 
-#define FX3_OHCI_RH_PORT_STATUS_ISO_SHDL_THR_SHIFT       4
-#define FX3_OHCI_RH_PORT_STATUS_ISO_SHDL_THR_BITS        4
-#define FX3_OHCI_RH_PORT_STATUS_ISO_SHDL_THR_MASK        (0xfUL << 4)
-#define FX3_OHCI_RH_PORT_STATUS_ASYNC_PARK_CAP           (1UL << 2)
-#define FX3_OHCI_RH_PORT_STATUS_ADDR_64_BIT_CAP          (1UL << 0)
+#define FX3_EHCI_HCCPARAMS_ISO_SHDL_THR_SHIFT            4
+#define FX3_EHCI_HCCPARAMS_ISO_SHDL_THR_BITS             4
+#define FX3_EHCI_HCCPARAMS_ISO_SHDL_THR_MASK             (0xfUL << 4)
+#define FX3_EHCI_HCCPARAMS_ASYNC_PARK_CAP                (1UL << 2)
+#define FX3_EHCI_HCCPARAMS_ADDR_64_BIT_CAP               (1UL << 0)
 
 #define FX3_EHCI_USBSTS_ASYNC_SHDL_ST                    (1UL << 15)
 #define FX3_EHCI_USBSTS_PER_SHDL_ST                      (1UL << 14)
