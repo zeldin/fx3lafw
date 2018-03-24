@@ -22,34 +22,34 @@
 #ifndef RDB_GCTL_H_
 #define RDB_GCTL_H_
 
-#define FX3_GCTL_CONTROL                  0xE0050000 /* Global control */
-#define FX3_GCTL_WAKEUP_EN                0xE0050004 /* Wakeup Enable Register */
-#define FX3_GCTL_WAKEUP_POLARITY          0xE0050008 /* Wakeup Signal Polarity Register */
-#define FX3_GCTL_WAKEUP_EVENT             0xE005000C /* Wakeup Event Register */
-#define FX3_GCTL_FREEZE                   0xE0050010 /* I/O Freeze Control Register */
-#define FX3_GCTL_WATCHDOG_CS              0xE0050014 /* Watchdog Timers Command and Control Register */
-#define FX3_GCTL_WATCHDOG_TIMER0          0xE0050018 /* Watchdog Timer Value 0 Register */
-#define FX3_GCTL_WATCHDOG_TIMER1          0xE005001C /* Watchdog Timer Value 1 Register */
-#define FX3_GCTL_IOMATRIX                 0xE0051008 /* I/O Matrix Configuration Register */
-#define FX3_GCTL_GPIO_SIMPLE              0xE005100C /* GPIO Override Configuration Register */
-#define FX3_GCTL_GPIO_COMPLEX             0xE0051014 /* GPIO Override Configuration Register */
-#define FX3_GCTL_DS                       0xE005101C /* I/O Drive Strength Configuration Register */
-#define FX3_GCTL_WPU_CFG                  0xE0051020 /* I/O Pull-Up Configuration Register */
-#define FX3_GCTL_WPD_CFG                  0xE0051028 /* I/O Pull-Down Configuration Register */
-#define FX3_GCTL_IOPOWER                  0xE0051030 /* I/O Power Observability Register */
-#define FX3_GCTL_IOPOWER_INTR             0xE0051034 /* I/O Power Change Interrupt Register */
-#define FX3_GCTL_IOPOWER_INTR_MASK        0xE0051038 /* I/O Power Change Interrupt Mask Register */
-#define FX3_GCTL_SW_INT                   0xE005104C /* Software Interrupt Register */
-#define FX3_GCTL_PLL_CFG                  0xE0052000 /* PLL Configuration Register */
-#define FX3_GCTL_CPU_CLK_CFG              0xE0052004 /* CPU and Bus Clock Configuration Register */
-#define FX3_GCTL_UIB_CORE_CLK             0xE0052008 /* UIB Clock Configuration Register */
-#define FX3_GCTL_PIB_CORE_CLK             0xE005200C /* PIB Clock Configuration Register */
-#define FX3_GCTL_GPIO_FAST_CLK            0xE0052018 /* GPIO Fast Clock Configuration Register */
-#define FX3_GCTL_GPIO_SLOW_CLK            0xE005201C /* GPIO Slow Clock Configuration Register */
-#define FX3_GCTL_I2C_CORE_CLK             0xE0052020 /* I²C Core Clock Configuration Register */
-#define FX3_GCTL_UART_CORE_CLK            0xE0052024 /* UART Core Clock Configuration Register */
-#define FX3_GCTL_SPI_CORE_CLK             0xE005202C /* SPI Core Clock Configuration Register */
-#define FX3_GCTL_I2S_CORE_CLK             0xE0052034 /* I2S Core Clock Configuration Register */
+#define FX3_GCTL_CONTROL                      0xE0050000 /* Global control */
+#define FX3_GCTL_WAKEUP_EN                    0xE0050004 /* Wakeup Enable Register */
+#define FX3_GCTL_WAKEUP_POLARITY              0xE0050008 /* Wakeup Signal Polarity Register */
+#define FX3_GCTL_WAKEUP_EVENT                 0xE005000C /* Wakeup Event Register */
+#define FX3_GCTL_FREEZE                       0xE0050010 /* I/O Freeze Control Register */
+#define FX3_GCTL_WATCHDOG_CS                  0xE0050014 /* Watchdog Timers Command and Control Register */
+#define FX3_GCTL_WATCHDOG_TIMER0              0xE0050018 /* Watchdog Timer Value 0 Register */
+#define FX3_GCTL_WATCHDOG_TIMER1              0xE005001C /* Watchdog Timer Value 1 Register */
+#define FX3_GCTL_IOMATRIX                     0xE0051008 /* I/O Matrix Configuration Register */
+#define FX3_GCTL_GPIO_SIMPLE                  0xE005100C /* GPIO Override Configuration Register */
+#define FX3_GCTL_GPIO_COMPLEX                 0xE0051014 /* GPIO Override Configuration Register */
+#define FX3_GCTL_DS                           0xE005101C /* I/O Drive Strength Configuration Register */
+#define FX3_GCTL_WPU_CFG                      0xE0051020 /* I/O Pull-Up Configuration Register */
+#define FX3_GCTL_WPD_CFG                      0xE0051028 /* I/O Pull-Down Configuration Register */
+#define FX3_GCTL_IOPOWER                      0xE0051030 /* I/O Power Observability Register */
+#define FX3_GCTL_IOPOWER_INTR                 0xE0051034 /* I/O Power Change Interrupt Register */
+#define FX3_GCTL_IOPOWER_INTR_MASK            0xE0051038 /* I/O Power Change Interrupt Mask Register */
+#define FX3_GCTL_SW_INT                       0xE005104C /* Software Interrupt Register */
+#define FX3_GCTL_PLL_CFG                      0xE0052000 /* PLL Configuration Register */
+#define FX3_GCTL_CPU_CLK_CFG                  0xE0052004 /* CPU and Bus Clock Configuration Register */
+#define FX3_GCTL_UIB_CORE_CLK                 0xE0052008 /* UIB Clock Configuration Register */
+#define FX3_GCTL_PIB_CORE_CLK                 0xE005200C /* PIB Clock Configuration Register */
+#define FX3_GCTL_GPIO_FAST_CLK                0xE0052018 /* GPIO Fast Clock Configuration Register */
+#define FX3_GCTL_GPIO_SLOW_CLK                0xE005201C /* GPIO Slow Clock Configuration Register */
+#define FX3_GCTL_I2C_CORE_CLK                 0xE0052020 /* I²C Core Clock Configuration Register */
+#define FX3_GCTL_UART_CORE_CLK                0xE0052024 /* UART Core Clock Configuration Register */
+#define FX3_GCTL_SPI_CORE_CLK                 0xE005202C /* SPI Core Clock Configuration Register */
+#define FX3_GCTL_I2S_CORE_CLK                 0xE0052034 /* I2S Core Clock Configuration Register */
 
 #define FX3_GCTL_CONTROL_HARD_RESET_N                    (1UL << 31)
 #define FX3_GCTL_CONTROL_CPU_RESET_N                     (1UL << 30)

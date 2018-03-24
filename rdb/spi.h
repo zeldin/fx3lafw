@@ -22,17 +22,17 @@
 #ifndef RDB_SPI_H_
 #define RDB_SPI_H_
 
-#define FX3_SPI_CONFIG                    0xE0000C00 /* SPI Configuration and Modes Register */
-#define FX3_SPI_STATUS                    0xE0000C04 /* SPI Status Register */
-#define FX3_SPI_INTR                      0xE0000C08 /* SPI Interrupt Request Register */
-#define FX3_SPI_INTR_MASK                 0xE0000C0C /* SPI Interrupt Mask Register */
-#define FX3_SPI_EGRESS_DATA               0xE0000C10 /* SPI Egress Data Register */
-#define FX3_SPI_INGRESS_DATA              0xE0000C14 /* SPI Ingress Data Register */
-#define FX3_SPI_SOCKET                    0xE0000C18 /* SPI Socket Register */
-#define FX3_SPI_RX_BYTE_COUNT             0xE0000C1C /* SPI Receive Byte Count Register */
-#define FX3_SPI_TX_BYTE_COUNT             0xE0000C20 /* SPI Transmit Byte Count Register */
-#define FX3_SPI_ID                        0xE0000FF0 /* Block Identification and Version Number */
-#define FX3_SPI_POWER                     0xE0000FF4 /* Power, Clock, and Reset Control */
+#define FX3_SPI_CONFIG                        0xE0000C00 /* SPI Configuration and Modes Register */
+#define FX3_SPI_STATUS                        0xE0000C04 /* SPI Status Register */
+#define FX3_SPI_INTR                          0xE0000C08 /* SPI Interrupt Request Register */
+#define FX3_SPI_INTR_MASK                     0xE0000C0C /* SPI Interrupt Mask Register */
+#define FX3_SPI_EGRESS_DATA                   0xE0000C10 /* SPI Egress Data Register */
+#define FX3_SPI_INGRESS_DATA                  0xE0000C14 /* SPI Ingress Data Register */
+#define FX3_SPI_SOCKET                        0xE0000C18 /* SPI Socket Register */
+#define FX3_SPI_RX_BYTE_COUNT                 0xE0000C1C /* SPI Receive Byte Count Register */
+#define FX3_SPI_TX_BYTE_COUNT                 0xE0000C20 /* SPI Transmit Byte Count Register */
+#define FX3_SPI_ID                            0xE0000FF0 /* Block Identification and Version Number */
+#define FX3_SPI_POWER                         0xE0000FF4 /* Power, Clock, and Reset Control */
 
 #define FX3_SPI_CONFIG_ENABLE                            (1UL << 31)
 #define FX3_SPI_CONFIG_TX_CLEAR                          (1UL << 30)

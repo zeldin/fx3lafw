@@ -22,53 +22,53 @@
 #ifndef RDB_GPIF_H_
 #define RDB_GPIF_H_
 
-#define FX3_GPIF_CONFIG                   0xE0014000 /* GPIF Configuration Register */
-#define FX3_GPIF_BUS_CONFIG               0xE0014004 /* Bus Configuration Register */
-#define FX3_GPIF_BUS_CONFIG2              0xE0014008 /* Bus Configuration Register #2 */
-#define FX3_GPIF_AD_CONFIG                0xE001400C /* Address/Data Configuration Register */
-#define FX3_GPIF_STATUS                   0xE0014010 /* GPIF Status Register */
-#define FX3_GPIF_INTR                     0xE0014014 /* GPIF Interrupt Request Register */
-#define FX3_GPIF_INTR_MASK                0xE0014018 /* GPIF Interrupt Mask Register */
-#define FX3_GPIF_CTRL_BUS_DIRECTION       0xE0014024 /* Control Bus In/Out Direction Register */
-#define FX3_GPIF_CTRL_BUS_DEFAULT         0xE0014028 /* Control Bus Default Values Register */
-#define FX3_GPIF_CTRL_BUS_POLARITY        0xE001402C /* Control Bus SIgnal Polarity Register */
-#define FX3_GPIF_CTRL_BUS_TOGGLE          0xE0014030 /* Control Bus Output Toggle Mode Register */
-#define FX3_GPIF_CTRL_BUS_SELECT          0xE0014034 /* Control Bus Connection Matrix Register */
-#define FX3_GPIF_CTRL_COUNT_CONFIG        0xE0014074 /* Control Counter Configuration Register */
-#define FX3_GPIF_CTRL_COUNT_RESET         0xE0014078 /* Control Counter Reset Register */
-#define FX3_GPIF_CTRL_COUNT_LIMIT         0xE001407C /* Control Counter Reset Register */
-#define FX3_GPIF_ADDR_COUNT_CONFIG        0xE0014080 /* Address Counter Configuration Register */
-#define FX3_GPIF_ADDR_COUNT_RESET         0xE0014084 /* Address Counter Reset Register */
-#define FX3_GPIF_ADDR_COUNT_LIMIT         0xE0014088 /* Address Counter Limit Register */
-#define FX3_GPIF_STATE_COUNT_CONFIG       0xE001408C /* State Counter Configuration Register */
-#define FX3_GPIF_STATE_COUNT_LIMIT        0xE0014090 /* State Counter Limit Register */
-#define FX3_GPIF_DATA_COUNT_CONFIG        0xE0014094 /* Data Counter Configuration Register */
-#define FX3_GPIF_DATA_COUNT_RESET         0xE0014098 /* Data Counter Reset Register */
-#define FX3_GPIF_DATA_COUNT_LIMIT         0xE001409C /* Data Counter Limit Register */
-#define FX3_GPIF_CTRL_COMP_VALUE          0xE00140A0 /* Control Comparator Value Register */
-#define FX3_GPIF_CTRL_COMP_MASK           0xE00140A4 /* Control Comparator Mask Register */
-#define FX3_GPIF_DATA_COMP_VALUE          0xE00140A8 /* Data Comparator Value Register */
-#define FX3_GPIF_DATA_COMP_MASK           0xE00140AC /* Data Comparator Mask Register */
-#define FX3_GPIF_ADDR_COMP_VALUE          0xE00140B0 /* Address Comparator Value Register */
-#define FX3_GPIF_ADDR_COMP_MASK           0xE00140B4 /* Address Comparator Mask Register */
-#define FX3_GPIF_DATA_CTRL                0xE00140B8 /* Data Control Register */
-#define FX3_GPIF_INGRESS_DATA             0xE00140BC /* Socket Ingress Data Register */
-#define FX3_GPIF_EGRESS_DATA              0xE00140CC /* Socket Egress Data Register */
-#define FX3_GPIF_INGRESS_ADDRESS          0xE00140DC /* Thread Ingress Address Register */
-#define FX3_GPIF_EGRESS_ADDRESS           0xE00140EC /* Thread Egress Address Register */
-#define FX3_GPIF_THREAD_CONFIG            0xE00140FC /* Thread Configuration Register */
-#define FX3_GPIF_LAMBDA_STAT              0xE001410C /* Lambda Status Register */
-#define FX3_GPIF_ALPHA_STAT               0xE0014110 /* Alpha Status Register */
-#define FX3_GPIF_BETA_STAT                0xE0014114 /* Beta Status Register */
-#define FX3_GPIF_WAVEFORM_CTRL_STAT       0xE0014118 /* Waveform Program Control Register */
-#define FX3_GPIF_WAVEFORM_SWITCH          0xE001411C /* Waveform Switch Control Register */
-#define FX3_GPIF_WAVEFORM_SWITCH_TIMEOUT  0xE0014120 /* Waveform Timeout Register */
-#define FX3_GPIF_CRC_CONFIG               0xE0014124 /* CRC Configuration Register */
-#define FX3_GPIF_CRC_DATA                 0xE0014128 /* CRC Data Register */
-#define FX3_GPIF_BETA_DEASSERT            0xE001412C /* Beta Deassert Register */
-#define FX3_GPIF_FUNCTION                 0xE0014130 /* Transition Function Registers */
-#define FX3_GPIF_LEFT_WAVEFORM            0xE0015000 /* Left Edge Waveform Memory Register */
-#define FX3_GPIF_RIGHT_WAVEFORM           0xE0016000 /* Right Edge Waveform Memory Register */
+#define FX3_GPIF_CONFIG                       0xE0014000 /* GPIF Configuration Register */
+#define FX3_GPIF_BUS_CONFIG                   0xE0014004 /* Bus Configuration Register */
+#define FX3_GPIF_BUS_CONFIG2                  0xE0014008 /* Bus Configuration Register #2 */
+#define FX3_GPIF_AD_CONFIG                    0xE001400C /* Address/Data Configuration Register */
+#define FX3_GPIF_STATUS                       0xE0014010 /* GPIF Status Register */
+#define FX3_GPIF_INTR                         0xE0014014 /* GPIF Interrupt Request Register */
+#define FX3_GPIF_INTR_MASK                    0xE0014018 /* GPIF Interrupt Mask Register */
+#define FX3_GPIF_CTRL_BUS_DIRECTION           0xE0014024 /* Control Bus In/Out Direction Register */
+#define FX3_GPIF_CTRL_BUS_DEFAULT             0xE0014028 /* Control Bus Default Values Register */
+#define FX3_GPIF_CTRL_BUS_POLARITY            0xE001402C /* Control Bus SIgnal Polarity Register */
+#define FX3_GPIF_CTRL_BUS_TOGGLE              0xE0014030 /* Control Bus Output Toggle Mode Register */
+#define FX3_GPIF_CTRL_BUS_SELECT              0xE0014034 /* Control Bus Connection Matrix Register */
+#define FX3_GPIF_CTRL_COUNT_CONFIG            0xE0014074 /* Control Counter Configuration Register */
+#define FX3_GPIF_CTRL_COUNT_RESET             0xE0014078 /* Control Counter Reset Register */
+#define FX3_GPIF_CTRL_COUNT_LIMIT             0xE001407C /* Control Counter Reset Register */
+#define FX3_GPIF_ADDR_COUNT_CONFIG            0xE0014080 /* Address Counter Configuration Register */
+#define FX3_GPIF_ADDR_COUNT_RESET             0xE0014084 /* Address Counter Reset Register */
+#define FX3_GPIF_ADDR_COUNT_LIMIT             0xE0014088 /* Address Counter Limit Register */
+#define FX3_GPIF_STATE_COUNT_CONFIG           0xE001408C /* State Counter Configuration Register */
+#define FX3_GPIF_STATE_COUNT_LIMIT            0xE0014090 /* State Counter Limit Register */
+#define FX3_GPIF_DATA_COUNT_CONFIG            0xE0014094 /* Data Counter Configuration Register */
+#define FX3_GPIF_DATA_COUNT_RESET             0xE0014098 /* Data Counter Reset Register */
+#define FX3_GPIF_DATA_COUNT_LIMIT             0xE001409C /* Data Counter Limit Register */
+#define FX3_GPIF_CTRL_COMP_VALUE              0xE00140A0 /* Control Comparator Value Register */
+#define FX3_GPIF_CTRL_COMP_MASK               0xE00140A4 /* Control Comparator Mask Register */
+#define FX3_GPIF_DATA_COMP_VALUE              0xE00140A8 /* Data Comparator Value Register */
+#define FX3_GPIF_DATA_COMP_MASK               0xE00140AC /* Data Comparator Mask Register */
+#define FX3_GPIF_ADDR_COMP_VALUE              0xE00140B0 /* Address Comparator Value Register */
+#define FX3_GPIF_ADDR_COMP_MASK               0xE00140B4 /* Address Comparator Mask Register */
+#define FX3_GPIF_DATA_CTRL                    0xE00140B8 /* Data Control Register */
+#define FX3_GPIF_INGRESS_DATA                 0xE00140BC /* Socket Ingress Data Register */
+#define FX3_GPIF_EGRESS_DATA                  0xE00140CC /* Socket Egress Data Register */
+#define FX3_GPIF_INGRESS_ADDRESS              0xE00140DC /* Thread Ingress Address Register */
+#define FX3_GPIF_EGRESS_ADDRESS               0xE00140EC /* Thread Egress Address Register */
+#define FX3_GPIF_THREAD_CONFIG                0xE00140FC /* Thread Configuration Register */
+#define FX3_GPIF_LAMBDA_STAT                  0xE001410C /* Lambda Status Register */
+#define FX3_GPIF_ALPHA_STAT                   0xE0014110 /* Alpha Status Register */
+#define FX3_GPIF_BETA_STAT                    0xE0014114 /* Beta Status Register */
+#define FX3_GPIF_WAVEFORM_CTRL_STAT           0xE0014118 /* Waveform Program Control Register */
+#define FX3_GPIF_WAVEFORM_SWITCH              0xE001411C /* Waveform Switch Control Register */
+#define FX3_GPIF_WAVEFORM_SWITCH_TIMEOUT      0xE0014120 /* Waveform Timeout Register */
+#define FX3_GPIF_CRC_CONFIG                   0xE0014124 /* CRC Configuration Register */
+#define FX3_GPIF_CRC_DATA                     0xE0014128 /* CRC Data Register */
+#define FX3_GPIF_BETA_DEASSERT                0xE001412C /* Beta Deassert Register */
+#define FX3_GPIF_FUNCTION                     0xE0014130 /* Transition Function Registers */
+#define FX3_GPIF_LEFT_WAVEFORM                0xE0015000 /* Left Edge Waveform Memory Register */
+#define FX3_GPIF_RIGHT_WAVEFORM               0xE0016000 /* Right Edge Waveform Memory Register */
 
 #define FX3_GPIF_CONFIG_ENABLE                           (1UL << 31)
 #define FX3_GPIF_CONFIG_PP_MODE                          (1UL << 30)

@@ -22,44 +22,44 @@
 #ifndef RDB_DMA_H_
 #define RDB_DMA_H_
 
-#define FX3_SCK_DSCR                      0x00 /* Descriptor Chain Pointer */
-#define FX3_SCK_INTR                      0x00 /* Socket Interrupt Request Register */
-#define FX3_SCK_SIZE                      0x04 /* Transfer Size Register */
-#define FX3_SCK_COUNT                     0x08 /* Transfer Count Register */
-#define FX3_SCK_STATUS                    0x0C /* Socket Status Register */
-#define FX3_SCK_INTR                      0x10 /* Socket Interrupt Request Register */
-#define FX3_SCK_INTR_MASK                 0x14 /* Socket Interrupt Mask Register */
-#define FX3_DSCR_BUFFER                   0x20 /* Descriptor Buffer Base Address Register */
-#define FX3_DSCR_SYNC                     0x24 /* Descriptor Synchronization Pointers Register */
-#define FX3_DSCR_CHAIN                    0x28 /* Descriptor Chain Pointers Register */
-#define FX3_DSCR_SIZE                     0x02C /* Descriptor Size Register */
-#define FX3_EVENT                         0x7C /* Event Communication Register */
-#define FX3_ADAPTER_STATUS                0xFC /* Adapter Global Status Fields */
-#define FX3_SDMMC_CMD_IDX                 0xE0020000 /* SDMMC Command Index */
-#define FX3_SDMMC_CMD_ARG0                0xE0020004 /* SDMMC Command Argument 0 */
-#define FX3_SDMMC_CMD_ARG1                0xE0020008 /* SDMMC Command Argument 1 */
-#define FX3_SDMMC_RESP_IDX                0xE002000C /* SDMMC Response Index */
-#define FX3_SDMMC_RESP_REG0               0xE0020010 /* SDMMC Command Response 0 */
-#define FX3_SDMMC_RESP_REG1               0xE0020014 /* SDMMC Command Response 1 */
-#define FX3_SDMMC_RESP_REG2               0xE0020018 /* SDMMC Command Response 2 */
-#define FX3_SDMMC_RESP_REG3               0xE002001C /* SDMMC Command Response 3 */
-#define FX3_SDMMC_RESP_REG4               0xE0020020 /* SDMMC Command Response 4 */
-#define FX3_SDMMC_CMD_RESP_FMT            0xE0020024 /* SDMMC Command Response Format */
-#define FX3_SDMMC_BLOCK_COUNT             0xE0020028 /* SDMMC Block Count */
-#define FX3_SDMMC_BLOCK_LEN               0xE002002C /* SDMMC Block Length */
-#define FX3_SDMMC_MODE_CFG                0xE0020030 /* SDMMC Mode Configuration */
-#define FX3_SDMMC_DATA_CFG                0xE0020034 /* SDMMC Data Configuration */
-#define FX3_SDMMC_CS                      0xE0020038 /* SDMMC Command and Status */
-#define FX3_SDMMC_STATUS                  0xE002003C /* SDMMC Status */
-#define FX3_SDMMC_INTR                    0xE0020040 /* SDMMC Interrupt Status */
-#define FX3_SDMMC_INTR_MASK               0xE0020044 /* SDMMC Interrupt Mask */
-#define FX3_SDMMC_NCR                     0xE0020048 /* SDMMC Command Response Timing Register #1 */
-#define FX3_SDMMC_NCC_NWR                 0xE002004C /* SDMMC Command Response Timing Register #2 */
-#define FX3_SDMMC_NAC                     0xE0020050 /* SDMMC Read Timeout Register */
-#define FX3_SDMMC_HW_CTRL                 0xE0020054 /* SDMMC Hardware Control Register */
-#define FX3_SDMMC_DLL_CTRL                0xE0020058 /* SDMMC DLL Control */
-#define FX3_SIB_ID                        0xE0027F00 /* Storage Interface Block ID register */
-#define FX3_SIB_POWER                     0xE0027F04 /* SIB Power Control */
+#define FX3_SCK_DSCR                          0x00 /* Descriptor Chain Pointer */
+#define FX3_SCK_INTR                          0x00 /* Socket Interrupt Request Register */
+#define FX3_SCK_SIZE                          0x04 /* Transfer Size Register */
+#define FX3_SCK_COUNT                         0x08 /* Transfer Count Register */
+#define FX3_SCK_STATUS                        0x0C /* Socket Status Register */
+#define FX3_SCK_INTR                          0x10 /* Socket Interrupt Request Register */
+#define FX3_SCK_INTR_MASK                     0x14 /* Socket Interrupt Mask Register */
+#define FX3_DSCR_BUFFER                       0x20 /* Descriptor Buffer Base Address Register */
+#define FX3_DSCR_SYNC                         0x24 /* Descriptor Synchronization Pointers Register */
+#define FX3_DSCR_CHAIN                        0x28 /* Descriptor Chain Pointers Register */
+#define FX3_DSCR_SIZE                         0x02C /* Descriptor Size Register */
+#define FX3_EVENT                             0x7C /* Event Communication Register */
+#define FX3_ADAPTER_STATUS                    0xFC /* Adapter Global Status Fields */
+#define FX3_SDMMC_CMD_IDX                     0xE0020000 /* SDMMC Command Index */
+#define FX3_SDMMC_CMD_ARG0                    0xE0020004 /* SDMMC Command Argument 0 */
+#define FX3_SDMMC_CMD_ARG1                    0xE0020008 /* SDMMC Command Argument 1 */
+#define FX3_SDMMC_RESP_IDX                    0xE002000C /* SDMMC Response Index */
+#define FX3_SDMMC_RESP_REG0                   0xE0020010 /* SDMMC Command Response 0 */
+#define FX3_SDMMC_RESP_REG1                   0xE0020014 /* SDMMC Command Response 1 */
+#define FX3_SDMMC_RESP_REG2                   0xE0020018 /* SDMMC Command Response 2 */
+#define FX3_SDMMC_RESP_REG3                   0xE002001C /* SDMMC Command Response 3 */
+#define FX3_SDMMC_RESP_REG4                   0xE0020020 /* SDMMC Command Response 4 */
+#define FX3_SDMMC_CMD_RESP_FMT                0xE0020024 /* SDMMC Command Response Format */
+#define FX3_SDMMC_BLOCK_COUNT                 0xE0020028 /* SDMMC Block Count */
+#define FX3_SDMMC_BLOCK_LEN                   0xE002002C /* SDMMC Block Length */
+#define FX3_SDMMC_MODE_CFG                    0xE0020030 /* SDMMC Mode Configuration */
+#define FX3_SDMMC_DATA_CFG                    0xE0020034 /* SDMMC Data Configuration */
+#define FX3_SDMMC_CS                          0xE0020038 /* SDMMC Command and Status */
+#define FX3_SDMMC_STATUS                      0xE002003C /* SDMMC Status */
+#define FX3_SDMMC_INTR                        0xE0020040 /* SDMMC Interrupt Status */
+#define FX3_SDMMC_INTR_MASK                   0xE0020044 /* SDMMC Interrupt Mask */
+#define FX3_SDMMC_NCR                         0xE0020048 /* SDMMC Command Response Timing Register #1 */
+#define FX3_SDMMC_NCC_NWR                     0xE002004C /* SDMMC Command Response Timing Register #2 */
+#define FX3_SDMMC_NAC                         0xE0020050 /* SDMMC Read Timeout Register */
+#define FX3_SDMMC_HW_CTRL                     0xE0020054 /* SDMMC Hardware Control Register */
+#define FX3_SDMMC_DLL_CTRL                    0xE0020058 /* SDMMC DLL Control */
+#define FX3_SIB_ID                            0xE0027F00 /* Storage Interface Block ID register */
+#define FX3_SIB_POWER                         0xE0027F04 /* SIB Power Control */
 
 #define FX3_SCK_DSCR_DSCR_LOW_SHIFT                      24
 #define FX3_SCK_DSCR_DSCR_LOW_BITS                       8

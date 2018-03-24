@@ -22,8 +22,8 @@
 #ifndef RDB_LPP_H_
 #define RDB_LPP_H_
 
-#define FX3_LPP_ID                        0xE0007F00 /* Block Identification and Version Number */
-#define FX3_LPP_POWER                     0xE0007F04 /* Power, Clock, and Reset Control */
+#define FX3_LPP_ID                            0xE0007F00 /* Block Identification and Version Number */
+#define FX3_LPP_POWER                         0xE0007F04 /* Power, Clock, and Reset Control */
 
 #define FX3_LPP_ID_BLOCK_VERSION_SHIFT                   16
 #define FX3_LPP_ID_BLOCK_VERSION_BITS                    16

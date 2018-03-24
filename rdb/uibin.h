@@ -22,8 +22,8 @@
 #ifndef RDB_UIBIN_H_
 #define RDB_UIBIN_H_
 
-#define FX3_UIBIN_ID                      0xE0040000 /* Block Identification and Version Number Register */
-#define FX3_UIBIN_POWER                   0xE0040004 /* Power, Clock, and Reset Control Registers */
+#define FX3_UIBIN_ID                          0xE0040000 /* Block Identification and Version Number Register */
+#define FX3_UIBIN_POWER                       0xE0040004 /* Power, Clock, and Reset Control Registers */
 
 #define FX3_UIBIN_ID_BLOCK_VERSION_SHIFT                 16
 #define FX3_UIBIN_ID_BLOCK_VERSION_BITS                  16

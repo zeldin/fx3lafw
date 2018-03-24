@@ -22,23 +22,23 @@
 #ifndef RDB_PPORT_H_
 #define RDB_PPORT_H_
 
-#define FX3_PP_ID                         0xE0017E00 /* P-Port Device ID Register */
-#define FX3_PP_INIT                       0xE0017E04 /* P-Port Reset and Power Control Register */
-#define FX3_PP_CONFIG                     0xE0017E08 /* P-Port Configuration Register */
-#define FX3_PP_INTR_MASK                  0xE0017E1C /* P-Port Interrupt Mask Register */
-#define FX3_PP_DRQR5_MASK                 0xE0017E20 /* P-Port DRQ/R5 Mask Register */
-#define FX3_PP_SOCK_MASK                  0xE0017E24 /* P-Port Socket Mask Register */
-#define FX3_PP_ERROR                      0xE0017E28 /* P-Port Error Indicator Register */
-#define FX3_PP_DMA_XFER                   0xE0017E2C /* P-Port DMA Transfer Register */
-#define FX3_PP_DMA_SIZE                   0xE0017E30 /* P-Port DMA Transfer Size Register */
-#define FX3_PP_WR_MAILBOX                 0xE0017E34 /* P-Port Write (Ingress) Mailbox Registers */
-#define FX3_PP_MMIO_ADDR                  0xE0017E3C /* P-Port MMIO Address Registers */
-#define FX3_PP_MMIO_DATA                  0xE0017E40 /* P-Port MMIO Data Registers */
-#define FX3_PP_MMIO                       0xE0017E44 /* P-Port MMIO Control Registers */
-#define FX3_PP_EVENT                      0xE0017E48 /* P-Port Event Register */
-#define FX3_PP_RD_MAILBOX                 0xE0017E4C /* P-Port Read (Egress) Mailbox Registers */
-#define FX3_PP_SOCK_STAT                  0xE0017E54 /* P-Port Socket Status Register */
-#define FX3_PP_BUF_SIZE_CNT               0xE0017E?? /* P-Port Socket Buffer Size or Count Register */
+#define FX3_PP_ID                             0xE0017E00 /* P-Port Device ID Register */
+#define FX3_PP_INIT                           0xE0017E04 /* P-Port Reset and Power Control Register */
+#define FX3_PP_CONFIG                         0xE0017E08 /* P-Port Configuration Register */
+#define FX3_PP_INTR_MASK                      0xE0017E1C /* P-Port Interrupt Mask Register */
+#define FX3_PP_DRQR5_MASK                     0xE0017E20 /* P-Port DRQ/R5 Mask Register */
+#define FX3_PP_SOCK_MASK                      0xE0017E24 /* P-Port Socket Mask Register */
+#define FX3_PP_ERROR                          0xE0017E28 /* P-Port Error Indicator Register */
+#define FX3_PP_DMA_XFER                       0xE0017E2C /* P-Port DMA Transfer Register */
+#define FX3_PP_DMA_SIZE                       0xE0017E30 /* P-Port DMA Transfer Size Register */
+#define FX3_PP_WR_MAILBOX                     0xE0017E34 /* P-Port Write (Ingress) Mailbox Registers */
+#define FX3_PP_MMIO_ADDR                      0xE0017E3C /* P-Port MMIO Address Registers */
+#define FX3_PP_MMIO_DATA                      0xE0017E40 /* P-Port MMIO Data Registers */
+#define FX3_PP_MMIO                           0xE0017E44 /* P-Port MMIO Control Registers */
+#define FX3_PP_EVENT                          0xE0017E48 /* P-Port Event Register */
+#define FX3_PP_RD_MAILBOX                     0xE0017E4C /* P-Port Read (Egress) Mailbox Registers */
+#define FX3_PP_SOCK_STAT                      0xE0017E54 /* P-Port Socket Status Register */
+#define FX3_PP_BUF_SIZE_CNT                   0xE0017E?? /* P-Port Socket Buffer Size or Count Register */
 
 #define FX3_PP_ID_DEVICE_ID_SHIFT                        0
 #define FX3_PP_ID_DEVICE_ID_BITS                         16

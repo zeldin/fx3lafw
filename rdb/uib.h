@@ -22,116 +22,121 @@
 #ifndef RDB_UIB_H_
 #define RDB_UIB_H_
 
-#define FX3_UIB_INTR                      0xE0030000 /* USB Interrupt Register */
-#define FX3_UIB_INTR_MASK                 0xE0030004 /* USB Interrupt Mask Register */
-#define FX3_PHY_CLK_AND_TEST              0xE0031008 /* USB PHY Clocks and Testability Configuration Register */
-#define FX3_PHY_CONF                      0xE003100C /* USB PHY Programmability and Serial Interface Register */
-#define FX3_PHY_CHIRP                     0xE0031014 /* USB PHY Chirp Control Register */
-#define FX3_DEV_CS                        0xE0031400 /* Device Controller Master Control and Status Register */
-#define FX3_DEV_FRAMECNT                  0xE0031404 /* FRAMECNT Register */
-#define FX3_DEV_PWR_CS                    0xE0031408 /* Power Management Control and Status Register */
-#define FX3_DEV_SETUPDAT                  0xE003140C /* SETUPDAT0/1 Registers */
-#define FX3_DEV_TOGGLE                    0xE0031414 /* Data Toggle for Endpoints Register */
-#define FX3_DEV_EPI_CS                    0xE0031418 /* IN Endpoint Control and Status Register */
-#define FX3_DEV_EPI_XFER_CNT              0xE0031458 /* IN Endpoint Remaining Transfer Length Register */
-#define FX3_DEV_EPO_CS                    0xE0031498 /* OUT Endpoint Control and Status Register */
-#define FX3_DEV_EPO_XFER_CNT              0xE00314D8 /* OUT Endpoint Remaining Transfer Length Register */
-#define FX3_DEV_CTRL_INTR_MASK            0xE0031518 /* CONTROL Interrupt Mask Register */
-#define FX3_DEV_CTRL_INTR                 0xE003151C /* CONTROL Interrupt Request Register */
-#define FX3_DEV_EP_INTR_MASK              0xE0031520 /* USB EP Interrupt Mask Register */
-#define FX3_DEV_EP_INTR                   0xE0031524 /* USB EP Interrupt Request Register */
-#define FX3_CHGDET_CTRL                   0xE0031800 /* Charger Detect Control and Configuration Register */
-#define FX3_CHGDET_INTR                   0xE0031804 /* Charger Detect Interrupt Register */
-#define FX3_CHGDET_INTR_MASK              0xE0031808 /* Charger Detect Interrupt Mask Register */
-#define FX3_OTG_CTRL                      0xE003180C /* OTG Control Register */
-#define FX3_OTG_INTR                      0xE0031810 /* OTG Interrupt Register */
-#define FX3_OTG_INTR_MASK                 0xE0031814 /* OTG Interrupt Mask Register */
-#define FX3_OTG_TIMER                     0xE0031818 /* OTG Timer Register */
-#define FX3_EEPM_CS                       0xE0031C00 /* Egress EPM Retry Buffer Status */
-#define FX3_IEPM_CS                       0xE0031C04 /* Ingress EPM Control and Status */
-#define FX3_IEPM_MULT                     0xE0031C08 /* Ingress EPM MULT Function Control Register */
-#define FX3_EEPM_ENDPOINT                 0xE0031C40 /* Egress EPM Retry Buffer Status */
-#define FX3_IEPM_ENDPOINT                 0xE0031C80 /* Ingress EPM Per Endpoint Control and Status Register */
-#define FX3_IEPM_FIFO                     0xE0031CC0 /* Ingress EPM FIFO Entry Register */
-#define FX3_HOST_CS                       0xE0032000 /* Host Controller Command and Status Bits Register */
-#define FX3_HOST_EP_INTR                  0xE0032004 /* Host End Point Interrupt Register */
-#define FX3_HOST_EP_INTR_MASK             0xE0032008 /* Host End Point Interrupt Mask Register */
-#define FX3_HOST_TOGGLE                   0xE003200C /* Data Toggle for Endpoints Register */
-#define FX3_HOST_SHDL_CS                  0xE0032010 /* Scheduler Memory Pointer Register */
-#define FX3_OHCI_REVISION                 0xE0032010 /* OHCI Host Controller Revision Number Register */
-#define FX3_HOST_SHDL_SLEEP               0xE0032014 /* Scheduler Sleep Register */
-#define FX3_HOST_RESP_BASE                0xE0032018 /* Response Base Address Register */
-#define FX3_HOST_RESP_CS                  0xE003201C /* Scheduler Response Command and Control Register */
-#define FX3_HOST_ACTIVE_EP                0xE0032020 /* Active Endpoint Register */
-#define FX3_OHCI_CONTROL                  0xE0032028 /* Host Controller Operating Mode Control Register */
-#define FX3_OHCI_COMMAND_STATUS           0xE003202C /* Command and Status Register */
-#define FX3_OHCI_INTERRUPT_STATUS         0xE0032030 /* OHCI Host Controller Interrupt Status Register */
-#define FX3_OHCI_INTERRUPT_ENABLE         0xE0032034 /* OHCI Interrupt Enable Register */
-#define FX3_OHCI_INTERRUPT_DISABLE        0xE0032038 /* OHCI Interrupt Disable Register */
-#define FX3_OHCI_FM_INTERVAL              0xE003203C /* OHCI Frame Control Information Register */
-#define FX3_OHCI_FM_REMAINING             0xE0032040 /* Current Value of Remaining Frame Count Register */
-#define FX3_OHCI_FM_NUMBER                0xE0032044 /* Full Speed Frame Number Register */
-#define FX3_OHCI_PERIODIC_START           0xE0032048 /* Periodic Schedule Start Register */
-#define FX3_OHCI_LS_THRESHOLD             0xE003204C /* LSTHRESHOLD Register */
-#define FX3_OHCI_RH_PORT_STATUS           0xE0032054 /* Root Hub Port Status Register */
-#define FX3_OHCI_EOF                      0xE0032058 /* OHCI End of Frame Times Register */
-#define FX3_EHCI_HCCPARAMS                0xE003205C /* Root Hub Port Status Register */
-#define FX3_EHCI_USBCMD                   0xE0032060 /* Root Hub Port Status Register */
-#define FX3_EHCI_USBSTS                   0xE0032064 /* Host Controller States and Pending Interrupts Register */
-#define FX3_EHCI_USBINTR                  0xE0032068 /* EHCI Interrupt Register */
-#define FX3_EHCI_FRINDEX                  0xE003206C /* Frame Index Register */
-#define FX3_EHCI_CONFIGFLAG               0xE0032070 /* Configure Flag Register */
-#define FX3_EHCI_PORTSC                   0xE0032074 /* Port Status and Control Register */
-#define FX3_EHCI_EOF                      0xE0032078 /* EHCI End of Frame Times Register */
-#define FX3_SHDL_CHNG_TYPE                0xE003207C /* Scheduler Change Type Register */
-#define FX3_SHDL_STATE_MACHINE            0xE0032080 /* Scheduler State Machine Register */
-#define FX3_SHDL_INTERNAL_STATUS          0xE0032084 /* Scheduler Internal Status Register */
-#define FX3_SHDL_OHCI                     0xE0032400 /* Scheduler Memory Register, OHCI Format */
-#define FX3_SHDL_EHCI                     0xE0032800 /* Scheduler Memory Register, EHCI Format */
-#define FX3_LNK_CONF                      0xE0033000 /* Link Configuration Register */
-#define FX3_LNK_INTR                      0xE0033004 /* Link Interrupt Register */
-#define FX3_LNK_INTR_MASK                 0xE0033008 /* Link Interrupt Mask Register */
-#define FX3_LNK_ERROR_CONF                0xE003300C /* Link Error Counter Configuration Register */
-#define FX3_LNK_ERROR_STATUS              0xE0033010 /* Link Error Status Register */
-#define FX3_LNK_ERROR_COUNT               0xE0033014 /* Error Counter Register */
-#define FX3_LNK_ERROR_COUNT_THRESHOLD     0xE0033018 /* Error Count Threshold Register */
-#define FX3_LNK_PHY_CONF                  0xE003301C /* USB 3.0 PHY Configuration Register */
-#define FX3_LNK_PHY_MPLL_STATUS           0xE003302C /* USB 3.0 PHY MPLL Status Register */
-#define FX3_LNK_PHY_TX_TRIM               0xE003303C /* USB 3.0 PHY Transmitter, Config Register */
-#define FX3_LNK_PHY_ERROR_CONF            0xE0033040 /* PHY Error Counter Configuration Register */
-#define FX3_LNK_PHY_ERROR_STATUS          0xE0033044 /* PHY Error Status Register */
-#define FX3_LNK_DEVICE_POWER_CONTROL      0xE0033050 /* USB 3.0 Device Power State Control Register */
-#define FX3_LNK_LTSSM_STATE               0xE0033054 /* Link Training Status State Machine (LTSSM) State Register */
-#define FX3_LNK_LFPS_OBSERVE              0xE0033064 /* LFPS Receiver Observability Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_0      0xE0033138 /* Compliance Pattern CP0 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_1      0xE003313C /* Compliance Pattern CP1 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_2      0xE0033140 /* Compliance Pattern CP2 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_3      0xE0033144 /* Compliance Pattern CP3 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_4      0xE0033148 /* Compliance Pattern CP4 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_5      0xE003314C /* Compliance Pattern CP5 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_6      0xE0033150 /* Compliance Pattern CP6 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_7      0xE0033154 /* Compliance Pattern CP7 Register */
-#define FX3_LNK_COMPLIANCE_PATTERN_8      0xE0033158 /* Compliance Pattern CP8 Register */
-#define FX3_PROT_CS                       0xE0033400 /* Protocol Layer Control and Status Register */
-#define FX3_PROT_INTR                     0xE0033404 /* Protocol Layer Interrupt Register */
-#define FX3_PROT_INTR_MASK                0xE0033408 /* Protocol Interrupts Mask Register */
-#define FX3_PROT_FRAMECNT                 0xE0033428 /* Frame Counter Register */
-#define FX3_PROT_ITP_TIME                 0xE0033430 /* ITP Time Free Running Counter */
-#define FX3_PROT_ITP_TIMESTAMP            0xE0033434 /* ITP Time Stamp Register */
-#define FX3_PROT_SETUP_DAT                0xE0033438 /* Received SETUP Packet Data Register */
-#define FX3_PROT_SEQ_NUM                  0xE0033440 /* Sequence Number */
-#define FX3_PROT_EP_INTR                  0xE0033474 /* Endpoint Interrupts */
-#define FX3_PROT_EP_INTR_MASK             0xE0033478 /* Endpoint Interrupt Mask */
-#define FX3_PROT_EPI_CS1                  0xE0033500 /* SuperSpeed IN Endpoint Control and Status */
-#define FX3_PROT_EPI_CS2                  0xE0033540 /* SuperSpeed IN Endpoint Control and Status */
-#define FX3_PROT_EPI_UNMAPPED_STREAM      0xE0033580 /* Unmapped Stream Request */
-#define FX3_PROT_EPI_MAPPED_STREAM        0xE00335C0 /* Mapped Streams Register */
-#define FX3_PROT_EPO_CS1                  0xE0033600 /* SuperSpeed OUT Endpoint Control and Status */
-#define FX3_PROT_EPO_CS2                  0xE0033640 /* SuperSpeed OUT Endpoint Control and Status */
-#define FX3_PROT_EPO_UNMAPPED_STREAM      0xE0033680 /* Unmapped Stream Request */
-#define FX3_PROT_EPO_MAPPED_STREAM        0xE00336C0 /* Mapped Streams Register */
-#define FX3_UIB_ID                        0xE0037F00 /* Block Identification and Version Number Register */
-#define FX3_UIB_POWER                     0xE0037F04 /* Power, Clock, and Reset Control Registers */
+#define FX3_UIB_INTR                          0xE0030000 /* USB Interrupt Register */
+#define FX3_UIB_INTR_MASK                     0xE0030004 /* USB Interrupt Mask Register */
+#define FX3_PHY_CLK_AND_TEST                  0xE0031008 /* USB PHY Clocks and Testability Configuration Register */
+#define FX3_PHY_CONF                          0xE003100C /* USB PHY Programmability and Serial Interface Register */
+#define FX3_PHY_CHIRP                         0xE0031014 /* USB PHY Chirp Control Register */
+#define FX3_DEV_CS                            0xE0031400 /* Device Controller Master Control and Status Register */
+#define FX3_DEV_FRAMECNT                      0xE0031404 /* FRAMECNT Register */
+#define FX3_DEV_PWR_CS                        0xE0031408 /* Power Management Control and Status Register */
+#define FX3_DEV_SETUPDAT                      0xE003140C /* SETUPDAT0/1 Registers */
+#define FX3_DEV_TOGGLE                        0xE0031414 /* Data Toggle for Endpoints Register */
+#define FX3_DEV_EPI_CS                        0xE0031418 /* IN Endpoint Control and Status Register */
+#define FX3_DEV_EPI_XFER_CNT                  0xE0031458 /* IN Endpoint Remaining Transfer Length Register */
+#define FX3_DEV_EPO_CS                        0xE0031498 /* OUT Endpoint Control and Status Register */
+#define FX3_DEV_EPO_XFER_CNT                  0xE00314D8 /* OUT Endpoint Remaining Transfer Length Register */
+#define FX3_DEV_CTRL_INTR_MASK                0xE0031518 /* CONTROL Interrupt Mask Register */
+#define FX3_DEV_CTRL_INTR                     0xE003151C /* CONTROL Interrupt Request Register */
+#define FX3_DEV_EP_INTR_MASK                  0xE0031520 /* USB EP Interrupt Mask Register */
+#define FX3_DEV_EP_INTR                       0xE0031524 /* USB EP Interrupt Request Register */
+#define FX3_CHGDET_CTRL                       0xE0031800 /* Charger Detect Control and Configuration Register */
+#define FX3_CHGDET_INTR                       0xE0031804 /* Charger Detect Interrupt Register */
+#define FX3_CHGDET_INTR_MASK                  0xE0031808 /* Charger Detect Interrupt Mask Register */
+#define FX3_OTG_CTRL                          0xE003180C /* OTG Control Register */
+#define FX3_OTG_INTR                          0xE0031810 /* OTG Interrupt Register */
+#define FX3_OTG_INTR_MASK                     0xE0031814 /* OTG Interrupt Mask Register */
+#define FX3_OTG_TIMER                         0xE0031818 /* OTG Timer Register */
+#define FX3_EEPM_CS                           0xE0031C00 /* Egress EPM Retry Buffer Status */
+#define FX3_IEPM_CS                           0xE0031C04 /* Ingress EPM Control and Status */
+#define FX3_IEPM_MULT                         0xE0031C08 /* Ingress EPM MULT Function Control Register */
+#define FX3_EEPM_ENDPOINT                     0xE0031C40 /* Egress EPM Retry Buffer Status */
+#define FX3_IEPM_ENDPOINT                     0xE0031C80 /* Ingress EPM Per Endpoint Control and Status Register */
+#define FX3_IEPM_FIFO                         0xE0031CC0 /* Ingress EPM FIFO Entry Register */
+#define FX3_HOST_CS                           0xE0032000 /* Host Controller Command and Status Bits Register */
+#define FX3_HOST_EP_INTR                      0xE0032004 /* Host End Point Interrupt Register */
+#define FX3_HOST_EP_INTR_MASK                 0xE0032008 /* Host End Point Interrupt Mask Register */
+#define FX3_HOST_TOGGLE                       0xE003200C /* Data Toggle for Endpoints Register */
+#define FX3_HOST_SHDL_CS                      0xE0032010 /* Scheduler Memory Pointer Register */
+#define FX3_HOST_SHDL_SLEEP                   0xE0032014 /* Scheduler Sleep Register */
+#define FX3_HOST_RESP_BASE                    0xE0032018 /* Response Base Address Register */
+#define FX3_HOST_RESP_CS                      0xE003201C /* Scheduler Response Command and Control Register */
+#define FX3_HOST_ACTIVE_EP                    0xE0032020 /* Active Endpoint Register */
+#define FX3_OHCI_REVISION                     0xE0032024 /* OHCI Host Controller Revision Number Register */
+#define FX3_OHCI_CONTROL                      0xE0032028 /* Host Controller Operating Mode Control Register */
+#define FX3_OHCI_COMMAND_STATUS               0xE003202C /* Command and Status Register */
+#define FX3_OHCI_INTERRUPT_STATUS             0xE0032030 /* OHCI Host Controller Interrupt Status Register */
+#define FX3_OHCI_INTERRUPT_ENABLE             0xE0032034 /* OHCI Interrupt Enable Register */
+#define FX3_OHCI_INTERRUPT_DISABLE            0xE0032038 /* OHCI Interrupt Disable Register */
+#define FX3_OHCI_FM_INTERVAL                  0xE003203C /* OHCI Frame Control Information Register */
+#define FX3_OHCI_FM_REMAINING                 0xE0032040 /* Current Value of Remaining Frame Count Register */
+#define FX3_OHCI_FM_NUMBER                    0xE0032044 /* Full Speed Frame Number Register */
+#define FX3_OHCI_PERIODIC_START               0xE0032048 /* Periodic Schedule Start Register */
+#define FX3_OHCI_LS_THRESHOLD                 0xE003204C /* LSTHRESHOLD Register */
+#define FX3_OHCI_RH_PORT_STATUS               0xE0032054 /* Root Hub Port Status Register */
+#define FX3_OHCI_EOF                          0xE0032058 /* OHCI End of Frame Times Register */
+#define FX3_EHCI_HCCPARAMS                    0xE003205C /* Root Hub Port Status Register */
+#define FX3_EHCI_USBCMD                       0xE0032060 /* Root Hub Port Status Register */
+#define FX3_EHCI_USBSTS                       0xE0032064 /* Host Controller States and Pending Interrupts Register */
+#define FX3_EHCI_USBINTR                      0xE0032068 /* EHCI Interrupt Register */
+#define FX3_EHCI_FRINDEX                      0xE003206C /* Frame Index Register */
+#define FX3_EHCI_CONFIGFLAG                   0xE0032070 /* Configure Flag Register */
+#define FX3_EHCI_PORTSC                       0xE0032074 /* Port Status and Control Register */
+#define FX3_EHCI_EOF                          0xE0032078 /* EHCI End of Frame Times Register */
+#define FX3_SHDL_CHNG_TYPE                    0xE003207C /* Scheduler Change Type Register */
+#define FX3_SHDL_STATE_MACHINE                0xE0032080 /* Scheduler State Machine Register */
+#define FX3_SHDL_INTERNAL_STATUS              0xE0032084 /* Scheduler Internal Status Register */
+#define FX3_SHDL_OHCI                         0xE0032400 /* Scheduler Memory Register, OHCI Format */
+#define FX3_SHDL_EHCI                         0xE0032800 /* Scheduler Memory Register, EHCI Format */
+#define FX3_LNK_CONF                          0xE0033000 /* Link Configuration Register */
+#define FX3_LNK_INTR                          0xE0033004 /* Link Interrupt Register */
+#define FX3_LNK_INTR_MASK                     0xE0033008 /* Link Interrupt Mask Register */
+#define FX3_LNK_ERROR_CONF                    0xE003300C /* Link Error Counter Configuration Register */
+#define FX3_LNK_ERROR_STATUS                  0xE0033010 /* Link Error Status Register */
+#define FX3_LNK_ERROR_COUNT                   0xE0033014 /* Error Counter Register */
+#define FX3_LNK_ERROR_COUNT_THRESHOLD         0xE0033018 /* Error Count Threshold Register */
+#define FX3_LNK_PHY_CONF                      0xE003301C /* USB 3.0 PHY Configuration Register */
+#define FX3_LNK_PHY_MPLL_STATUS               0xE003302C /* USB 3.0 PHY MPLL Status Register */
+#define FX3_LNK_PHY_TX_TRIM                   0xE003303C /* USB 3.0 PHY Transmitter, Config Register */
+#define FX3_LNK_PHY_ERROR_CONF                0xE0033040 /* PHY Error Counter Configuration Register */
+#define FX3_LNK_PHY_ERROR_STATUS              0xE0033044 /* PHY Error Status Register */
+#define FX3_LNK_DEVICE_POWER_CONTROL          0xE0033050 /* USB 3.0 Device Power State Control Register */
+#define FX3_LNK_LTSSM_STATE                   0xE0033054 /* Link Training Status State Machine (LTSSM) State Register */
+#define FX3_LNK_LFPS_OBSERVE                  0xE0033064 /* LFPS Receiver Observability Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_0          0xE0033138 /* Compliance Pattern CP0 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_1          0xE003313C /* Compliance Pattern CP1 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_2          0xE0033140 /* Compliance Pattern CP2 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_3          0xE0033144 /* Compliance Pattern CP3 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_4          0xE0033148 /* Compliance Pattern CP4 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_5          0xE003314C /* Compliance Pattern CP5 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_6          0xE0033150 /* Compliance Pattern CP6 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_7          0xE0033154 /* Compliance Pattern CP7 Register */
+#define FX3_LNK_COMPLIANCE_PATTERN_8          0xE0033158 /* Compliance Pattern CP8 Register */
+#define FX3_PROT_CS                           0xE0033400 /* Protocol Layer Control and Status Register */
+#define FX3_PROT_INTR                         0xE0033404 /* Protocol Layer Interrupt Register */
+#define FX3_PROT_INTR_MASK                    0xE0033408 /* Protocol Interrupts Mask Register */
+#define FX3_PROT_LMP_PORT_CAPABILITY_TIMER    0xE0033418 /* Capability Timer Register */
+#define FX3_PROT_LMP_PORT_CONFIGURATION_TIMER 0xE003341C /* Configuration Timer Register */
+#define FX3_PROT_FRAMECNT                     0xE0033428 /* Frame Counter Register */
+#define FX3_PROT_ITP_TIME                     0xE0033430 /* ITP Time Free Running Counter */
+#define FX3_PROT_ITP_TIMESTAMP                0xE0033434 /* ITP Time Stamp Register */
+#define FX3_PROT_SETUP_DAT                    0xE0033438 /* Received SETUP Packet Data Register */
+#define FX3_PROT_SEQ_NUM                      0xE0033440 /* Sequence Number */
+#define FX3_PROT_LMP_RECEIVED                 0xE003345C /* Received Register */
+#define FX3_PROT_EP_INTR                      0xE0033474 /* Endpoint Interrupts */
+#define FX3_PROT_EP_INTR_MASK                 0xE0033478 /* Endpoint Interrupt Mask */
+#define FX3_PROT_EPI_CS1                      0xE0033500 /* SuperSpeed IN Endpoint Control and Status */
+#define FX3_PROT_EPI_CS2                      0xE0033540 /* SuperSpeed IN Endpoint Control and Status */
+#define FX3_PROT_EPI_UNMAPPED_STREAM          0xE0033580 /* Unmapped Stream Request */
+#define FX3_PROT_EPI_MAPPED_STREAM            0xE00335C0 /* Mapped Streams Register */
+#define FX3_PROT_EPO_CS1                      0xE0033600 /* SuperSpeed OUT Endpoint Control and Status */
+#define FX3_PROT_EPO_CS2                      0xE0033640 /* SuperSpeed OUT Endpoint Control and Status */
+#define FX3_PROT_EPO_UNMAPPED_STREAM          0xE0033680 /* Unmapped Stream Request */
+#define FX3_PROT_EPO_MAPPED_STREAM            0xE00336C0 /* Mapped Streams Register */
+#define FX3_PROT_STREAM_ERROR_DISABLE         0xE0033700 /* Stream Error Disable Register */
+#define FX3_PROT_STREAM_ERROR_STATUS          0xE0033704 /* Stream Error Status Register */
+#define FX3_UIB_ID                            0xE0037F00 /* Block Identification and Version Number Register */
+#define FX3_UIB_POWER                         0xE0037F04 /* Power, Clock, and Reset Control Registers */
 
 #define FX3_UIB_INTR_EPM_URUN_TIMEOUT                    (1UL << 12)
 #define FX3_UIB_INTR_EPM_URUN                            (1UL << 11)
@@ -515,10 +520,6 @@
 #define FX3_HOST_SHDL_CS_BULK_CNTRL_PTR0_BITS            8
 #define FX3_HOST_SHDL_CS_BULK_CNTRL_PTR0_MASK            (0xffUL << 0)
 
-#define FX3_OHCI_REVISION_REV_SHIFT                      0
-#define FX3_OHCI_REVISION_REV_BITS                       8
-#define FX3_OHCI_REVISION_REV_MASK                       (0xffUL << 0)
-
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_SHIFT     1
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_BITS      9
 #define FX3_HOST_SHDL_SLEEP_ASYNC_SLEEP_TIMMER_MASK      (0x1ffUL << 1)
@@ -542,6 +543,10 @@
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_SHIFT           0
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_BITS            16
 #define FX3_HOST_ACTIVE_EP_OUT_EP_ACTIVE_MASK            (0xffffUL << 0)
+
+#define FX3_OHCI_REVISION_REV_SHIFT                      0
+#define FX3_OHCI_REVISION_REV_BITS                       8
+#define FX3_OHCI_REVISION_REV_MASK                       (0xffUL << 0)
 
 #define FX3_OHCI_CONTROL_HCFS_SHIFT                      6
 #define FX3_OHCI_CONTROL_HCFS_BITS                       2
@@ -990,6 +995,16 @@
 #define FX3_LNK_LTSSM_STATE_LTSSM_STATE_SHIFT            0
 #define FX3_LNK_LTSSM_STATE_LTSSM_STATE_BITS             6
 #define FX3_LNK_LTSSM_STATE_LTSSM_STATE_MASK             (0x3fUL << 0)
+#define FX3_LNK_LTSSM_STATE_LTSSM_OVERRIDE_VALUE_SHIFT   6
+#define FX3_LNK_LTSSM_STATE_LTSSM_OVERRIDE_VALUE_BITS    6
+#define FX3_LNK_LTSSM_STATE_LTSSM_OVERRIDE_VALUE_MASK    (0x3fUL << 6)
+#define FX3_LNK_LTSSM_STATE_LTSSM_OVERRIDE_EN            (1UL << 12)
+#define FX3_LNK_LTSSM_STATE_LTSSM_OVERRIDE_GO            (1UL << 13)
+#define FX3_LNK_LTSSM_STATE_LOOPBACK_MASTER              (1UL << 14)
+#define FX3_LNK_LTSSM_STATE_DISABLE_SCRAMBLING           (1UL << 15)
+#define FX3_LNK_LTSSM_STATE_LOOPBACK_ERROR               (1UL << 16)
+#define FX3_LNK_LTSSM_STATE_LOOPBACK_GOOD                (1UL << 17)
+#define FX3_LNK_LTSSM_STATE_LTSSM_FREEZE                 (1UL << 31)
 
 #define FX3_LNK_LFPS_OBSERVE_POLLING_LFPS_SENT_SHIFT     20
 #define FX3_LNK_LFPS_OBSERVE_POLLING_LFPS_SENT_BITS      4

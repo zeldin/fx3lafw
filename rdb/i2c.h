@@ -22,24 +22,24 @@
 #ifndef RDB_I2C_H_
 #define RDB_I2C_H_
 
-#define FX3_I2C_CONFIG                    0xE0000400 /* I²C Configuration and Mode Register */
-#define FX3_I2C_STATUS                    0xE0000404 /* I²C Status Register */
-#define FX3_I2C_INTR                      0xE0000408 /* I²C Interrupt Request Register */
-#define FX3_I2C_INTR_MASK                 0xE000040C /* I²C Interrupt Mask Register */
-#define FX3_I2C_TIMEOUT                   0xE0000410 /* Timeout Register */
-#define FX3_I2C_DMA_TIMEOUT               0xE0000414 /* DMA Timeout Register */
-#define FX3_I2C_PREAMBLE_CTRL             0xE0000418 /* I²C Preamble Control Register */
-#define FX3_I2C_PREAMBLE_DATA             0xE000041C /* I²C Preamble Data Register */
-#define FX3_I2C_PREAMBLE_RPT              0xE0000424 /* I²C Preamble Repeat Register */
-#define FX3_I2C_COMMAND                   0xE0000428 /* I²C Command Register */
-#define FX3_I2C_EGRESS_DATA               0xE000042C /* I²C Egress Data Register */
-#define FX3_I2C_INGRESS_DATA              0xE0000430 /* I²C Ingress Data Register */
-#define FX3_I2C_CLOCK_LOW_COUNT           0xE0000434 /* I²C Clock Low Count Register */
-#define FX3_I2C_BYTE_COUNT                0xE0000438 /* I²C Byte Count Register */
-#define FX3_I2C_BYTES_TRANSFERRED         0xE000043C /* Number of Bytes Transferred in the Data Phase */
-#define FX3_I2C_SOCKET                    0xE0000440 /* I²C Socket Register */
-#define FX3_I2C_ID                        0xE00007F0 /* Block Identification and Version Number */
-#define FX3_I2C_POWER                     0xE00007F4 /* Power, Clock, and Reset Control */
+#define FX3_I2C_CONFIG                        0xE0000400 /* I²C Configuration and Mode Register */
+#define FX3_I2C_STATUS                        0xE0000404 /* I²C Status Register */
+#define FX3_I2C_INTR                          0xE0000408 /* I²C Interrupt Request Register */
+#define FX3_I2C_INTR_MASK                     0xE000040C /* I²C Interrupt Mask Register */
+#define FX3_I2C_TIMEOUT                       0xE0000410 /* Timeout Register */
+#define FX3_I2C_DMA_TIMEOUT                   0xE0000414 /* DMA Timeout Register */
+#define FX3_I2C_PREAMBLE_CTRL                 0xE0000418 /* I²C Preamble Control Register */
+#define FX3_I2C_PREAMBLE_DATA                 0xE000041C /* I²C Preamble Data Register */
+#define FX3_I2C_PREAMBLE_RPT                  0xE0000424 /* I²C Preamble Repeat Register */
+#define FX3_I2C_COMMAND                       0xE0000428 /* I²C Command Register */
+#define FX3_I2C_EGRESS_DATA                   0xE000042C /* I²C Egress Data Register */
+#define FX3_I2C_INGRESS_DATA                  0xE0000430 /* I²C Ingress Data Register */
+#define FX3_I2C_CLOCK_LOW_COUNT               0xE0000434 /* I²C Clock Low Count Register */
+#define FX3_I2C_BYTE_COUNT                    0xE0000438 /* I²C Byte Count Register */
+#define FX3_I2C_BYTES_TRANSFERRED             0xE000043C /* Number of Bytes Transferred in the Data Phase */
+#define FX3_I2C_SOCKET                        0xE0000440 /* I²C Socket Register */
+#define FX3_I2C_ID                            0xE00007F0 /* Block Identification and Version Number */
+#define FX3_I2C_POWER                         0xE00007F4 /* Power, Clock, and Reset Control */
 
 #define FX3_I2C_CONFIG_ENABLE                            (1UL << 31)
 #define FX3_I2C_CONFIG_TX_CLEAR                          (1UL << 30)

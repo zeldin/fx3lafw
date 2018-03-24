@@ -22,17 +22,17 @@
 #ifndef RDB_UART_H_
 #define RDB_UART_H_
 
-#define FX3_UART_CONFIG                   0xE0000800 /* UART Configuration and Mode Register */
-#define FX3_UART_STATUS                   0xE0000804 /* UART Status Register */
-#define FX3_UART_INTR                     0xE0000808 /* UART Interrupt Request Register */
-#define FX3_UART_INTR_MASK                0xE000080C /* UART Interrupt Mask Register */
-#define FX3_UART_EGRESS_DATA              0xE0000810 /* UART Egress Data Register */
-#define FX3_UART_INGRESS_DATA             0xE0000814 /* UART Ingress Data Register */
-#define FX3_UART_SOCKET                   0xE0000818 /* UART Socket Register */
-#define FX3_UART_RX_BYTE_COUNT            0xE000081C /* UART Receive Byte Count Register */
-#define FX3_UART_TX_BYTE_COUNT            0xE0000820 /* UART Transmit Byte Count Register */
-#define FX3_UART_ID                       0xE0000BF0 /* Block Identification and Version Number */
-#define FX3_UART_POWER                    0xE0000BF4 /* Power, Clock, and Reset Control */
+#define FX3_UART_CONFIG                       0xE0000800 /* UART Configuration and Mode Register */
+#define FX3_UART_STATUS                       0xE0000804 /* UART Status Register */
+#define FX3_UART_INTR                         0xE0000808 /* UART Interrupt Request Register */
+#define FX3_UART_INTR_MASK                    0xE000080C /* UART Interrupt Mask Register */
+#define FX3_UART_EGRESS_DATA                  0xE0000810 /* UART Egress Data Register */
+#define FX3_UART_INGRESS_DATA                 0xE0000814 /* UART Ingress Data Register */
+#define FX3_UART_SOCKET                       0xE0000818 /* UART Socket Register */
+#define FX3_UART_RX_BYTE_COUNT                0xE000081C /* UART Receive Byte Count Register */
+#define FX3_UART_TX_BYTE_COUNT                0xE0000820 /* UART Transmit Byte Count Register */
+#define FX3_UART_ID                           0xE0000BF0 /* Block Identification and Version Number */
+#define FX3_UART_POWER                        0xE0000BF4 /* Power, Clock, and Reset Control */
 
 #define FX3_UART_CONFIG_ENABLE                           (1UL << 31)
 #define FX3_UART_CONFIG_TX_CLEAR                         (1UL << 30)

@@ -22,19 +22,19 @@
 #ifndef RDB_PIB_H_
 #define RDB_PIB_H_
 
-#define FX3_PIB_CONFIG                    0xE0010000 /* PIB Configuration Register */
-#define FX3_PIB_INTR                      0xE0010004 /* PIB Interrupt Request Register */
-#define FX3_PIB_INTR_MASK                 0xE0010008 /* PIB Interrupt Mask Register */
-#define FX3_PIB_CLOCK_DETECT              0xE001000C /* PIB Clock Detector Configuration Register */
-#define FX3_PIB_RD_MAILBOX                0xE0010010 /* Read (Egress) Mailbox Register */
-#define FX3_PIB_WR_MAILBOX                0xE0010018 /* Write (Ingress) Mailbox Register */
-#define FX3_PIB_ERROR                     0xE0010020 /* PIB Error Indicator Register */
-#define FX3_PIB EOP/EOT                   0xE0010024 /* Configuration Register */
-#define FX3_PIB_DLL_CTRL                  0xE0010028 /* DLL Configuration Register */
-#define FX3_PIB_WR_THRESHOLD              0xE001002C /* Write Threshold Register */
-#define FX3_PIB_RD_THRESHOLD              0xE0010030 /* Read Threshold Register */
-#define FX3_PIB_ID                        0xE0017F00 /* Block Identification and Version Number Register */
-#define FX3_PIB_POWER                     0xE0017F04 /* Power, Clock, and Reset Control Register */
+#define FX3_PIB_CONFIG                        0xE0010000 /* PIB Configuration Register */
+#define FX3_PIB_INTR                          0xE0010004 /* PIB Interrupt Request Register */
+#define FX3_PIB_INTR_MASK                     0xE0010008 /* PIB Interrupt Mask Register */
+#define FX3_PIB_CLOCK_DETECT                  0xE001000C /* PIB Clock Detector Configuration Register */
+#define FX3_PIB_RD_MAILBOX                    0xE0010010 /* Read (Egress) Mailbox Register */
+#define FX3_PIB_WR_MAILBOX                    0xE0010018 /* Write (Ingress) Mailbox Register */
+#define FX3_PIB_ERROR                         0xE0010020 /* PIB Error Indicator Register */
+#define FX3_PIB EOP/EOT                       0xE0010024 /* Configuration Register */
+#define FX3_PIB_DLL_CTRL                      0xE0010028 /* DLL Configuration Register */
+#define FX3_PIB_WR_THRESHOLD                  0xE001002C /* Write Threshold Register */
+#define FX3_PIB_RD_THRESHOLD                  0xE0010030 /* Read Threshold Register */
+#define FX3_PIB_ID                            0xE0017F00 /* Block Identification and Version Number Register */
+#define FX3_PIB_POWER                         0xE0017F04 /* Power, Clock, and Reset Control Register */
 
 #define FX3_PIB_CONFIG_ENABLE                            (1UL << 31)
 #define FX3_PIB_CONFIG_MMIO_ENABLE                       (1UL << 30)

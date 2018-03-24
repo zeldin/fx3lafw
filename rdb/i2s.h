@@ -22,16 +22,16 @@
 #ifndef RDB_I2S_H_
 #define RDB_I2S_H_
 
-#define FX3_I2S_CONFIG                    0xE0000000 /* I2S Configuration and Mode Register */
-#define FX3_I2S_STATUS                    0xE0000004 /* I2S Status Register */
-#define FX3_I2S_INTR                      0xE0000008 /* I2S Interrupt Request Register */
-#define FX3_I2S_INTR_MASK                 0xE000000C /* I2S Interrupt Mask Register */
-#define FX3_I2S_EGRESS_DATA_LEFT          0xE0000010 /* I2S Egress Data Register (Left) */
-#define FX3_I2S_EGRESS_DATA_RIGHT         0xE0000014 /* I2S Egress Data Register (Right) */
-#define FX3_I2S_COUNTER                   0xE0000018 /* I2S Sample Counter Register */
-#define FX3_I2S_SOCKET                    0xE0000304 /* I2S Socket Register */
-#define FX3_I2S_ID                        0xE00003F0 /* Block Identification and Version Number */
-#define FX3_I2S_POWER                     0xE00003F4 /* Power, Clock, and Reset Control */
+#define FX3_I2S_CONFIG                        0xE0000000 /* I2S Configuration and Mode Register */
+#define FX3_I2S_STATUS                        0xE0000004 /* I2S Status Register */
+#define FX3_I2S_INTR                          0xE0000008 /* I2S Interrupt Request Register */
+#define FX3_I2S_INTR_MASK                     0xE000000C /* I2S Interrupt Mask Register */
+#define FX3_I2S_EGRESS_DATA_LEFT              0xE0000010 /* I2S Egress Data Register (Left) */
+#define FX3_I2S_EGRESS_DATA_RIGHT             0xE0000014 /* I2S Egress Data Register (Right) */
+#define FX3_I2S_COUNTER                       0xE0000018 /* I2S Sample Counter Register */
+#define FX3_I2S_SOCKET                        0xE0000304 /* I2S Socket Register */
+#define FX3_I2S_ID                            0xE00003F0 /* Block Identification and Version Number */
+#define FX3_I2S_POWER                         0xE00003F4 /* Power, Clock, and Reset Control */
 
 #define FX3_I2S_CONFIG_ENABLE                            (1UL << 31)
 #define FX3_I2S_CONFIG_TX_CLEAR                          (1UL << 30)

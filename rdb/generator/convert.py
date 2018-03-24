@@ -41,7 +41,26 @@ missing = [
       ('11', 'WAKEUP_AP_INT'), ('10', 'RAM_SLEEP'), ('9', 'DEBUG_MODE'),
       ('8', 'BOOT_COMPLETE'), ('4', 'WAKEUP_CLK'), ('3', 'WAKEUP_PWR'),
       ('2', 'WDT_RESET'), ('1', 'SW_RESET'), ('0', 'POR')]),
+
+# More missing regs...
+    ('uib', 'PROT_LMP_PORT_CAPABILITY_TIMER', 'Capability Timer Register', '0xE0033418', []),
+    ('uib', 'PROT_LMP_PORT_CONFIGURATION_TIMER', 'Configuration Timer Register', '0xE003341C', []),
+    ('uib', 'PROT_LMP_RECEIVED', 'Received Register', '0xE003345C', []),
+    ('uib', 'PROT_STREAM_ERROR_DISABLE', 'Stream Error Disable Register', '0xE0033700', []),
+    ('uib', 'PROT_STREAM_ERROR_STATUS', 'Stream Error Status Register', '0xE0033704', []),
 ]
+
+# Missing register fields
+missing_fields = {
+    'LNK_LTSSM_STATE' : [('11:6', 'LTSSM_OVERRIDE_VALUE[5:0]'),
+                         ('12', 'LTSSM_OVERRIDE_EN'),
+                         ('13', 'LTSSM_OVERRIDE_GO'),
+                         ('14', 'LOOPBACK_MASTER'),
+                         ('15', 'DISABLE_SCRAMBLING'),
+                         ('16', 'LOOPBACK_ERROR'),
+                         ('17', 'LOOPBACK_GOOD'),
+                         ('31', 'LTSSM_FREEZE')],
+}
 
 # Fixes for typos in TRM
 reg_name_fixups = {
@@ -50,13 +69,16 @@ reg_name_fixups = {
     '0xE003205C': ('OHCI_RH_PORT_STATUS', 'EHCI_HCCPARAMS'),
     '0xE0032060': ('OHCI_RH_PORT_STATUS', 'EHCI_USBCMD'),
 }
+reg_addr_fixups = {
+    'OHCI_REVISION': ('0xE0032010', '0xE0032024'),
+}
 field_name_fixups = {
     'OTG_CTRL': {'11': ('B_SESS_VALID', 'B_END_SESS')},
 }
 
 class Register:
     rdb_prefix='FX3_'
-    pad_size=30
+    pad_size=34
     pad_size_field=45
     
     def __init__(self, group, name, description, address, fields):
@@ -64,6 +86,16 @@ class Register:
             fixup = reg_name_fixups[address]
             if name == fixup[0]:
                 name = fixup[1]
+        except KeyError:
+            pass
+        try:
+            fixup = reg_addr_fixups[name]
+            if address == fixup[0]:
+                address = fixup[1]
+        except KeyError:
+            pass
+        try:
+            fields += missing_fields[name]
         except KeyError:
             pass
 
