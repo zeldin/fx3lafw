@@ -23,7 +23,7 @@
 #define RDB_DMA_H_
 
 #define FX3_SCK_DSCR                          0x00 /* Descriptor Chain Pointer */
-#define FX3_SCK_INTR                          0x00 /* Socket Interrupt Request Register */
+#define FX3_SCK_INTR0                         0x00 /* Socket Interrupt Request Register */
 #define FX3_SCK_SIZE                          0x04 /* Transfer Size Register */
 #define FX3_SCK_COUNT                         0x08 /* Transfer Count Register */
 #define FX3_SCK_STATUS                        0x0C /* Socket Status Register */
@@ -71,9 +71,9 @@
 #define FX3_SCK_DSCR_DSCR_NUMBER_BITS                    16
 #define FX3_SCK_DSCR_DSCR_NUMBER_MASK                    (0xffffUL << 0)
 
-#define FX3_SCK_INTR_SCKINTR_SHIFT                       0
-#define FX3_SCK_INTR_SCKINTR_BITS                        256
-#define FX3_SCK_INTR_SCKINTR_MASK                        (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffUL << 0)
+#define FX3_SCK_INTR0_SCKINTR_SHIFT                      0
+#define FX3_SCK_INTR0_SCKINTR_BITS                       256
+#define FX3_SCK_INTR0_SCKINTR_MASK                       (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffUL << 0)
 
 #define FX3_SCK_STATUS_GO_ENABLE                         (1UL << 31)
 #define FX3_SCK_STATUS_GO_SUSPEND                        (1UL << 30)

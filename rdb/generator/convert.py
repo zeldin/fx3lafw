@@ -68,6 +68,7 @@ reg_name_fixups = {
     '0xE003151C': ('DEV_CTRL_INTR_MASK', 'DEV_CTRL_INTR'),
     '0xE003205C': ('OHCI_RH_PORT_STATUS', 'EHCI_HCCPARAMS'),
     '0xE0032060': ('OHCI_RH_PORT_STATUS', 'EHCI_USBCMD'),
+    '0x00': ('SCK_INTR', 'SCK_INTR0'),
 }
 reg_addr_fixups = {
     'OHCI_REVISION': ('0xE0032010', '0xE0032024'),
