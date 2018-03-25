@@ -23,7 +23,6 @@
 #define RDB_DMA_H_
 
 #define FX3_SCK_DSCR                          0x00 /* Descriptor Chain Pointer */
-#define FX3_SCK_INTR0                         0x00 /* Socket Interrupt Request Register */
 #define FX3_SCK_SIZE                          0x04 /* Transfer Size Register */
 #define FX3_SCK_COUNT                         0x08 /* Transfer Count Register */
 #define FX3_SCK_STATUS                        0x0C /* Socket Status Register */
@@ -34,7 +33,10 @@
 #define FX3_DSCR_CHAIN                        0x28 /* Descriptor Chain Pointers Register */
 #define FX3_DSCR_SIZE                         0x02C /* Descriptor Size Register */
 #define FX3_EVENT                             0x7C /* Event Communication Register */
+#define FX3_SCK_INTR0                         0x00 /* Socket Interrupt Request Register */
 #define FX3_ADAPTER_STATUS                    0xFC /* Adapter Global Status Fields */
+#define FX3_SIB_ID                            0xE0027F00 /* Storage Interface Block ID register */
+#define FX3_SIB_POWER                         0xE0027F04 /* SIB Power Control */
 #define FX3_SDMMC_CMD_IDX                     0xE0020000 /* SDMMC Command Index */
 #define FX3_SDMMC_CMD_ARG0                    0xE0020004 /* SDMMC Command Argument 0 */
 #define FX3_SDMMC_CMD_ARG1                    0xE0020008 /* SDMMC Command Argument 1 */
@@ -58,8 +60,6 @@
 #define FX3_SDMMC_NAC                         0xE0020050 /* SDMMC Read Timeout Register */
 #define FX3_SDMMC_HW_CTRL                     0xE0020054 /* SDMMC Hardware Control Register */
 #define FX3_SDMMC_DLL_CTRL                    0xE0020058 /* SDMMC DLL Control */
-#define FX3_SIB_ID                            0xE0027F00 /* Storage Interface Block ID register */
-#define FX3_SIB_POWER                         0xE0027F04 /* SIB Power Control */
 
 #define FX3_SCK_DSCR_DSCR_LOW_SHIFT                      24
 #define FX3_SCK_DSCR_DSCR_LOW_BITS                       8
@@ -70,10 +70,6 @@
 #define FX3_SCK_DSCR_DSCR_NUMBER_SHIFT                   0
 #define FX3_SCK_DSCR_DSCR_NUMBER_BITS                    16
 #define FX3_SCK_DSCR_DSCR_NUMBER_MASK                    (0xffffUL << 0)
-
-#define FX3_SCK_INTR0_SCKINTR_SHIFT                      0
-#define FX3_SCK_INTR0_SCKINTR_BITS                       256
-#define FX3_SCK_INTR0_SCKINTR_MASK                       (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffUL << 0)
 
 #define FX3_SCK_STATUS_GO_ENABLE                         (1UL << 31)
 #define FX3_SCK_STATUS_GO_SUSPEND                        (1UL << 30)
@@ -162,6 +158,10 @@
 #define FX3_EVENT_ACTIVE_DSCR_BITS                       16
 #define FX3_EVENT_ACTIVE_DSCR_MASK                       (0xffffUL << 0)
 
+#define FX3_SCK_INTR0_SCKINTR_SHIFT                      0
+#define FX3_SCK_INTR0_SCKINTR_BITS                       256
+#define FX3_SCK_INTR0_SCKINTR_MASK                       (0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffUL << 0)
+
 #define FX3_ADAPTER_STATUS_WORD_SIZE_SHIFT               22
 #define FX3_ADAPTER_STATUS_WORD_SIZE_BITS                2
 #define FX3_ADAPTER_STATUS_WORD_SIZE_MASK                (0x3UL << 22)
@@ -174,6 +174,16 @@
 #define FX3_ADAPTER_STATUS_TTL_SOCKETS_SHIFT             0
 #define FX3_ADAPTER_STATUS_TTL_SOCKETS_BITS              8
 #define FX3_ADAPTER_STATUS_TTL_SOCKETS_MASK              (0xffUL << 0)
+
+#define FX3_SIB_ID_BLOCK_VERSION_SHIFT                   16
+#define FX3_SIB_ID_BLOCK_VERSION_BITS                    16
+#define FX3_SIB_ID_BLOCK_VERSION_MASK                    (0xffffUL << 16)
+#define FX3_SIB_ID_BLOCK_ID_SHIFT                        0
+#define FX3_SIB_ID_BLOCK_ID_BITS                         16
+#define FX3_SIB_ID_BLOCK_ID_MASK                         (0xffffUL << 0)
+
+#define FX3_SIB_POWER_RESETN                             (1UL << 31)
+#define FX3_SIB_POWER_ACTIVE                             (1UL << 0)
 
 #define FX3_SDMMC_CMD_IDX_CMD_SHIFT                      0
 #define FX3_SDMMC_CMD_IDX_CMD_BITS                       6
@@ -340,15 +350,5 @@
 #define FX3_SDMMC_DLL_CTRL_DLL_STAT                      (1UL << 2)
 #define FX3_SDMMC_DLL_CTRL_HIGH_FREQ                     (1UL << 1)
 #define FX3_SDMMC_DLL_CTRL_ENABLE                        (1UL << 0)
-
-#define FX3_SIB_ID_BLOCK_VERSION_SHIFT                   16
-#define FX3_SIB_ID_BLOCK_VERSION_BITS                    16
-#define FX3_SIB_ID_BLOCK_VERSION_MASK                    (0xffffUL << 16)
-#define FX3_SIB_ID_BLOCK_ID_SHIFT                        0
-#define FX3_SIB_ID_BLOCK_ID_BITS                         16
-#define FX3_SIB_ID_BLOCK_ID_MASK                         (0xffffUL << 0)
-
-#define FX3_SIB_POWER_RESETN                             (1UL << 31)
-#define FX3_SIB_POWER_ACTIVE                             (1UL << 0)
 
 #endif /* RDB_DMA_H_ */
