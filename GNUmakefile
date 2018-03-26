@@ -6,7 +6,7 @@ WARN = -Wall -Wextra -Werror
 OPTIMZE = -g -Os
 INCLUDE = -I.
 
-CFLAGS = -std=c11 -mcpu=arm926ej-s -mthumb-interwork $(WARN) $(OPTIMIZE) $(INCLUDE)
+CFLAGS = -std=c11 -mcpu=arm926ej-s -mthumb-interwork -fno-pie $(WARN) $(OPTIMIZE) $(INCLUDE)
 LDFLAGS = -static -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(basename $@).map
 
 VPATH = bsp
