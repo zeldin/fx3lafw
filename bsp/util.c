@@ -44,10 +44,10 @@ void exit(int status)
 void *_sbrk(intptr_t increment)
 {
   extern char _end[];
-  extern char __stack_end[];
+  extern char __heap_end[];
   static void *current_brk = _end;
 
-  if (increment > __stack_end - (char *)current_brk) {
+  if (increment > __heap_end - (char *)current_brk) {
     errno = ENOMEM;
     return (void *)-1;
   }

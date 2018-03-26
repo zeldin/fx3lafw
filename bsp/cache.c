@@ -21,13 +21,6 @@
 
 #include <bsp/cache.h>
 
-#define DTCM_BASE 0x10000000
-#define DTCM_SIZE 4 /* 512 << 4 = 8K */
-
-#define ITCM_BASE 0x00000000
-#define ITCM_SIZE 5 /* 512 << 5 = 16K */
-
-
 void Fx3CacheEnableCaches(void)
 {
   Fx3CacheInvalidateICacheAndDCache();
@@ -37,9 +30,4 @@ void Fx3CacheEnableCaches(void)
   __asm__ __volatile__("mrc p15, 0, %0, c1, c0, 0" : "=r"(creg));
   creg |= (1UL << 12) | (1UL << 2);
   __asm__ __volatile__("mcr p15, 0, %0, c1, c0, 0" : : "r"(creg));
-
-  /* Write data TCM Region register */
-  __asm__ __volatile__("mcr p15, 0, %0, c9, c1, 0" : : "r"(DTCM_BASE | (DTCM_SIZE << 2) | 1));
-  /* Write instruction TCM Region register */
-  __asm__ __volatile__("mcr p15, 0, %0, c9, c1, 1" : : "r"(ITCM_BASE | (ITCM_SIZE << 2) | 1));
 }

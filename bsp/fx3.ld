@@ -25,8 +25,13 @@ SECTIONS
 {
 	. = 0x40003000;
 
-	__stack = 0x40040000;
-	__stack_end = __stack - 0x10000;
+	/* Stacks in DTCM */
+	__stack_sys =   0x10002000; /* 6KB */
+	__stack_undef = 0x10000800; /* 128B */
+	__stack_abort = 0x10000780; /* 128B */
+	__stack_firq =  0x10000700; /* 256B */
+	__stack_irq =   0x10000600; /* 1KB */
+	__stack_super = 0x10000200; /* 512B */
 
 	.text :
 	{
@@ -67,4 +72,6 @@ SECTIONS
 	__exidx_end = .;
 
 	_end = .;
+
+	__heap_end = 0x40040000;
 }
