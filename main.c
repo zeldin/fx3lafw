@@ -2,12 +2,14 @@
 #include <bsp/gctl.h>
 #include <bsp/gpio.h>
 #include <bsp/uart.h>
+#include <bsp/irq.h>
 #include <bsp/cache.h>
 #include <bsp/util.h>
 
 int main(void)
 {
   Fx3CacheEnableCaches();
+  Fx3IrqInit();
 
   Fx3GctlInitClock();
   *(volatile uint32_t *)(void *)0x400020e8 = 0;
@@ -23,6 +25,9 @@ int main(void)
 		     FX3_GPIO_SIMPLE_ENABLE |
 		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
 		     FX3_GPIO_SIMPLE_DRIVE_LO_EN);
+
+  Fx3IrqEnableInterrupts();
+
   for(;;) {
     Fx3GpioSetOutputValue(54, 1);
     Fx3UtilDelayUs(500000);
