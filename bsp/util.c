@@ -28,7 +28,7 @@ void Fx3UtilDelayUs(uint32_t delay_us)
 {
   /* Each loop is 4 instruction cycles */
   uint32_t cnt = delay_us * (SYS_CLK / 4 / 1000000);
-  __asm__ __volatile__("1: subs %0,%0,#1; bcs 1b" : "=r"(cnt) : "0"(cnt));
+  __asm__ __volatile__("1: subs %0,%0,#1; bcs 1b" : "=r"(cnt) : "0"(cnt) : "cc");
 }
 
 void exit(int status)
