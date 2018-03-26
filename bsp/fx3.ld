@@ -26,6 +26,7 @@ SECTIONS
 	. = 0x40003000;
 
 	__stack = 0x40040000;
+	__stack_end = __stack - 0x10000;
 
 	.text :
 	{
@@ -64,4 +65,6 @@ SECTIONS
 		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
 	}
 	__exidx_end = .;
+
+	_end = .;
 }

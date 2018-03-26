@@ -22,6 +22,8 @@
 #include <bsp/util.h>
 #include <bsp/gctl.h>
 
+#include <errno.h>
+
 void Fx3UtilDelayUs(uint32_t delay_us)
 {
   /* Each loop is 4 instruction cycles */
@@ -37,4 +39,20 @@ void exit(int status)
 
   for(;;)
     ;
+}
+
+void *_sbrk(intptr_t increment)
+{
+  extern char _end[];
+  extern char __stack_end[];
+  static void *current_brk = _end;
+
+  if (increment > __stack_end - (char *)current_brk) {
+    errno = ENOMEM;
+    return (void *)-1;
+  }
+
+  void *ret = current_brk;
+  current_brk = increment + (char *)current_brk;
+  return ret;
 }
