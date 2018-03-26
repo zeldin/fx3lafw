@@ -42,6 +42,8 @@ struct Fx3DmaDescriptor {
   uint32_t dscr_size;
 };
 
+extern uint16_t Fx3DmaAllocateDescriptor(void);
+extern void Fx3DmaFreeDescriptor(uint16_t d);
 extern void Fx3DmaAbortSocket(uint32_t socket);
 extern void Fx3DmaSimpleTransferRead(uint32_t socket, uint16_t descriptor,
 				     const volatile void *buffer, uint16_t length);

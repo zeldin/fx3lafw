@@ -31,6 +31,33 @@
     FX3_SCK_STATUS_EN_PROD_EVENTS  |		\
     FX3_SCK_STATUS_TRUNCATE )
 
+static uint16_t Fx3DmaDescriptorFirstUnallocated = 1;
+static uint16_t Fx3DmaDescriptorFreeListHead = 0;
+
+uint16_t Fx3DmaAllocateDescriptor(void)
+{
+  uint16_t r;
+  if ((r = Fx3DmaDescriptorFreeListHead)) {
+    /* Pick first off free list */
+    volatile struct Fx3DmaDescriptor *desc = FX3_DMA_DESCRIPTOR(r);
+    Fx3DmaDescriptorFreeListHead = desc->dscr_chain;
+  } else if(Fx3DmaDescriptorFirstUnallocated < 768) {
+    /* Allocate a fresh one */
+    r = Fx3DmaDescriptorFirstUnallocated++;
+  }
+  return r;
+}
+
+void Fx3DmaFreeDescriptor(uint16_t d)
+{
+  if (d) {
+    /* Put on head of free list */
+    volatile struct Fx3DmaDescriptor *desc = FX3_DMA_DESCRIPTOR(d);
+    desc->dscr_chain = Fx3DmaDescriptorFreeListHead;
+    Fx3DmaDescriptorFreeListHead = d;
+  }
+}
+
 void Fx3DmaAbortSocket(uint32_t socket)
 {
   Fx3ClearReg32(socket + FX3_SCK_STATUS,
