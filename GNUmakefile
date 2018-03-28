@@ -3,7 +3,7 @@
 CC = arm-none-eabi-gcc
 
 WARN = -Wall -Wextra -Werror
-OPTIMZE = -g -Os
+OPTIMIZE = -g -Os
 INCLUDE = -I.
 
 CFLAGS = -std=c11 -mcpu=arm926ej-s -mthumb-interwork -fno-pie $(WARN) $(OPTIMIZE) $(INCLUDE)
