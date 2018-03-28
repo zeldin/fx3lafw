@@ -11,7 +11,7 @@ LDFLAGS = -static -nostartfiles -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(b
 
 VPATH = bsp
 
-OBJS = main.o gctl.o gpio.o uart.o util.o dma.o irq.o cache.o vectors.o
+OBJS = main.o usb.o gctl.o gpio.o uart.o util.o dma.o irq.o cache.o vectors.o
 
 all : fx3lafw.img
 
