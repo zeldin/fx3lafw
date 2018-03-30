@@ -2,11 +2,13 @@
 
 CC = arm-none-eabi-gcc
 
+CGENFLAGS = -mcpu=arm926ej-s -mthumb-interwork -fno-pie
 WARN = -Wall -Wextra -Werror
 OPTIMIZE = -g -Os
 INCLUDE = -I.
+GENDEP = -MMD -MP
 
-CFLAGS = -std=c11 -mcpu=arm926ej-s -mthumb-interwork -fno-pie $(WARN) $(OPTIMIZE) $(INCLUDE)
+CFLAGS = -std=c11 $(CGENFLAGS) $(WARN) $(OPTIMIZE) $(INCLUDE) $(GENDEP)
 LDFLAGS = -static -nostartfiles -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(basename $@).map
 
 VPATH = bsp
@@ -19,7 +21,9 @@ fx3lafw.img : fx3lafw.elf
 	python3 elf2img.py $< $@
 
 clean :
-	rm -f fx3lafw.img fx3lafw.elf fx3lafw.map $(OBJS)
+	rm -f fx3lafw.img fx3lafw.elf fx3lafw.map $(OBJS) $(OBJS:.o=.d)
 
 fx3lafw.elf : $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+-include $(OBJS:.o=.d)
