@@ -26,14 +26,51 @@
 
 void Fx3GpioSetupSimple(uint8_t num, uint32_t config)
 {
-  if (num < 61) {
+  if (num < 61 &&
+      !(Fx3ReadReg32(FX3_GCTL_GPIO_COMPLEX + ((num & 32) >> 3))
+	& (1UL << (num & 31)))) {
     Fx3WriteReg32(FX3_GPIO_SIMPLE + (num << 2), config);
     Fx3SetReg32(FX3_GCTL_GPIO_SIMPLE + ((num & 32) >> 3),
 		1UL << (num & 31));
   }
 }
 
-void Fx3GpioSetOutputValue(uint8_t num, uint8_t value)
+void Fx3GpioSetupComplex(uint8_t num, uint32_t config, uint32_t timer,
+			 uint32_t period, uint32_t threshold)
+{
+  if (num < 61) {
+    // There are only 8 instances of complex GPIO.  The low 3 bits of
+    // the GPIO number selects which instance it is connected to.
+    uint8_t instance = num & 7;
+
+    if (!(Fx3ReadReg32(FX3_GCTL_GPIO_COMPLEX + ((num & 32) >> 3))
+	  & (1UL << (num & 31)))) {
+      // Check for conflicting simple I/O
+      if ((Fx3ReadReg32(FX3_GCTL_GPIO_SIMPLE + ((num & 32) >> 3))
+	   & (1UL << (num & 31))))
+	// GPIO already in use
+	return;
+
+      // Check for conflicting complex I/O
+      uint32_t mask = 0x01010101UL << instance;
+      if ((Fx3ReadReg32(FX3_GCTL_GPIO_COMPLEX + 0) & mask) ||
+	  (Fx3ReadReg32(FX3_GCTL_GPIO_COMPLEX + 4) & mask))
+	// Instance already in use
+	return;
+    }
+
+    Fx3ClearReg32(FX3_PIN_STATUS + (instance << 4), FX3_PIN_STATUS_ENABLE);
+    Fx3WriteReg32(FX3_PIN_TIMER + (instance << 4), timer);
+    Fx3WriteReg32(FX3_PIN_PERIOD + (instance << 4), period);
+    Fx3WriteReg32(FX3_PIN_THRESHOLD + (instance << 4), threshold);
+    Fx3WriteReg32(FX3_PIN_STATUS + (instance << 4), config);
+
+    Fx3SetReg32(FX3_GCTL_GPIO_COMPLEX + ((num & 32) >> 3),
+		1UL << (num & 31));
+  }
+}
+
+void Fx3GpioSetOutputValueSimple(uint8_t num, uint8_t value)
 {
   if (num < 61) {
     Fx3WriteReg32(FX3_GPIO_SIMPLE + (num << 2),
@@ -43,7 +80,7 @@ void Fx3GpioSetOutputValue(uint8_t num, uint8_t value)
   }
 }
 
-uint8_t Fx3GpioGetInputValue(uint8_t num)
+uint8_t Fx3GpioGetInputValueSimple(uint8_t num)
 {
   if (num < 61) {
     return (Fx3ReadReg32(FX3_GPIO_SIMPLE + (num << 2)) & FX3_GPIO_SIMPLE_IN_VALUE) >> 1;

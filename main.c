@@ -81,20 +81,29 @@ int main(void)
 		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
 		     FX3_GPIO_SIMPLE_DRIVE_LO_EN);
 
+  // Divide the 100.8MHz clock by 100800 into a 1kHz clock output for reference
+  Fx3GpioSetupComplex(50,
+		      FX3_PIN_STATUS_ENABLE |
+		      (FX3_GPIO_TIMER_MODE_HIGH_FREQ << FX3_PIN_STATUS_TIMER_MODE_SHIFT) |
+		      (FX3_GPIO_PIN_MODE_PWM << FX3_PIN_STATUS_MODE_SHIFT) |
+		      FX3_PIN_STATUS_DRIVE_HI_EN |
+		      FX3_PIN_STATUS_DRIVE_LO_EN,
+		      0, 100800-1, 50400-1);
+
   Fx3IrqEnableInterrupts();
 
   Fx3UsbInit(&callbacks);
   Fx3UsbConnect();
 
   for(;;) {
-    Fx3GpioSetOutputValue(54, 1);
+    Fx3GpioSetOutputValueSimple(54, 1);
     Fx3UtilDelayUs(500000);
-    if (!Fx3GpioGetInputValue(45)) {
+    if (!Fx3GpioGetInputValueSimple(45)) {
       Fx3UartTxString("BUTTON\n");
       Fx3UartTxFlush();
       Fx3GctlHardReset();
     }
-    Fx3GpioSetOutputValue(54, 0);
+    Fx3GpioSetOutputValueSimple(54, 0);
     Fx3UtilDelayUs(500000);
   }
 }

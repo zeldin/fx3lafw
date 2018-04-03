@@ -25,8 +25,50 @@
 #include <stdint.h>
 #include <rdb/gpio.h>
 
+typedef enum {
+  FX3_GPIO_TIMER_MODE_SHUTDOWN = 0,
+  FX3_GPIO_TIMER_MODE_HIGH_FREQ,
+  FX3_GPIO_TIMER_MODE_LOW_FREQ,
+  FX3_GPIO_TIMER_MODE_STANDBY_FREQ,
+  FX3_GPIO_TIMER_MODE_POS_EDGE,
+  FX3_GPIO_TIMER_MODE_NEG_EDGE,
+  FX3_GPIO_TIMER_MODE_ANY_EDGE,
+} Fx3GpioTimerMode_t;
+
+typedef enum {
+  FX3_GPIO_INTR_MODE_NONE = 0,
+  FX3_GPIO_INTR_MODE_POS_EDGE,
+  FX3_GPIO_INTR_MODE_NEG_EDGE,
+  FX3_GPIO_INTR_MODE_ANY_EDGE,
+  FX3_GPIO_INTR_MODE_LOW_LEVEL,
+  FX3_GPIO_INTR_MODE_HIGH_LEVEL,
+  FX3_GPIO_INTR_MODE_TIMER_THRESHOLD,
+  FX3_GPIO_INTR_MODE_TIMER_0,
+} Fx3GpioIntrMode_t;
+
+typedef enum {
+  FX3_GPIO_PIN_MODE_STATIC = 0,
+  FX3_GPIO_PIN_MODE_TOGGLE,
+  FX3_GPIO_PIN_MODE_SAMPLENOW,
+  FX3_GPIO_PIN_MODE_PULSENOW,
+  FX3_GPIO_PIN_MODE_PULSE,
+  FX3_GPIO_PIN_MODE_PWM,
+  FX3_GPIO_PIN_MODE_MEASURE_LOW,
+  FX3_GPIO_PIN_MODE_MEASURE_HIGH,
+  FX3_GPIO_PIN_MODE_MEASURE_LOW_ONCE,
+  FX3_GPIO_PIN_MODE_MEASURE_HIGH_ONCE,
+  FX3_GPIO_PIN_MODE_MEASURE_NEG,
+  FX3_GPIO_PIN_MODE_MEASURE_POS,
+  FX3_GPIO_PIN_MODE_MEASURE_ANY,
+  FX3_GPIO_PIN_MODE_MEASURE_NEG_ONCE,
+  FX3_GPIO_PIN_MODE_MEASURE_POS_ONCE,
+  FX3_GPIO_PIN_MODE_MEASURE_ANY_ONCE,
+} Fx3GpioPinMode_t;
+
 extern void Fx3GpioSetupSimple(uint8_t num, uint32_t config);
-extern void Fx3GpioSetOutputValue(uint8_t num, uint8_t value);
-extern uint8_t Fx3GpioGetInputValue(uint8_t num);
+extern void Fx3GpioSetupComplex(uint8_t num, uint32_t config, uint32_t timer,
+				uint32_t period, uint32_t threshold);
+extern void Fx3GpioSetOutputValueSimple(uint8_t num, uint8_t value);
+extern uint8_t Fx3GpioGetInputValueSimple(uint8_t num);
 
 #endif /* BSP_GPIO_H_ */
