@@ -114,7 +114,7 @@ class Register:
             file.write('\n')
             for field in self.fields:
                 bits = field[0].split(':')
-                name = field[1].split('[')
+                name = field[1].replace('{','[').split('[')
                 try:
                     fixup = field_name_fixups[self.name][field[0]]
                     if name[0] == fixup[0]:

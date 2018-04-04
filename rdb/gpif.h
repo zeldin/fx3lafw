@@ -367,9 +367,9 @@
 #define FX3_GPIF_LEFT_WAVEFORM_Alpha_Right_SHIFT         46
 #define FX3_GPIF_LEFT_WAVEFORM_Alpha_Right_BITS          8
 #define FX3_GPIF_LEFT_WAVEFORM_Alpha_Right_MASK          (0xffUL << 46)
-#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left{7:0]_SHIFT     38
-#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left{7:0]_BITS      8
-#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left{7:0]_MASK      (0xffUL << 38)
+#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left_SHIFT          38
+#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left_BITS           8
+#define FX3_GPIF_LEFT_WAVEFORM_Alpha_Left_MASK           (0xffUL << 38)
 #define FX3_GPIF_LEFT_WAVEFORM_f1_SHIFT                  33
 #define FX3_GPIF_LEFT_WAVEFORM_f1_BITS                   5
 #define FX3_GPIF_LEFT_WAVEFORM_f1_MASK                   (0x1fUL << 33)
@@ -406,9 +406,9 @@
 #define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Right_SHIFT        46
 #define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Right_BITS         8
 #define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Right_MASK         (0xffUL << 46)
-#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left{7:0]_SHIFT    38
-#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left{7:0]_BITS     8
-#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left{7:0]_MASK     (0xffUL << 38)
+#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left_SHIFT         38
+#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left_BITS          8
+#define FX3_GPIF_RIGHT_WAVEFORM_Alpha_Left_MASK          (0xffUL << 38)
 #define FX3_GPIF_RIGHT_WAVEFORM_f1_SHIFT                 33
 #define FX3_GPIF_RIGHT_WAVEFORM_f1_BITS                  5
 #define FX3_GPIF_RIGHT_WAVEFORM_f1_MASK                  (0x1fUL << 33)
