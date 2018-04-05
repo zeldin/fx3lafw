@@ -48,6 +48,8 @@ missing = [
     ('uib', 'PROT_LMP_RECEIVED', 'Received Register', '0xE003345C', []),
     ('uib', 'PROT_STREAM_ERROR_DISABLE', 'Stream Error Disable Register', '0xE0033700', []),
     ('uib', 'PROT_STREAM_ERROR_STATUS', 'Stream Error Status Register', '0xE0033704', []),
+    ('gpif', 'GPIF_SERIAL_IN_CONFIG', 'Serial Input Configuration Register', '0XE001401C', []),
+    ('gpif', 'GPIF_SERIAL_OUT_CONFIG', 'Serial Output Configuration Register', '0XE0014020', []),
 ]
 
 # Missing register fields

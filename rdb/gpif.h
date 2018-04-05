@@ -29,6 +29,8 @@
 #define FX3_GPIF_STATUS                       0xE0014010 /* GPIF Status Register */
 #define FX3_GPIF_INTR                         0xE0014014 /* GPIF Interrupt Request Register */
 #define FX3_GPIF_INTR_MASK                    0xE0014018 /* GPIF Interrupt Mask Register */
+#define FX3_GPIF_SERIAL_IN_CONFIG             0XE001401C /* Serial Input Configuration Register */
+#define FX3_GPIF_SERIAL_OUT_CONFIG            0XE0014020 /* Serial Output Configuration Register */
 #define FX3_GPIF_CTRL_BUS_DIRECTION           0xE0014024 /* Control Bus In/Out Direction Register */
 #define FX3_GPIF_CTRL_BUS_DEFAULT             0xE0014028 /* Control Bus Default Values Register */
 #define FX3_GPIF_CTRL_BUS_POLARITY            0xE001402C /* Control Bus SIgnal Polarity Register */
