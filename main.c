@@ -11,6 +11,7 @@
 #include <stdio.h>
 
 #include "descriptors.h"
+#include "acquisition.h"
 
 static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
 		      uint16_t index, uint16_t length)
@@ -94,6 +95,8 @@ int main(void)
 
   Fx3UsbInit(&callbacks);
   Fx3UsbConnect();
+
+  start_acquisition(8, 201); /* 201.6 MHz / 202 ~= 1 MHz */
 
   for(;;) {
     Fx3GpioSetOutputValueSimple(54, 1);
