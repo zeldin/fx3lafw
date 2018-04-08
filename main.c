@@ -13,6 +13,66 @@
 #include "descriptors.h"
 #include "acquisition.h"
 
+#define CMD_GET_FW_VERSION		0xb0
+#define CMD_START			0xb1
+#define CMD_GET_REVID_VERSION		0xb2
+
+static volatile uint8_t DmaBuf[32] __attribute__((aligned(32)));
+
+static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
+			  uint16_t index, uint16_t length)
+{
+  switch(request) {
+  case CMD_START:
+    if (request_type !=
+	(FX3_USB_REQTYPE_OUT | FX3_USB_REQTYPE_TYPE_VENDOR | FX3_USB_REQTYPE_TGT_DEVICE))
+      goto stall;
+    if (value != 0 || index != 0 || length != 3)
+      goto stall;
+    Fx3UartTxString("CMD_START\n");
+    Fx3UsbUnstallEp0();
+    Fx3UsbDmaDataOut(0, DmaBuf, 3);
+    Fx3CacheInvalidateDCacheEntry(DmaBuf);
+    {
+      char buf[64];
+      snprintf(buf, sizeof(buf), "flags=%02x, sample_delay_h=%02x, sample_delay_l=%02x\n",
+	       (unsigned)DmaBuf[0], (unsigned)DmaBuf[1], (unsigned)DmaBuf[2]);
+      Fx3UartTxString(buf);
+    }
+
+    start_acquisition(8, 201); /* 201.6 MHz / 202 ~= 1 MHz */
+
+    return;
+  case CMD_GET_FW_VERSION:
+    if (request_type !=
+	(FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_VENDOR | FX3_USB_REQTYPE_TGT_DEVICE))
+      goto stall;
+    if (value != 0 || index != 0 || length != 2)
+      goto stall;
+    Fx3UartTxString("CMD_GET_FW_VERSION\n");
+    DmaBuf[0] = 1;
+    DmaBuf[1] = 3;
+    Fx3CacheCleanDCacheEntry(DmaBuf);
+    Fx3UsbUnstallEp0();
+    Fx3UsbDmaDataIn(0, DmaBuf, 2);
+    return;
+  case CMD_GET_REVID_VERSION:
+    if (request_type !=
+	(FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_VENDOR | FX3_USB_REQTYPE_TGT_DEVICE))
+      goto stall;
+    if (value != 0 || index != 0 || length != 1)
+      goto stall;
+    Fx3UartTxString("CMD_GET_REVID_VERSION\n");
+    DmaBuf[0] = 1;
+    Fx3CacheCleanDCacheEntry(DmaBuf);
+    Fx3UsbUnstallEp0();
+    Fx3UsbDmaDataIn(0, DmaBuf, 1);
+    return;
+  }
+ stall:
+  Fx3UsbStallEp0();
+}
+
 static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
 		      uint16_t index, uint16_t length)
 {
@@ -22,6 +82,11 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
 	   (unsigned)request_type, (unsigned)request,
 	   (unsigned)value, (unsigned)index, (unsigned)length);
   Fx3UartTxString(buf);
+
+  if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) == FX3_USB_REQTYPE_TYPE_VENDOR) {
+    VendorCommand(request_type, request, value, index, length);
+    return;
+  }
 
   if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) != FX3_USB_REQTYPE_TYPE_STD)
     goto stall;
@@ -50,6 +115,7 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
     if (value != 1)
       goto stall;
 
+    Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, 512);
     Fx3UsbUnstallEp0();
     return;
   }
@@ -95,8 +161,6 @@ int main(void)
 
   Fx3UsbInit(&callbacks);
   Fx3UsbConnect();
-
-  start_acquisition(8, 201); /* 201.6 MHz / 202 ~= 1 MHz */
 
   for(;;) {
     Fx3GpioSetOutputValueSimple(54, 1);

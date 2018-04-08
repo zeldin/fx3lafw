@@ -1,5 +1,6 @@
 #include <bsp/gpif.h>
 #include <bsp/dma.h>
+#include <bsp/usb.h>
 #include <bsp/uart.h>
 #include <stdio.h>
 
@@ -48,6 +49,11 @@ void start_acquisition(uint8_t bits, uint8_t delay)
   Fx3DmaSimpleTransferWrite(FX3_PIB_DMA_SCK(0), desc,
 			    gpif_buf, sizeof(gpif_buf));
   Fx3DmaFreeDescriptor(desc);
+  Fx3GpifStop();
+  Fx3GpifPibStop();
+
+  Fx3UsbDmaDataIn(2, gpif_buf, sizeof(gpif_buf));
+
   unsigned i, z=0, nz=0, szr=sizeof(gpif_buf), lzr=0, snzr=sizeof(gpif_buf), lnzr=0, run=0, match=gpif_buf[0], valid=0;
   for(i=0; i<sizeof(gpif_buf); i++) {
     if(gpif_buf[i])
@@ -78,6 +84,4 @@ void start_acquisition(uint8_t bits, uint8_t delay)
   char buf[64];
   snprintf(buf, sizeof(buf), "Xfer done, #0: %u (%u-%u) #nz: %u (%u-%u)\n", z,  szr, lzr, nz, snzr, lnzr);
   Fx3UartTxString(buf);
-  Fx3GpifStop();
-  Fx3GpifPibStop();
 }
