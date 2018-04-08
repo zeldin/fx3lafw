@@ -44,6 +44,11 @@ static inline void Fx3CacheCleanDCacheEntry(volatile void *ptr)
   __asm__ __volatile__("mcr p15, 0, %0, c7, c10, 1" : : "r"(((uint32_t)ptr) & ~0x1FUL));
 }
 
+static inline void Fx3CacheInvalidateDCacheEntry(volatile void *ptr)
+{
+  __asm__ __volatile__("mcr p15, 0, %0, c7, c6, 1" : : "r"(((uint32_t)ptr) & ~0x1FUL));
+}
+
 extern void Fx3CacheEnableCaches(void);
 
 #endif /* BSP_CACHE_H_ */
