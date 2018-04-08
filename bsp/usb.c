@@ -486,3 +486,30 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
   Fx3WriteReg32(FX3_VIC_INT_CLEAR,
 		(1UL << 21) | (1UL << 9) | (1UL << 0));
 }
+
+void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pktsize)
+{
+  static const uint8_t usb2_type_map[] = {
+    [FX3_USB_EP_ISOCHRONOUS] = 1,
+    [FX3_USB_EP_INTERRUPT] = 3,
+    [FX3_USB_EP_BULK] = 2,
+    [FX3_USB_EP_CONTROL] = 0,
+  };
+
+  /* USB3 EP valid */
+  Fx3WriteReg32(FX3_PROT_EPI_CS1+(ep<<2), FX3_PROT_EPI_CS1_VALID);
+  Fx3WriteReg32(FX3_PROT_EPI_CS2+(ep<<2),
+		(16UL << FX3_PROT_EPI_CS2_ISOINPKS_SHIFT) |
+		((type << FX3_PROT_EPI_CS2_TYPE_SHIFT) & FX3_PROT_EPI_CS2_TYPE_SHIFT));
+
+  /* USB2 EP valid */
+  Fx3WriteReg32(FX3_DEV_EPI_CS+(ep<<2),
+		FX3_DEV_EPI_CS_VALID |
+		(usb2_type_map[type&3] << FX3_DEV_EPI_CS_TYPE_SHIFT) |
+		((pktsize << FX3_DEV_EPI_CS_PAYLOAD_SHIFT) & FX3_DEV_EPI_CS_PAYLOAD_MASK));
+
+  /* Endpoint manager settings for EP */
+  Fx3WriteReg32(FX3_EEPM_ENDPOINT+(ep<<2),
+		(pktsize << FX3_EEPM_ENDPOINT_PACKET_SIZE_SHIFT)
+		& FX3_EEPM_ENDPOINT_PACKET_SIZE_MASK);
+}

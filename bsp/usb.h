@@ -66,6 +66,13 @@
 #define FX3_USB_DESCRIPTOR_DEV_CAPABILITY     0x10
 #define FX3_USB_DESCRIPTOR_SS_EP_COMPANION    0x30
 
+typedef enum {
+  FX3_USB_EP_ISOCHRONOUS = 0,
+  FX3_USB_EP_INTERRUPT,
+  FX3_USB_EP_BULK,
+  FX3_USB_EP_CONTROL,
+} Fx3UsbEndpointType_t;
+
 struct Fx3UsbCallbacks {
   void (*sutok)(uint8_t request_type, uint8_t request, uint16_t value,
 		uint16_t index, uint16_t length);
@@ -79,5 +86,7 @@ extern void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer,
 			     uint16_t length);
 extern void Fx3UsbDmaDataIn(uint8_t ep, const volatile void *buffer,
 			    uint16_t length);
+extern void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type,
+				   uint16_t pktsize);
 
 #endif /* BSP_USB_H_ */
