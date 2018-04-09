@@ -159,7 +159,7 @@ void Fx3GpifPibStart(uint16_t clock_divisor_x2)
   Fx3ClearReg32(FX3_PIB_DLL_CTRL, FX3_PIB_DLL_CTRL_ENABLE);
   Fx3UtilDelayUs(1);
   Fx3WriteReg32(FX3_PIB_DLL_CTRL,
-		FX3_PIB_DLL_CTRL_HIGH_FREQ |
+		(clock_divisor_x2<11? FX3_PIB_DLL_CTRL_HIGH_FREQ : 0UL) |
 		FX3_PIB_DLL_CTRL_ENABLE);
   Fx3UtilDelayUs(1);
   Fx3ClearReg32(FX3_PIB_DLL_CTRL, FX3_PIB_DLL_CTRL_DLL_RESET_N);
