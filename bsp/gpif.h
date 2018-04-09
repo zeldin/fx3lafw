@@ -41,9 +41,7 @@
 #define FX3_GPIO_ALPHA_DQ_OEN             (1UL<<0) /* Alpha 0 */
 #define FX3_GPIO_ALPHA_UPDATE_DOUT        (1UL<<1) /* Alpha 1 */
 #define FX3_GPIO_ALPHA_SAMPLE_DIN         (1UL<<2) /* Alpha 2 */
-/* 3 = sample_ain? */
-
-/* beta: a_oen register_access assert_drq deassert_drq */
+#define FX3_GPIO_ALPHA_SAMPLE_AIN         (1UL<<3) /* Alpha 3 */
 
 #define FX3_GPIO_BETA_THREAD_0            (0UL<<4)  /* Beta 4&5 */
 #define FX3_GPIO_BETA_THREAD_1            (1UL<<4)  /*  - " -   */
@@ -51,7 +49,10 @@
 #define FX3_GPIO_BETA_THREAD_3            (3UL<<4)  /*  - " -   */
 #define FX3_GPIO_BETA_RQ_POP              (1UL<<6)  /* Beta 6 */
 #define FX3_GPIO_BETA_WQ_PUSH             (1UL<<7)  /* Beta 7 */
-
+#define FX3_GPIO_BETA_RQ_POP_ADDR         (1UL<<8)  /* Beta 8 */
+#define FX3_GPIO_BETA_WQ_PUSH_ADDR        (1UL<<9)  /* Beta 9 */
+#define FX3_GPIO_BETA_A_OEN               (1UL<<10) /* Beta 10 */
+  /* 11 = ? */
 #define FX3_GPIO_BETA_COUNT_CTRL          (1UL<<12) /* Beta 12 */
 #define FX3_GPIO_BETA_LD_CTRL_COUNT       (1UL<<13) /* Beta 13 */
 #define FX3_GPIO_BETA_COUNT_ADDR          (1UL<<14) /* Beta 14 */
@@ -60,7 +61,12 @@
 #define FX3_GPIO_BETA_LD_DATA_COUNT       (1UL<<17) /* Beta 17 */
 #define FX3_GPIO_BETA_INTR_CPU            (1UL<<18) /* Beta 18 */
 #define FX3_GPIO_BETA_INTR_HOST           (1UL<<19) /* Beta 19 */
-
+#define FX3_GPIO_BETA_UPDATE_AOUT         (1UL<<20) /* Beta 20 */
+#define FX3_GPIO_BETA_REGISTER_ACCESS     (1UL<<21) /* Beta 21 */
+  /* 22, 23, 24 = ? */
+#define FX3_GPIO_BETA_ASSERT_DRQ          (1UL<<25) /* Beta 25 */
+#define FX3_GPIO_BETA_DEASSERT_DRQ        (1UL<<26) /* Beta 26 */
+  /* 27, 28, 29 = ? */
 #define FX3_GPIO_BETA_COMMIT              (1UL<<30) /* Beta 30 */
 #define FX3_GPIO_BETA_PP_ACCESS           (1UL<<31) /* Beta 31 */
 
@@ -115,10 +121,19 @@ typedef enum {
   FX3_GPIO_LAMBDA_INDEX_CTL15,    /* GPIO 47 */
   FX3_GPIO_LAMBDA_INDEX_OUT_REG_CR_VALID = 16,
   FX3_GPIO_LAMBDA_INDEX_IN_REG_CR_VALID  = 17,
-  FX3_GPIO_LAMBDA_INDEX_DMA_WM    = 24,
-  FX3_GPIO_LAMBDA_INDEX_DMA_RDY   = 26,
-  FX3_GPIO_LAMBDA_INDEX_INTR_PEND = 29,
-  FX3_GPIO_LAMBDA_INDEX_FW_TRG    = 30,
+  FX3_GPIO_LAMBDA_INDEX_CTRL_CNT_HIT     = 18,
+  FX3_GPIO_LAMBDA_INDEX_ADDR_CNT_HIT     = 19,
+  FX3_GPIO_LAMBDA_INDEX_DATA_CNT_HIT     = 20,
+  FX3_GPIO_LAMBDA_INDEX_CTRL_CMP_MATCH   = 21,
+  FX3_GPIO_LAMBDA_INDEX_ADDR_CMP_MATCH   = 22,
+  FX3_GPIO_LAMBDA_INDEX_DATA_CMP_MATCH   = 23,
+  FX3_GPIO_LAMBDA_INDEX_DMA_WM           = 24,
+  FX3_GPIO_LAMBDA_INDEX_DMA_RDY_ADDR     = 25,
+  FX3_GPIO_LAMBDA_INDEX_DMA_RDY          = 26,
+  /* 27, 28 = ? */
+  FX3_GPIO_LAMBDA_INDEX_INTR_PEND        = 29,
+  FX3_GPIO_LAMBDA_INDEX_FW_TRG           = 30,
+  FX3_GPIO_LAMBDA_INDEX_OUT_ADDR_VALID   = 31,
 } Fx3GpifLambdaIndex_t;
 
 typedef enum {
