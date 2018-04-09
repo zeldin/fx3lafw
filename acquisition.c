@@ -32,14 +32,14 @@ static Fx3GpifRegisters_t registers = {
   .beta_deassert = FX3_GPIO_BETA_WQ_PUSH,
 };
 
-void start_acquisition(uint8_t bits, uint8_t delay)
+void start_acquisition(uint8_t bits, uint8_t delay, uint16_t clock_divisor_x2)
 {
   registers.bus_config &= ~FX3_GPIF_BUS_CONFIG_BUS_WIDTH_MASK;
   registers.bus_config |= ((bits >> 3) - 1) << FX3_GPIF_BUS_CONFIG_BUS_WIDTH_SHIFT;
   waveforms[1].state[2] &= ~(0xFFUL << (FX3_GPIF_LEFT_WAVEFORM_REPEAT_COUNT_SHIFT - 64));
   waveforms[1].state[2] |= delay << (FX3_GPIF_LEFT_WAVEFORM_REPEAT_COUNT_SHIFT - 64);
 
-  Fx3GpifPibStart(4); /* Minimum divisor = 2.0 */
+  Fx3GpifPibStart(clock_divisor_x2);
   Fx3GpifConfigure(waveforms,
 		   sizeof(waveforms)/sizeof(waveforms[0]),
 		   functions, sizeof(functions)/sizeof(functions[0]),

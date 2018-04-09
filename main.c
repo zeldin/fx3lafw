@@ -40,7 +40,16 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
       Fx3UartTxString(buf);
     }
 
-    start_acquisition(8, 201); /* 201.6 MHz / 202 ~= 1 MHz */
+    uint8_t flags = DmaBuf[0];
+    uint16_t sample_delay = (DmaBuf[1]<<8)|DmaBuf[2];
+    uint8_t bits = 8;
+    if (flags & (1<<5))
+      bits = 16;
+    uint16_t clock_divisor_x2 = 27; /* -> ~30 MHz (0.44% slow) */
+    if (flags & (1<<6))
+      clock_divisor_x2 = 17; /* -> ~48 MHz (1.18% slow) */
+
+    start_acquisition(bits, sample_delay, clock_divisor_x2);
 
     return;
   case CMD_GET_FW_VERSION:
