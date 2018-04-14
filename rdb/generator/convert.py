@@ -78,6 +78,10 @@ reg_addr_fixups = {
 field_name_fixups = {
     'OTG_CTRL': {'11': ('B_SESS_VALID', 'B_END_SESS')},
 }
+field_bits_fixups = {
+    'GPIF_ADDR_COUNT_CONFIG': {'INCREMENT': ('7:0', '15:8')},
+    'GPIF_DATA_COUNT_CONFIG': {'INCREMENT': ('7:0', '15:8')},
+}
 
 class Register:
     rdb_prefix='FX3_'
@@ -121,6 +125,12 @@ class Register:
                     fixup = field_name_fixups[self.name][field[0]]
                     if name[0] == fixup[0]:
                         name[0] = fixup[1]
+                except KeyError:
+                    pass
+                try:
+                    fixup = field_bits_fixups[self.name][name[0]]
+                    if field[0] == fixup[0]:
+                        bits = fixup[1].split(':')
                 except KeyError:
                     pass
                 if len(bits) == 1 and len(name) == 2 and (name[0] == 'EN_GPIO' or name[0] == 'EV_GPIO' or name[0] == 'POL_GPIO'):
