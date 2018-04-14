@@ -9,15 +9,18 @@ static volatile uint8_t gpif_buf[8192] __attribute__((aligned(32)));
 static const uint16_t functions[]  = {
   [0] = 0U,  /* Constant 0 */
   [1] = (uint16_t)~0U, /* Constant 1 */
+  [2] = FX3_GPIF_FUNCTION_Fa, /* Fa */
 };
 
 #define START_STATE  0
 #define START_ALPHA  FX3_GPIO_ALPHA_SAMPLE_DIN
 
-static Fx3GpifWaveform_t waveforms[] = {
+static const Fx3GpifWaveform_t waveforms[] = {
   [0] = { GPIF_START_STATE(0), .left=1 },
-  [1] = { GPIF_STATE(1, 0, 0, 0, 0, 0, 1, 0, FX3_GPIO_ALPHA_SAMPLE_DIN,
-		     FX3_GPIO_BETA_WQ_PUSH, 0, 1), .right=1 },
+  [1] = { GPIF_STATE(1, FX3_GPIO_LAMBDA_INDEX_DATA_CNT_HIT, 0, 0, 0, 0, 2,
+		     0, FX3_GPIO_ALPHA_SAMPLE_DIN,
+		     FX3_GPIO_BETA_WQ_PUSH |
+		     FX3_GPIO_BETA_COUNT_DATA, 0, 1), .right=1 },
 };
 
 static Fx3GpifRegisters_t registers = {
@@ -26,18 +29,23 @@ static Fx3GpifRegisters_t registers = {
 	     FX3_GPIF_CONFIG_CLK_SOURCE),
   .ad_config = (FX3_GPIO_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_A_OEN_CFG_SHIFT) |
                (FX3_GPIO_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_DQ_OEN_CFG_SHIFT),
+  .data_count_config = (1UL << FX3_GPIF_DATA_COUNT_CONFIG_INCREMENT_SHIFT) |
+                       FX3_GPIF_DATA_COUNT_CONFIG_DOWN_UP |
+                       FX3_GPIF_DATA_COUNT_CONFIG_SW_RESET |
+                       FX3_GPIF_DATA_COUNT_CONFIG_RELOAD |
+                       FX3_GPIF_DATA_COUNT_CONFIG_ENABLE,
   .thread_config[0] = (FX3_GPIF_THREAD_CONFIG_ENABLE |
 		       (1UL << FX3_GPIF_THREAD_CONFIG_WATERMARK_SHIFT) |
 		       (4UL << FX3_GPIF_THREAD_CONFIG_BURST_SIZE_SHIFT)),
   .beta_deassert = FX3_GPIO_BETA_WQ_PUSH,
 };
 
-void start_acquisition(uint8_t bits, uint8_t delay, uint16_t clock_divisor_x2)
+void start_acquisition(uint8_t bits, uint32_t delay, uint16_t clock_divisor_x2)
 {
   registers.bus_config &= ~FX3_GPIF_BUS_CONFIG_BUS_WIDTH_MASK;
   registers.bus_config |= ((bits >> 3) - 1) << FX3_GPIF_BUS_CONFIG_BUS_WIDTH_SHIFT;
-  waveforms[1].state[2] &= ~(0xFFUL << (FX3_GPIF_LEFT_WAVEFORM_REPEAT_COUNT_SHIFT - 64));
-  waveforms[1].state[2] |= delay << (FX3_GPIF_LEFT_WAVEFORM_REPEAT_COUNT_SHIFT - 64);
+
+  registers.data_count_limit = delay;
 
   Fx3GpifPibStart(clock_divisor_x2);
   Fx3GpifConfigure(waveforms,
