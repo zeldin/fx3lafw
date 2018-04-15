@@ -20,6 +20,7 @@
  */
 
 #include <bsp/uart.h>
+#include <bsp/gctl.h>
 #include <bsp/regaccess.h>
 #include <bsp/util.h>
 #include <rdb/uart.h>
@@ -29,7 +30,7 @@ void Fx3UartInit(uint32_t baud_rate, Fx3UartParity_t parity, Fx3UartStopBits_t s
 {
   /* Configure baud rate generator */
   Fx3WriteReg32(FX3_GCTL_UART_CORE_CLK,
-		(((SYS_CLK/8 / baud_rate - 1) << FX3_GCTL_UART_CORE_CLK_DIV_SHIFT) & FX3_GCTL_UART_CORE_CLK_DIV_MASK) |
+		(((SYS_CLK/16 / baud_rate - 1) << FX3_GCTL_UART_CORE_CLK_DIV_SHIFT) & FX3_GCTL_UART_CORE_CLK_DIV_MASK) |
 		(3UL << FX3_GCTL_UART_CORE_CLK_SRC_SHIFT) |
 		FX3_GCTL_UART_CORE_CLK_CLK_EN);
 

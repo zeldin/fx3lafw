@@ -17,6 +17,8 @@
 #define CMD_START			0xb1
 #define CMD_GET_REVID_VERSION		0xb2
 
+#define CLOCK_DIVISOR_X2_FOR(f) ((SYS_CLK + (f)/4) / ((f)/2))
+
 static volatile uint8_t DmaBuf[32] __attribute__((aligned(32)));
 
 static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
@@ -45,9 +47,11 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     uint8_t bits = 8;
     if (flags & (1<<5))
       bits = 16;
-    uint16_t clock_divisor_x2 = 27; /* -> ~30 MHz (0.44% slow) */
+    uint16_t clock_divisor_x2;
     if (flags & (1<<6))
-      clock_divisor_x2 = 17; /* -> ~48 MHz (1.18% slow) */
+      clock_divisor_x2 = CLOCK_DIVISOR_X2_FOR(48000000); /* 48 MHz */
+    else
+      clock_divisor_x2 = CLOCK_DIVISOR_X2_FOR(30000000); /* 30 MHz */
 
     start_acquisition(bits, sample_delay, clock_divisor_x2);
 
@@ -149,6 +153,7 @@ int main(void)
   Fx3UartTxString("\nGood moaning!\n");
   Fx3UartTxFlush();
 
+  Fx3GpioInitClock();
   Fx3GpioSetupSimple(45,
 		     FX3_GPIO_SIMPLE_ENABLE |
 		     FX3_GPIO_SIMPLE_INPUT_EN);
@@ -157,14 +162,14 @@ int main(void)
 		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
 		     FX3_GPIO_SIMPLE_DRIVE_LO_EN);
 
-  // Divide the 100.8MHz clock by 100800 into a 1kHz clock output for reference
+  // Divide the GPIO fast clock into a 1kHz clock output for reference
   Fx3GpioSetupComplex(50,
 		      FX3_PIN_STATUS_ENABLE |
-		      (FX3_GPIO_TIMER_MODE_HIGH_FREQ << FX3_PIN_STATUS_TIMER_MODE_SHIFT) |
+		      (FX3_GPIO_TIMER_MODE_FAST_CLK << FX3_PIN_STATUS_TIMER_MODE_SHIFT) |
 		      (FX3_GPIO_PIN_MODE_PWM << FX3_PIN_STATUS_MODE_SHIFT) |
 		      FX3_PIN_STATUS_DRIVE_HI_EN |
 		      FX3_PIN_STATUS_DRIVE_LO_EN,
-		      0, 100800-1, 50400-1);
+		      0, GPIO_FAST_CLK/1000, GPIO_FAST_CLK/2000);
 
   Fx3IrqEnableInterrupts();
 

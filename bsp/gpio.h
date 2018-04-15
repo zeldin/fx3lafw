@@ -24,12 +24,26 @@
 
 #include <stdint.h>
 #include <rdb/gpio.h>
+#include <bsp/gctl.h>
+
+#ifndef GPIO_FAST_DIV
+#define GPIO_FAST_DIV 2
+#endif
+
+#ifndef GPIO_SLOW_DIV
+#define GPIO_SLOW_DIV 48
+#endif
+
+#define GPIO_FAST_CLK (SYS_CLK / GPIO_FAST_DIV)
+
+#define GPIO_SLOW_CLK (GPIO_FAST_CLK / GPIO_SLOW_DIV)
+
 
 typedef enum {
   FX3_GPIO_TIMER_MODE_SHUTDOWN = 0,
-  FX3_GPIO_TIMER_MODE_HIGH_FREQ,
-  FX3_GPIO_TIMER_MODE_LOW_FREQ,
-  FX3_GPIO_TIMER_MODE_STANDBY_FREQ,
+  FX3_GPIO_TIMER_MODE_FAST_CLK,
+  FX3_GPIO_TIMER_MODE_SLOW_CLK,
+  FX3_GPIO_TIMER_MODE_STANDBY_CLK,
   FX3_GPIO_TIMER_MODE_POS_EDGE,
   FX3_GPIO_TIMER_MODE_NEG_EDGE,
   FX3_GPIO_TIMER_MODE_ANY_EDGE,
@@ -65,6 +79,7 @@ typedef enum {
   FX3_GPIO_PIN_MODE_MEASURE_ANY_ONCE,
 } Fx3GpioPinMode_t;
 
+extern void Fx3GpioInitClock(void);
 extern void Fx3GpioSetupSimple(uint8_t num, uint32_t config);
 extern void Fx3GpioSetupComplex(uint8_t num, uint32_t config, uint32_t timer,
 				uint32_t period, uint32_t threshold);

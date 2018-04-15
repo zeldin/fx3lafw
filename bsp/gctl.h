@@ -24,6 +24,19 @@
 
 #include <stdint.h>
 
+#ifndef PLL_FBDIV
+#define PLL_FBDIV 21  /* -> SYS_CLK = 403200000 */
+#endif
+
+#define SYS_CLK (19200000 * PLL_FBDIV)
+
+#ifndef CPU_DIV
+#define CPU_DIV 2
+#endif
+
+#define CPU_CLK   (SYS_CLK / CPU_DIV)
+
+
 /* Alternate function for GPIO 33-57 */
 typedef enum {
   FX3_GCTL_ALTFUNC_GPIO = 0,

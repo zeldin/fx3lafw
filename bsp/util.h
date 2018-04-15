@@ -24,8 +24,6 @@
 
 #include <stdint.h>
 
-#define SYS_CLK   201600000 /* 201.6 MHz */
-
 extern void Fx3UtilDelayUs(uint32_t delay_us);
 
 #endif /* BSP_UTIL_H_ */

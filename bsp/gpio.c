@@ -21,8 +21,22 @@
 
 #include <bsp/gpio.h>
 #include <bsp/regaccess.h>
+#include <bsp/util.h>
 #include <rdb/gpio.h>
 #include <rdb/gctl.h>
+
+void Fx3GpioInitClock(void)
+{
+  Fx3WriteReg32(FX3_GCTL_GPIO_FAST_CLK,
+		FX3_GCTL_GPIO_FAST_CLK_CLK_EN |
+		(3UL << FX3_GCTL_GPIO_FAST_CLK_SRC_SHIFT) |
+		((GPIO_FAST_DIV - 1UL) << FX3_GCTL_GPIO_FAST_CLK_DIV_SHIFT));
+  Fx3UtilDelayUs(10);
+  Fx3WriteReg32(FX3_GCTL_GPIO_SLOW_CLK,
+		FX3_GCTL_GPIO_SLOW_CLK_CLK_EN |
+		((GPIO_SLOW_DIV - 1UL) << FX3_GCTL_GPIO_SLOW_CLK_DIV_SHIFT));
+  Fx3UtilDelayUs(10);
+}
 
 void Fx3GpioSetupSimple(uint8_t num, uint32_t config)
 {

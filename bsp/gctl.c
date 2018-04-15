@@ -31,12 +31,12 @@ void Fx3GctlInitClock(void)
 		(1UL << FX3_GCTL_CPU_CLK_CFG_MMIO_DIV_SHIFT) |
 		(1UL << FX3_GCTL_CPU_CLK_CFG_DMA_DIV_SHIFT) |
 		(3UL << FX3_GCTL_CPU_CLK_CFG_SRC_SHIFT) |
-		(1UL << FX3_GCTL_CPU_CLK_CFG_CPU_DIV_SHIFT));
+		((CPU_DIV - 1UL) << FX3_GCTL_CPU_CLK_CFG_CPU_DIV_SHIFT));
   Fx3UtilDelayUs(10);
 
-  /* Change PLL divisor from 20 to 21 */
-  if (Fx3GetField32(FX3_GCTL_PLL_CFG, FBDIV) != 21) {
-    Fx3SetField32(FX3_GCTL_PLL_CFG, FBDIV, 21);
+  /* Change PLL feedback divisor if needed */
+  if (Fx3GetField32(FX3_GCTL_PLL_CFG, FBDIV) != PLL_FBDIV) {
+    Fx3SetField32(FX3_GCTL_PLL_CFG, FBDIV, PLL_FBDIV);
     Fx3UtilDelayUs(10);
     while ((Fx3ReadReg32(FX3_GCTL_PLL_CFG) & FX3_GCTL_PLL_CFG_PLL_LOCK) == 0)
       ;

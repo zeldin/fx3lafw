@@ -7,8 +7,9 @@ WARN = -Wall -Wextra -Werror
 OPTIMIZE = -g -Os
 INCLUDE = -I.
 GENDEP = -MMD -MP
+DEFS = -DPLL_FBDIV=20
 
-CFLAGS = -std=c11 $(CGENFLAGS) $(WARN) $(OPTIMIZE) $(INCLUDE) $(GENDEP)
+CFLAGS = -std=c11 $(CGENFLAGS) $(WARN) $(OPTIMIZE) $(INCLUDE) $(GENDEP) $(DEFS)
 LDFLAGS = -static -nostartfiles -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(basename $@).map
 
 VPATH = bsp
