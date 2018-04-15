@@ -165,14 +165,14 @@ int main(void)
 		     FX3_GPIO_SIMPLE_DRIVE_HI_EN |
 		     FX3_GPIO_SIMPLE_DRIVE_LO_EN);
 
-  // Divide the GPIO fast clock into a 1kHz clock output for reference
+  // Divide the GPIO slow clock into a 1kHz clock output for reference
   Fx3GpioSetupComplex(50,
 		      FX3_PIN_STATUS_ENABLE |
-		      (FX3_GPIO_TIMER_MODE_FAST_CLK << FX3_PIN_STATUS_TIMER_MODE_SHIFT) |
+		      (FX3_GPIO_TIMER_MODE_SLOW_CLK << FX3_PIN_STATUS_TIMER_MODE_SHIFT) |
 		      (FX3_GPIO_PIN_MODE_PWM << FX3_PIN_STATUS_MODE_SHIFT) |
 		      FX3_PIN_STATUS_DRIVE_HI_EN |
 		      FX3_PIN_STATUS_DRIVE_LO_EN,
-		      0, GPIO_FAST_CLK/1000, GPIO_FAST_CLK/2000);
+		      0, GPIO_SLOW_CLK/1000-1, GPIO_SLOW_CLK/2000);
 
   Fx3IrqEnableInterrupts();
 
