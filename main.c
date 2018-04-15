@@ -12,10 +12,7 @@
 
 #include "descriptors.h"
 #include "acquisition.h"
-
-#define CMD_GET_FW_VERSION		0xb0
-#define CMD_START			0xb1
-#define CMD_GET_REVID_VERSION		0xb2
+#include "command.h"
 
 #define CLOCK_DIVISOR_X2_FOR(f) ((SYS_CLK + (f)/4) / ((f)/2))
 
@@ -29,26 +26,31 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     if (request_type !=
 	(FX3_USB_REQTYPE_OUT | FX3_USB_REQTYPE_TYPE_VENDOR | FX3_USB_REQTYPE_TGT_DEVICE))
       goto stall;
-    if (value != 0 || index != 0 || length != 3)
+    if (value != 0 || index != 0 || length != sizeof(struct cmd_start_acquisition))
       goto stall;
     Fx3UartTxString("CMD_START\n");
     Fx3UsbUnstallEp0();
-    Fx3UsbDmaDataOut(0, DmaBuf, 3);
+    Fx3UsbDmaDataOut(0, DmaBuf, sizeof(struct cmd_start_acquisition));
     Fx3CacheInvalidateDCacheEntry(DmaBuf);
+    volatile struct cmd_start_acquisition *cmd = (volatile struct cmd_start_acquisition *)DmaBuf;
     {
       char buf[64];
       snprintf(buf, sizeof(buf), "flags=%02x, sample_delay_h=%02x, sample_delay_l=%02x\n",
-	       (unsigned)DmaBuf[0], (unsigned)DmaBuf[1], (unsigned)DmaBuf[2]);
+	       (unsigned)cmd->flags, (unsigned)cmd->sample_delay_h, (unsigned)cmd->sample_delay_l);
       Fx3UartTxString(buf);
     }
 
-    uint8_t flags = DmaBuf[0];
-    uint16_t sample_delay = (DmaBuf[1]<<8)|DmaBuf[2];
+    uint8_t flags = cmd->flags;
+    uint16_t sample_delay = (cmd->sample_delay_h<<8)|cmd->sample_delay_l;
     uint8_t bits = 8;
-    if (flags & (1<<5))
+    if (flags & (1<<CMD_START_FLAGS_WIDE_POS))
       bits = 16;
+    if (flags & (1<<CMD_START_FLAGS_SUPERWIDE_POS))
+      bits += 16;
     uint16_t clock_divisor_x2;
-    if (flags & (1<<6))
+    if (flags & CMD_START_FLAGS_CLK_192MHZ)
+      clock_divisor_x2 = CLOCK_DIVISOR_X2_FOR(192000000); /* 192 MHz */
+    else if (flags & CMD_START_FLAGS_CLK_48MHZ)
       clock_divisor_x2 = CLOCK_DIVISOR_X2_FOR(48000000); /* 48 MHz */
     else
       clock_divisor_x2 = CLOCK_DIVISOR_X2_FOR(30000000); /* 30 MHz */
@@ -60,14 +62,15 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     if (request_type !=
 	(FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_VENDOR | FX3_USB_REQTYPE_TGT_DEVICE))
       goto stall;
-    if (value != 0 || index != 0 || length != 2)
+    if (value != 0 || index != 0 || length != sizeof(struct version_info))
       goto stall;
     Fx3UartTxString("CMD_GET_FW_VERSION\n");
-    DmaBuf[0] = 1;
-    DmaBuf[1] = 3;
+    volatile struct version_info *vinfo = (volatile struct version_info *)DmaBuf;
+    vinfo->major = 1;
+    vinfo->minor = 3;
     Fx3CacheCleanDCacheEntry(DmaBuf);
     Fx3UsbUnstallEp0();
-    Fx3UsbDmaDataIn(0, DmaBuf, 2);
+    Fx3UsbDmaDataIn(0, DmaBuf, sizeof(struct version_info));
     return;
   case CMD_GET_REVID_VERSION:
     if (request_type !=
