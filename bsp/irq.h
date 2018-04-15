@@ -24,6 +24,26 @@
 
 #include <stdint.h>
 
+typedef enum {
+  FX3_IRQ_GCTL_CORE = 0,
+  FX3_IRQ_SW_INTR = 1,
+  FX3_IRQ_WATCHDOG_TIMER = 4,
+  FX3_IRQ_GPIF_DMA = 6,
+  FX3_IRQ_GPIF_CORE = 7,
+  FX3_IRQ_USB_DMA = 8,
+  FX3_IRQ_USB_CORE = 9,
+  FX3_IRQ_STORAGE_DMA = 11,
+  FX3_IRQ_STORAGE0_CORE = 12,
+  FX3_IRQ_STORAGE1_CORE = 13,
+  FX3_IRQ_I2C_CORE = 15,
+  FX3_IRQ_I2S_CORE = 16,
+  FX3_IRQ_SPI_CORE = 17,
+  FX3_IRQ_UART_CORE = 18,
+  FX3_IRQ_GPIO_CORE = 19,
+  FX3_IRQ_PERIPH_DMA = 20,
+  FX3_IRQ_GCTL_POWER = 21,
+} Fx3IrqSource_t;
+
 static inline void Fx3IrqEnableInterrupts(void)
 {
   uint32_t cpsr;

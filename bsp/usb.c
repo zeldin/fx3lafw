@@ -22,6 +22,7 @@
 #include <bsp/usb.h>
 #include <bsp/regaccess.h>
 #include <bsp/dma.h>
+#include <bsp/irq.h>
 #include <bsp/util.h>
 #include <bsp/uart.h>
 #include <rdb/gctl.h>
@@ -136,7 +137,7 @@ static void Fx3UsbEnablePhy(void)
 		FX3_UIB_INTR_MASK_PROT_INT |
 		FX3_UIB_INTR_MASK_LNK_INT |
 		FX3_UIB_INTR_MASK_DEV_CTL_INT);
-  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << 9));
+  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << FX3_IRQ_USB_CORE));
   Fx3SetReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_USB_POWER_EN);
 
   /* Setup LNK for superspeed */
@@ -196,7 +197,7 @@ void Fx3UsbConnect(void)
 {
   Fx3WriteReg32(FX3_GCTL_IOPOWER_INTR, ~0UL);
   Fx3WriteReg32(FX3_GCTL_IOPOWER_INTR_MASK, FX3_GCTL_IOPOWER_INTR_MASK_VBUS);
-  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << 21));
+  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << FX3_IRQ_GCTL_POWER));
   if (Fx3ReadReg32(FX3_GCTL_IOPOWER) & FX3_GCTL_IOPOWER_VBUS) {
     Fx3UartTxString("VBUS POWER!\n");
     Fx3UsbEnablePhy();
@@ -480,11 +481,11 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
   Fx3WriteReg32(FX3_UIB_INTR_MASK, 0);
 
   /* Configure vectored interrupt controller */
-  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (0<<2), Fx3UsbGctlCoreIsr);
-  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (9<<2), Fx3UsbUsbCoreIsr);
-  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (21<<2), Fx3UsbGctlPowerIsr);
+  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (FX3_IRQ_GCTL_CORE<<2), Fx3UsbGctlCoreIsr);
+  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (FX3_IRQ_USB_CORE<<2), Fx3UsbUsbCoreIsr);
+  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (FX3_IRQ_GCTL_POWER<<2), Fx3UsbGctlPowerIsr);
   Fx3WriteReg32(FX3_VIC_INT_CLEAR,
-		(1UL << 21) | (1UL << 9) | (1UL << 0));
+		(1UL << FX3_IRQ_GCTL_POWER) | (1UL << FX3_IRQ_USB_CORE) | (1UL << FX3_IRQ_GCTL_CORE));
 }
 
 void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pktsize)

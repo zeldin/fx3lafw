@@ -21,6 +21,7 @@
 
 #include <bsp/gpif.h>
 #include <bsp/regaccess.h>
+#include <bsp/irq.h>
 #include <bsp/util.h>
 #include <bsp/uart.h>
 #include <rdb/gctl.h>
@@ -169,16 +170,16 @@ void Fx3GpifPibStart(uint16_t clock_divisor_x2)
   while(!(Fx3ReadReg32(FX3_PIB_DLL_CTRL) & FX3_PIB_DLL_CTRL_DLL_STAT))
     ;
 
-  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (7<<2), Fx3GpifPibIsr);
+  Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (FX3_IRQ_GPIF_CORE<<2), Fx3GpifPibIsr);
   Fx3WriteReg32(FX3_PIB_INTR, Fx3ReadReg32(FX3_PIB_INTR));
   Fx3WriteReg32(FX3_PIB_INTR_MASK, FX3_PIB_INTR_MASK_GPIF_INTERRUPT);
-  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << 7));
+  Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << FX3_IRQ_GPIF_CORE));
 }
 
 void Fx3GpifPibStop(void)
 {
   Fx3WriteReg32(FX3_PIB_INTR_MASK, 0UL);
-  Fx3WriteReg32(FX3_VIC_INT_CLEAR, (1UL << 7));
+  Fx3WriteReg32(FX3_VIC_INT_CLEAR, (1UL << FX3_IRQ_GPIF_CORE));
   Fx3WriteReg32(FX3_PIB_INTR_MASK, 0UL);
   Fx3WriteReg32(FX3_PIB_INTR, ~0UL);
   Fx3WriteReg32(FX3_PIB_POWER, 0UL);
