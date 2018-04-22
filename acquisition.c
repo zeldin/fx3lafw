@@ -50,6 +50,7 @@ static void stop_acquisition(void)
   Fx3DmaAbortSocket(FX3_UIB_DMA_SCK(2));
   Fx3GpifStop();
   Fx3GpifPibStop();
+  Fx3UsbFlushInEndpoint(2);
 }
 
 static void setup_descriptors(void)
