@@ -514,3 +514,10 @@ void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pkts
 		(pktsize << FX3_EEPM_ENDPOINT_PACKET_SIZE_SHIFT)
 		& FX3_EEPM_ENDPOINT_PACKET_SIZE_MASK);
 }
+
+void Fx3UsbFlushInEndpoint(uint8_t ep)
+{
+  Fx3SetReg32(FX3_EEPM_ENDPOINT+(ep<<2), FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+  Fx3UtilDelayUs(5);
+  Fx3ClearReg32(FX3_EEPM_ENDPOINT+(ep<<2), FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+}
