@@ -208,6 +208,16 @@ typedef struct {
   uint32_t beta_deassert;
 } Fx3GpifRegisters_t;
 
+typedef enum {
+  FX3_GPIF_INVALID = 0,
+  FX3_GPIF_ARMED = 2,
+  FX3_GPIF_RUNNING,
+  FX3_GPIF_DONE,
+  FX3_GPIF_PAUSED,
+  FX3_GPIF_SWITCHING,
+  FX3_GPIF_ERROR,
+} Fx3GpifStat_t;
+
 extern void Fx3GpifStart(uint8_t state, uint8_t alpha);
 extern void Fx3GpifStop(void);
 extern void Fx3GpifInvalidate(void);
@@ -222,5 +232,6 @@ extern void Fx3GpifConfigureCompat(const Fx3GpifWaveformCompat_t *waveforms,
 				   const uint32_t *registers, uint16_t num_registers);
 extern void Fx3GpifPibStart(uint16_t clock_divisor_x2);
 extern void Fx3GpifPibStop(void);
+extern Fx3GpifStat_t Fx3GpifGetStat(uint8_t *current_state);
 
 #endif /* BSP_GPIF_H_ */

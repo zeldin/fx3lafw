@@ -200,3 +200,14 @@ void Fx3GpifPibStop(void)
   Fx3UtilDelayUs(10);
   Fx3ClearReg32(FX3_GCTL_PIB_CORE_CLK, FX3_GCTL_PIB_CORE_CLK_CLK_EN);
 }
+
+Fx3GpifStat_t Fx3GpifGetStat(uint8_t *current_state)
+{
+  uint32_t stat = Fx3ReadReg32(FX3_GPIF_WAVEFORM_CTRL_STAT);
+  if (current_state)
+    *current_state =
+      (stat & FX3_GPIF_WAVEFORM_CTRL_STAT_CURRENT_STATE_MASK)
+      >> FX3_GPIF_WAVEFORM_CTRL_STAT_CURRENT_STATE_SHIFT;
+  return (stat & FX3_GPIF_WAVEFORM_CTRL_STAT_GPIF_STAT_MASK)
+    >> FX3_GPIF_WAVEFORM_CTRL_STAT_GPIF_STAT_SHIFT;
+}
