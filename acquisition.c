@@ -4,7 +4,8 @@
 #include <bsp/uart.h>
 #include <stdio.h>
 
-static volatile uint8_t gpif_buf[8192] __attribute__((aligned(32)));
+#define NUM_DMA_BUFFERS 8
+#define DMA_BUFFER_SIZE 8192
 
 static const uint16_t functions[]  = {
   [0] = 0U,  /* Constant 0 */
@@ -40,6 +41,28 @@ static Fx3GpifRegisters_t registers = {
   .beta_deassert = FX3_GPIO_BETA_WQ_PUSH,
 };
 
+static volatile uint8_t gpif_buf[NUM_DMA_BUFFERS][DMA_BUFFER_SIZE] __attribute__((aligned(32)));
+static uint32_t dma_buffer_descriptor[NUM_DMA_BUFFERS];
+
+static void stop_acquisition(void)
+{
+  Fx3DmaAbortSocket(FX3_PIB_DMA_SCK(0));
+  Fx3DmaAbortSocket(FX3_UIB_DMA_SCK(2));
+  Fx3GpifStop();
+  Fx3GpifPibStop();
+}
+
+static void setup_descriptors(void)
+{
+  unsigned i;
+  for(i=0; i<NUM_DMA_BUFFERS; i++) {
+    unsigned next = (i==NUM_DMA_BUFFERS-1? 0 : i+1);
+    Fx3DmaFillDescriptorThrough(FX3_PIB_DMA_SCK(0), FX3_UIB_DMA_SCK(2),
+				dma_buffer_descriptor[i], gpif_buf[i],
+				DMA_BUFFER_SIZE, dma_buffer_descriptor[next]);
+  }
+}
+
 void start_acquisition(uint8_t bits, uint32_t delay, uint16_t clock_divisor_x2)
 {
   registers.bus_config &= ~FX3_GPIF_BUS_CONFIG_BUS_WIDTH_MASK;
@@ -47,49 +70,24 @@ void start_acquisition(uint8_t bits, uint32_t delay, uint16_t clock_divisor_x2)
 
   registers.data_count_limit = delay;
 
+  stop_acquisition();
+  setup_descriptors();
+
   Fx3GpifPibStart(clock_divisor_x2);
   Fx3GpifConfigure(waveforms,
 		   sizeof(waveforms)/sizeof(waveforms[0]),
 		   functions, sizeof(functions)/sizeof(functions[0]),
 		   &registers);
+
   Fx3GpifStart(START_STATE, START_ALPHA);
-  uint16_t desc = Fx3DmaAllocateDescriptor();
-  Fx3DmaSimpleTransferWrite(FX3_PIB_DMA_SCK(0), desc,
-			    gpif_buf, sizeof(gpif_buf));
-  Fx3DmaFreeDescriptor(desc);
-  Fx3GpifStop();
-  Fx3GpifPibStop();
 
-  Fx3UsbDmaDataIn(2, gpif_buf, sizeof(gpif_buf));
+  Fx3DmaStartProducer(FX3_PIB_DMA_SCK(0), dma_buffer_descriptor[0], 0, 0);
+  Fx3DmaStartConsumer(FX3_UIB_DMA_SCK(2), dma_buffer_descriptor[0], 0, 0);
+}
 
-  unsigned i, z=0, nz=0, szr=sizeof(gpif_buf), lzr=0, snzr=sizeof(gpif_buf), lnzr=0, run=0, match=gpif_buf[0], valid=0;
-  for(i=0; i<sizeof(gpif_buf); i++) {
-    if(gpif_buf[i])
-      nz++;
-    else
-      z++;
-    if ((!gpif_buf[i]) == (!match))
-      run++;
-    else {
-      if (valid) {
-	if (match) {
-	  if (run > lnzr)
-	    lnzr = run;
-	  if (run < snzr)
-	    snzr = run;
-	} else {
-	  if (run > lzr)
-	    lzr = run;
-	  if (run < szr)
-	    szr = run;
-	}
-      }
-      run = 0;
-      valid = 1;
-      match = gpif_buf[i];
-    }
-  }
-  char buf[64];
-  snprintf(buf, sizeof(buf), "Xfer done, #0: %u (%u-%u) #nz: %u (%u-%u)\n", z,  szr, lzr, nz, snzr, lnzr);
-  Fx3UartTxString(buf);
+void setup_acquisition(void)
+{
+  unsigned i;
+  for(i=0; i<NUM_DMA_BUFFERS; i++)
+    dma_buffer_descriptor[i] = Fx3DmaAllocateDescriptor();
 }

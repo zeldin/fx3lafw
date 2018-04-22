@@ -176,6 +176,8 @@ int main(void)
 
   Fx3IrqEnableInterrupts();
 
+  setup_acquisition();
+
   Fx3UsbInit(&callbacks);
   Fx3UsbConnect();
 
