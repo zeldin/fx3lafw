@@ -501,7 +501,7 @@ void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pkts
   Fx3WriteReg32(FX3_PROT_EPI_CS1+(ep<<2), FX3_PROT_EPI_CS1_VALID);
   Fx3WriteReg32(FX3_PROT_EPI_CS2+(ep<<2),
 		(16UL << FX3_PROT_EPI_CS2_ISOINPKS_SHIFT) |
-		((type << FX3_PROT_EPI_CS2_TYPE_SHIFT) & FX3_PROT_EPI_CS2_TYPE_SHIFT));
+		((type << FX3_PROT_EPI_CS2_TYPE_SHIFT) & FX3_PROT_EPI_CS2_TYPE_MASK));
 
   /* USB2 EP valid */
   Fx3WriteReg32(FX3_DEV_EPI_CS+(ep<<2),
