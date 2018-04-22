@@ -11,17 +11,23 @@ static const uint16_t functions[]  = {
   [0] = 0U,  /* Constant 0 */
   [1] = (uint16_t)~0U, /* Constant 1 */
   [2] = FX3_GPIF_FUNCTION_Fa, /* Fa */
+  [3] = FX3_GPIF_FUNCTION_Fa & ~FX3_GPIF_FUNCTION_Fb, /* Fa & !Fb */
 };
 
 #define START_STATE  0
-#define START_ALPHA  FX3_GPIO_ALPHA_SAMPLE_DIN
+#define START_ALPHA  0
 
 static const Fx3GpifWaveform_t waveforms[] = {
   [0] = { GPIF_START_STATE(0), .left=1 },
-  [1] = { GPIF_STATE(1, FX3_GPIO_LAMBDA_INDEX_DATA_CNT_HIT, 0, 0, 0, 0, 2,
+  [1] = { GPIF_STATE(1, FX3_GPIO_LAMBDA_INDEX_DMA_RDY, 0, 0, 0, 2, 0,
+		     FX3_GPIO_ALPHA_SAMPLE_DIN, 0,
+		     0, 0, 0), .left = 2 },
+  [2] = { GPIF_STATE(2, FX3_GPIO_LAMBDA_INDEX_DATA_CNT_HIT /* Fa */,
+		     FX3_GPIO_LAMBDA_INDEX_DMA_RDY /* Fb */, 0, 0, 3, 2,
 		     0, FX3_GPIO_ALPHA_SAMPLE_DIN,
 		     FX3_GPIO_BETA_WQ_PUSH |
-		     FX3_GPIO_BETA_COUNT_DATA, 0, 1), .right=1 },
+		     FX3_GPIO_BETA_COUNT_DATA, 0, 1), .left=3, .right=2 },
+  [3] = { GPIF_STATE(3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), .left=0 },
 };
 
 static Fx3GpifRegisters_t registers = {
@@ -38,6 +44,8 @@ static Fx3GpifRegisters_t registers = {
   .thread_config[0] = (FX3_GPIF_THREAD_CONFIG_ENABLE |
 		       (1UL << FX3_GPIF_THREAD_CONFIG_WATERMARK_SHIFT) |
 		       (4UL << FX3_GPIF_THREAD_CONFIG_BURST_SIZE_SHIFT)),
+  .waveform_switch = ((3UL << FX3_GPIF_WAVEFORM_SWITCH_DONE_STATE_SHIFT) |
+		      FX3_GPIF_WAVEFORM_SWITCH_DONE_ENABLE),
   .beta_deassert = FX3_GPIO_BETA_WQ_PUSH,
 };
 
