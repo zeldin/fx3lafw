@@ -37,12 +37,26 @@ static void Fx3GpifPibIsr(void)
 
   Fx3UartTxString("Fx3GpifPibIsr\n");
 
+  if (req & FX3_PIB_INTR_MASK_GPIF_INTERRUPT) {
+    Fx3UartTxString("  GPIF\n");
+    uint32_t gpif_req = Fx3ReadReg32(FX3_GPIF_INTR) & Fx3ReadReg32(FX3_GPIF_INTR_MASK);
+    Fx3WriteReg32(FX3_GPIF_INTR, gpif_req);
+
+    if (gpif_req & FX3_GPIF_INTR_MASK_GPIF_INTR)
+      Fx3UartTxString("    INTR\n");
+    if (gpif_req & FX3_GPIF_INTR_MASK_GPIF_DONE)
+      Fx3UartTxString("    DONE\n");
+  }
+
   Fx3WriteReg32(FX3_VIC_ADDRESS, 0);
 }
 
 
 void Fx3GpifStart(uint8_t state, uint8_t alpha)
 {
+  Fx3WriteReg32(FX3_GPIF_INTR, Fx3ReadReg32(FX3_GPIF_INTR));
+  Fx3WriteReg32(FX3_GPIF_INTR_MASK,
+		FX3_GPIF_INTR_MASK_GPIF_INTR | FX3_GPIF_INTR_MASK_GPIF_DONE);
   Fx3SetField32(FX3_GPIF_WAVEFORM_CTRL_STAT, ALPHA_INIT, alpha);
   Fx3SetReg32(FX3_GPIF_WAVEFORM_CTRL_STAT,
 	      FX3_GPIF_WAVEFORM_CTRL_STAT_WAVEFORM_VALID);
