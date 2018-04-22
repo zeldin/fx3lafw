@@ -182,6 +182,8 @@ int main(void)
   Fx3UsbConnect();
 
   for(;;) {
+    poll_acquisition();
+
     Fx3GpioSetOutputValueSimple(54, 1);
     Fx3UtilDelayUs(500000);
     if (!Fx3GpioGetInputValueSimple(45)) {

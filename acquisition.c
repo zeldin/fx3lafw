@@ -100,3 +100,11 @@ void setup_acquisition(void)
   for(i=0; i<NUM_DMA_BUFFERS; i++)
     dma_buffer_descriptor[i] = Fx3DmaAllocateDescriptor();
 }
+
+void poll_acquisition(void)
+{
+  if (Fx3GpifGetStat(NULL) == FX3_GPIF_DONE) {
+    Fx3UartTxString("GPIF done, stopping DMA\n");
+    stop_acquisition();
+  }
+}
