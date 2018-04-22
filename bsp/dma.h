@@ -35,6 +35,12 @@
 #define FX3_DMA_DESCRIPTOR(n) /* 1 <= n < 768 */   \
   ((volatile struct Fx3DmaDescriptor *)(void *)(0x40000000 + ((n) << 4)))
 
+#define FX3_LPP_DMA_GLOBL    0xE000FF00
+#define FX3_PIB_DMA_GLOBL    0xE001FF00
+#define FX3_UIB_DMA_GLOBL    0xE003FF00
+#define FX3_UIBIN_DMA_GLOBL  0xE004FF00
+
+
 struct Fx3DmaDescriptor {
   uint32_t dscr_buffer;
   uint32_t dscr_sync;
@@ -45,9 +51,23 @@ struct Fx3DmaDescriptor {
 extern uint16_t Fx3DmaAllocateDescriptor(void);
 extern void Fx3DmaFreeDescriptor(uint16_t d);
 extern void Fx3DmaAbortSocket(uint32_t socket);
+extern void Fx3DmaFillDescriptorThrough(uint32_t prod_socket, uint32_t cons_socket,
+					uint16_t descriptor, volatile void *buffer, uint16_t length,
+					uint16_t chain);
+extern void Fx3DmaFillDescriptorRead(uint32_t socket, uint16_t descriptor,
+				     const volatile void *buffer,
+				     uint16_t length, uint16_t chain);
+extern void Fx3DmaFillDescriptorWrite(uint32_t socket, uint16_t descriptor,
+				      volatile void *buffer, uint16_t length,
+				      uint16_t chain);
 extern void Fx3DmaSimpleTransferRead(uint32_t socket, uint16_t descriptor,
 				     const volatile void *buffer, uint16_t length);
 extern void Fx3DmaSimpleTransferWrite(uint32_t socket, uint16_t descriptor,
 				      volatile void *buffer, uint16_t length);
+extern void Fx3DmaStartProducer(uint32_t socket, uint16_t descriptor,
+				uint32_t size, uint32_t count);
+extern void Fx3DmaStartConsumer(uint32_t socket, uint16_t descriptor,
+				uint32_t size, uint32_t count);
+
 
 #endif /* BSP_DMA_H_ */
