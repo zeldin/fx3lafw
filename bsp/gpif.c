@@ -37,14 +37,20 @@ static void Fx3GpifPibIsr(void)
 
   Fx3UartTxString("Fx3GpifPibIsr\n");
 
-  if (req & FX3_PIB_INTR_MASK_GPIF_INTERRUPT) {
+  if (req & FX3_PIB_INTR_GPIF_ERR) {
+    Fx3UartTxString("  GPIF ERROR\n");
+    /* Pause on error */
+    Fx3SetReg32(FX3_GPIF_WAVEFORM_CTRL_STAT, FX3_GPIF_WAVEFORM_CTRL_STAT_PAUSE);
+  }
+
+  if (req & FX3_PIB_INTR_GPIF_INTERRUPT) {
     Fx3UartTxString("  GPIF\n");
     uint32_t gpif_req = Fx3ReadReg32(FX3_GPIF_INTR) & Fx3ReadReg32(FX3_GPIF_INTR_MASK);
     Fx3WriteReg32(FX3_GPIF_INTR, gpif_req);
 
-    if (gpif_req & FX3_GPIF_INTR_MASK_GPIF_INTR)
+    if (gpif_req & FX3_GPIF_INTR_GPIF_INTR)
       Fx3UartTxString("    INTR\n");
-    if (gpif_req & FX3_GPIF_INTR_MASK_GPIF_DONE)
+    if (gpif_req & FX3_GPIF_INTR_GPIF_DONE)
       Fx3UartTxString("    DONE\n");
   }
 
@@ -186,7 +192,8 @@ void Fx3GpifPibStart(uint16_t clock_divisor_x2)
 
   Fx3WriteReg32(FX3_VIC_VEC_ADDRESS + (FX3_IRQ_GPIF_CORE<<2), Fx3GpifPibIsr);
   Fx3WriteReg32(FX3_PIB_INTR, Fx3ReadReg32(FX3_PIB_INTR));
-  Fx3WriteReg32(FX3_PIB_INTR_MASK, FX3_PIB_INTR_MASK_GPIF_INTERRUPT);
+  Fx3WriteReg32(FX3_PIB_INTR_MASK, FX3_PIB_INTR_MASK_GPIF_ERR |
+		FX3_PIB_INTR_MASK_GPIF_INTERRUPT);
   Fx3WriteReg32(FX3_VIC_INT_ENABLE, (1UL << FX3_IRQ_GPIF_CORE));
 }
 
