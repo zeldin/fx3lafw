@@ -18,22 +18,22 @@ static const uint16_t functions[]  = {
 
 static const Fx3GpifWaveform_t waveforms[] = {
   [0] = { GPIF_START_STATE(0), .left=1 },
-  [1] = { GPIF_STATE(1, FX3_GPIO_LAMBDA_INDEX_DMA_RDY, 0, 0, 0, 2, 0,
-		     FX3_GPIO_ALPHA_SAMPLE_DIN, 0,
+  [1] = { GPIF_STATE(1, FX3_GPIF_LAMBDA_INDEX_DMA_RDY, 0, 0, 0, 2, 0,
+		     FX3_GPIF_ALPHA_SAMPLE_DIN, 0,
 		     0, 0, 0), .left = 2 },
-  [2] = { GPIF_STATE(2, FX3_GPIO_LAMBDA_INDEX_DATA_CNT_HIT /* Fa */, 0,
+  [2] = { GPIF_STATE(2, FX3_GPIF_LAMBDA_INDEX_DATA_CNT_HIT /* Fa */, 0,
 		     0, 0, 0, 2,
-		     0, FX3_GPIO_ALPHA_SAMPLE_DIN,
-		     FX3_GPIO_BETA_WQ_PUSH |
-		     FX3_GPIO_BETA_COUNT_DATA, 0, 1), .right=2 },
+		     0, FX3_GPIF_ALPHA_SAMPLE_DIN,
+		     FX3_GPIF_BETA_WQ_PUSH |
+		     FX3_GPIF_BETA_COUNT_DATA, 0, 1), .right=2 },
 };
 
 static Fx3GpifRegisters_t registers = {
   .config = (FX3_GPIF_CONFIG_ENABLE |
 	     FX3_GPIF_CONFIG_THREAD_IN_STATE |
 	     FX3_GPIF_CONFIG_CLK_SOURCE),
-  .ad_config = (FX3_GPIO_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_A_OEN_CFG_SHIFT) |
-               (FX3_GPIO_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_DQ_OEN_CFG_SHIFT),
+  .ad_config = (FX3_GPIF_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_A_OEN_CFG_SHIFT) |
+               (FX3_GPIF_OEN_CFG_INPUT << FX3_GPIF_AD_CONFIG_DQ_OEN_CFG_SHIFT),
   .data_count_config = (1UL << FX3_GPIF_DATA_COUNT_CONFIG_INCREMENT_SHIFT) |
                        FX3_GPIF_DATA_COUNT_CONFIG_DOWN_UP |
                        FX3_GPIF_DATA_COUNT_CONFIG_SW_RESET |
@@ -42,7 +42,7 @@ static Fx3GpifRegisters_t registers = {
   .thread_config[0] = (FX3_GPIF_THREAD_CONFIG_ENABLE |
 		       (1UL << FX3_GPIF_THREAD_CONFIG_WATERMARK_SHIFT) |
 		       (4UL << FX3_GPIF_THREAD_CONFIG_BURST_SIZE_SHIFT)),
-  .beta_deassert = FX3_GPIO_BETA_WQ_PUSH,
+  .beta_deassert = FX3_GPIF_BETA_WQ_PUSH,
 };
 
 static volatile uint8_t gpif_buf[NUM_DMA_BUFFERS][DMA_BUFFER_SIZE] __attribute__((aligned(32)));
