@@ -69,7 +69,8 @@ void Fx3DmaAbortSocket(uint32_t socket)
 }
 
 static void Fx3DmaFillDescriptor(uint16_t descriptor, uint32_t buffer,
-				 uint32_t sync, uint32_t size, uint16_t chain)
+				 uint32_t sync, uint32_t size,
+				 uint16_t wrchain, uint16_t rdchain)
 {
   volatile struct Fx3DmaDescriptor *desc = FX3_DMA_DESCRIPTOR(descriptor);
 
@@ -80,8 +81,8 @@ static void Fx3DmaFillDescriptor(uint16_t descriptor, uint32_t buffer,
   desc->dscr_sync = sync;
   desc->dscr_size = size;
   desc->dscr_chain =
-    (chain << FX3_DSCR_CHAIN_WR_NEXT_DSCR_SHIFT) |
-    (chain << FX3_DSCR_CHAIN_RD_NEXT_DSCR_SHIFT);
+    (wrchain << FX3_DSCR_CHAIN_WR_NEXT_DSCR_SHIFT) |
+    (rdchain << FX3_DSCR_CHAIN_RD_NEXT_DSCR_SHIFT);
 
   Fx3CacheCleanDCacheEntry(desc);
 }
@@ -123,7 +124,7 @@ static void Fx3DmaWaitForEvent(uint32_t socket, uint32_t event)
 
 void Fx3DmaFillDescriptorThrough(uint32_t prod_socket, uint32_t cons_socket,
 				 uint16_t descriptor, volatile void *buffer,
-				 uint16_t length, uint16_t chain)
+				 uint16_t length, uint16_t wrchain, uint16_t rdchain)
 {
   Fx3DmaFillDescriptor(descriptor, (uint32_t)buffer,
 		       FX3_DSCR_SYNC_EN_PROD_INT |
@@ -134,7 +135,8 @@ void Fx3DmaFillDescriptorThrough(uint32_t prod_socket, uint32_t cons_socket,
 		       FX3_DSCR_SYNC_EN_CONS_EVENT |
 		       (FX3_DMA_SOCKET_IP(cons_socket) << FX3_DSCR_SYNC_CONS_IP_SHIFT) |
 		       (FX3_DMA_SOCKET_SCK(cons_socket) << FX3_DSCR_SYNC_CONS_SCK_SHIFT),
-		       (length + 15) & FX3_DSCR_SIZE_BUFFER_SIZE_MASK, chain);
+		       (length + 15) & FX3_DSCR_SIZE_BUFFER_SIZE_MASK,
+		       wrchain, rdchain);
 }
 
 void Fx3DmaFillDescriptorRead(uint32_t socket, uint16_t descriptor,
@@ -151,7 +153,7 @@ void Fx3DmaFillDescriptorRead(uint32_t socket, uint16_t descriptor,
 		       (FX3_DMA_SOCKET_SCK(socket) << FX3_DSCR_SYNC_CONS_SCK_SHIFT),
 		       (length << FX3_DSCR_SIZE_BYTE_COUNT_SHIFT) |
 		       ((length + 15) & FX3_DSCR_SIZE_BUFFER_SIZE_MASK) |
-		       FX3_DSCR_SIZE_BUFFER_OCCUPIED, chain);
+		       FX3_DSCR_SIZE_BUFFER_OCCUPIED, chain, chain);
 }
 
 void Fx3DmaFillDescriptorWrite(uint32_t socket, uint16_t descriptor,
@@ -166,7 +168,7 @@ void Fx3DmaFillDescriptorWrite(uint32_t socket, uint16_t descriptor,
 		       FX3_DSCR_SYNC_EN_CONS_INT |
 		       FX3_DSCR_SYNC_EN_CONS_EVENT |
 		       (0x3FUL << FX3_DSCR_SYNC_CONS_IP_SHIFT),
-		       (length + 15) & FX3_DSCR_SIZE_BUFFER_SIZE_MASK, chain);
+		       (length + 15) & FX3_DSCR_SIZE_BUFFER_SIZE_MASK, chain, chain);
 }
 
 void Fx3DmaSimpleTransferRead(uint32_t socket, uint16_t descriptor,

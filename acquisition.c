@@ -64,7 +64,9 @@ static void setup_descriptors(void)
     unsigned next = (i==NUM_DMA_BUFFERS-1? 0 : i+1);
     Fx3DmaFillDescriptorThrough(FX3_PIB_DMA_SCK(0), FX3_UIB_DMA_SCK(2),
 				dma_buffer_descriptor[i], gpif_buf[i],
-				DMA_BUFFER_SIZE, dma_buffer_descriptor[next]);
+				DMA_BUFFER_SIZE,
+				dma_buffer_descriptor[next],
+				dma_buffer_descriptor[next]);
   }
 }
 

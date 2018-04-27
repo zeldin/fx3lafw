@@ -53,7 +53,7 @@ extern void Fx3DmaFreeDescriptor(uint16_t d);
 extern void Fx3DmaAbortSocket(uint32_t socket);
 extern void Fx3DmaFillDescriptorThrough(uint32_t prod_socket, uint32_t cons_socket,
 					uint16_t descriptor, volatile void *buffer, uint16_t length,
-					uint16_t chain);
+					uint16_t wrchain, uint16_t rdchain);
 extern void Fx3DmaFillDescriptorRead(uint32_t socket, uint16_t descriptor,
 				     const volatile void *buffer,
 				     uint16_t length, uint16_t chain);
