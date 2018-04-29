@@ -16,9 +16,9 @@ VPATH = bsp
 
 OBJS = main.o usb.o gpif.o gctl.o gpio.o uart.o util.o dma.o irq.o cache.o vectors.o descriptors.o acquisition.o
 
-all : fx3lafw.img
+all : fx3lafw-cypress-fx3.fw
 
-fx3lafw.img : fx3lafw.elf
+fx3lafw-cypress-fx3.fw : fx3lafw.elf
 	python3 elf2img.py $< $@
 
 clean :
