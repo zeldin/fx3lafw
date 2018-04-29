@@ -5,11 +5,14 @@ This is an open source firmware for using a Cypress FX3 USB controller
 as a logic analyzer with sigrok.  It does not rely on any libraries or
 tools provided by Cypress under license.
 
-This is a work in progress, it is not yet functional as a logic
-analyzer.
+This is a work in progress, some functionality such as HighSpeed
+compatibility is not yet implemented.
 
 Currently supported hardware is the CYUSB3KIT-003 "SuperSpeed Explorer
 Kit".
+
+There is [a branch of libsigrok on github](https://github.com/zeldin/libsigrok/commits/fx3lafw)
+which contains the host side support.
 
 
 Building
