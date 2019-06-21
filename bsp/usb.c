@@ -63,6 +63,46 @@ static void Fx3UsbWritePhyReg(uint16_t phy_addr, uint16_t phy_val)
     ;
 }
 
+static void Fx3UsbConnectHighSpeed(void)
+{
+	Fx3UsbWritePhyReg(0x1005, 0x0000);
+	/* Force the link state machine into SS.Disabled. */
+	Fx3WriteReg32(FX3_LNK_LTSSM_STATE,(0UL << (6)) | (1UL << 12));
+	/* Change EPM config to full speed */
+	Fx3ClearReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+	Fx3WriteReg32(FX3_GCTL_UIB_CORE_CLK,
+			(2UL << FX3_GCTL_UIB_CORE_CLK_PCLK_SRC_SHIFT) |
+			(2UL << FX3_GCTL_UIB_CORE_CLK_EPMCLK_SRC_SHIFT));
+	Fx3SetReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+	/* Switch the EPM to USB 2.0 mode, turn off USB 3.0 PHY and remove Rx Termination. */
+	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSDEV_ENABLE);
+	Fx3UtilDelayUs(5);
+	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSEPM_ENABLE);
+        Fx3ClearReg32(FX3_UIB_INTR_MASK, FX3_UIB_INTR_DEV_CTL_INT |
+					FX3_UIB_INTR_DEV_EP_INT |
+					FX3_UIB_INTR_LNK_INT |
+					FX3_UIB_INTR_PROT_INT |
+					FX3_UIB_INTR_PROT_EP_INT |
+					FX3_UIB_INTR_EPM_URUN);
+        *(volatile uint32_t *)(void*)(FX3_LNK_PHY_CONF) &= 0x1FFFFFFF;
+   
+
+
+
+        	
+
+
+
+
+
+
+
+
+	Fx3UartTxString("end of function HS!\n");
+}
+
 static void Fx3UsbConnectSuperSpeed(void)
 {
   Fx3WriteReg32(FX3_LNK_PHY_TX_TRIM, 0x0b569011UL);
@@ -311,6 +351,7 @@ static void Fx3UsbUsbCoreIsr(void)
     }
     if (lnk_req & FX3_LNK_INTR_LTSSM_DISCONNECT) {
       Fx3UartTxString("    LTSSM_DISCONNECT\n");
+      Fx3UsbConnectHighSpeed();
     }
     if (lnk_req & FX3_LNK_INTR_LTSSM_CONNECT) {
       Fx3UartTxString("    LTSSM_CONNECT\n");
