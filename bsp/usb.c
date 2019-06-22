@@ -90,7 +90,7 @@ static void Fx3UsbConnectHighSpeed(void)
 					FX3_UIB_INTR_PROT_EP_INT |
 					FX3_UIB_INTR_EPM_URUN);
 
-        *(volatile uint32_t *)(void*)(FX3_LNK_PHY_CONF) &= 0x1FFFFFFF;
+        *(volatile uint32_t *)(void*)(FX3_LNK_PHY_CONF) &= 0x1FFFFFFFUL;
         Fx3WriteReg32(FX3_LNK_PHY_MPLL_STATUS,0x910410);
 
 	/* Power cycle the PHY blocks. */
@@ -105,11 +105,31 @@ static void Fx3UsbConnectHighSpeed(void)
 	Fx3WriteReg32(FX3_OTG_INTR, ~0UL);
 
 	/* Clear and disable USB 3.0 interrupts. */
+	Fx3WriteReg32(FX3_LNK_INTR_MASK, 0UL);
+	Fx3WriteReg32(FX3_LNK_INTR, ~0UL);
+	Fx3WriteReg32(FX3_PROT_INTR_MASK, 0UL);
+	Fx3WriteReg32(FX3_PROT_INTR, ~0UL);
+
+        Fx3SetReg32(FX3_UIB_INTR_MASK, FX3_UIB_INTR_DEV_CTL_INT |
+					FX3_UIB_INTR_DEV_EP_INT |
+					FX3_UIB_INTR_LNK_INT |
+					FX3_UIB_INTR_PROT_INT |
+					FX3_UIB_INTR_PROT_EP_INT |
+					FX3_UIB_INTR_EPM_URUN);
+
+	/* Disable EP0-IN and EP0-OUT (USB-2). */
+        Fx3ClearReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_VALID);
+        Fx3ClearReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_VALID);
 	
+	Fx3WriteReg32(FX3_EHCI_PORTSC, (1UL << 22));
 
+        Fx3WriteReg32(FX3_DEV_PWR_CS, FX3_UIB_INTR_MASK, (1UL << 2) | (1UL << 3));
 
+	/* Enable USB 2.0 PHY. */
+	Fx3UtilDelayUs(2);
+	Fx3SetReg32(FX3_OTG_CTRL, (1UL << 13);
 
-        	
+	Fx3UtilDelayUs(100);
 
 
 
