@@ -68,6 +68,7 @@ static void Fx3UsbConnectHighSpeed(void)
 	Fx3UsbWritePhyReg(0x1005, 0x0000);
 	/* Force the link state machine into SS.Disabled. */
 	Fx3WriteReg32(FX3_LNK_LTSSM_STATE,(0UL << (6)) | (1UL << 12));
+
 	/* Change EPM config to full speed */
 	Fx3ClearReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
 	Fx3UtilDelayUs(5);
@@ -76,18 +77,35 @@ static void Fx3UsbConnectHighSpeed(void)
 			(2UL << FX3_GCTL_UIB_CORE_CLK_EPMCLK_SRC_SHIFT));
 	Fx3SetReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
 	Fx3UtilDelayUs(5);
+
 	/* Switch the EPM to USB 2.0 mode, turn off USB 3.0 PHY and remove Rx Termination. */
 	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSDEV_ENABLE);
 	Fx3UtilDelayUs(5);
 	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSEPM_ENABLE);
+
         Fx3ClearReg32(FX3_UIB_INTR_MASK, FX3_UIB_INTR_DEV_CTL_INT |
 					FX3_UIB_INTR_DEV_EP_INT |
 					FX3_UIB_INTR_LNK_INT |
 					FX3_UIB_INTR_PROT_INT |
 					FX3_UIB_INTR_PROT_EP_INT |
 					FX3_UIB_INTR_EPM_URUN);
+
         *(volatile uint32_t *)(void*)(FX3_LNK_PHY_CONF) &= 0x1FFFFFFF;
-   
+        Fx3WriteReg32(FX3_LNK_PHY_MPLL_STATUS,0x910410);
+
+	/* Power cycle the PHY blocks. */
+        Fx3ClearReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_USB_POWER_EN);
+	Fx3UtilDelayUs(5);
+	Fx3SetReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_USB_POWER_EN);
+	Fx3UtilDelayUs(10);
+
+	/* Clear USB 2.0 interrupts. */
+	Fx3WriteReg32(FX3_DEV_CTRL_INTR, ~0UL);
+	Fx3WriteReg32(FX3_DEV_EP_INTR, ~0UL);
+	Fx3WriteReg32(FX3_OTG_INTR, ~0UL);
+
+	/* Clear and disable USB 3.0 interrupts. */
+	
 
 
 
@@ -100,7 +118,7 @@ static void Fx3UsbConnectHighSpeed(void)
 
 
 
-	Fx3UartTxString("end of function HS!\n");
+	Fx3UartTxString("function end HS!\n");
 }
 
 static void Fx3UsbConnectSuperSpeed(void)
