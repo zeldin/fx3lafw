@@ -123,18 +123,27 @@ static void Fx3UsbConnectHighSpeed(void)
 	
 	Fx3WriteReg32(FX3_EHCI_PORTSC, (1UL << 22));
 
-        Fx3WriteReg32(FX3_DEV_PWR_CS, FX3_UIB_INTR_MASK, (1UL << 2) | (1UL << 3));
+        Fx3WriteReg32(FX3_DEV_PWR_CS, (1UL << 2) | (1UL << 3));
 
 	/* Enable USB 2.0 PHY. */
 	Fx3UtilDelayUs(2);
-	Fx3SetReg32(FX3_OTG_CTRL, (1UL << 13);
+	Fx3SetReg32(FX3_OTG_CTRL, (1UL << 13));
 
 	Fx3UtilDelayUs(100);
+        Fx3WriteReg32(FX3_PHY_CONF, 0xd4a480UL);
+        Fx3WriteReg32(FX3_PHY_CLK_AND_TEST, 0xa0000011UL);
+	Fx3UtilDelayUs(80);
 
+	Fx3ClearReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+	Fx3WriteReg32(FX3_GCTL_UIB_CORE_CLK,
+			(2UL << FX3_GCTL_UIB_CORE_CLK_PCLK_SRC_SHIFT) |
+			(0UL << FX3_GCTL_UIB_CORE_CLK_EPMCLK_SRC_SHIFT));
+	Fx3SetReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
 
-
-
-
+	/* For USB 2.0 connections, enable pull-up on D+ pin. */
+        Fx3ClearReg32(FX3_DEV_PWR_CS, (1UL << 3));
 
 
 
