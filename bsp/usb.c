@@ -63,61 +63,6 @@ static void Fx3UsbWritePhyReg(uint16_t phy_addr, uint16_t phy_val)
     ;
 }
 
-static void Fx3UsbResume(void)
-{
-	Fx3UartTxString("    resume\n");
-
-}
-
-static void Fx3UsbSuspend(void)
-{
-	Fx3UartTxString("    suspend\n");
-
-}
-
-static void Fx3UsbReset(void)
-{
-	Fx3UartTxString("    reset\n");
-
-}
-
-static void Fx3UsbHsGrant(void)
-{
-	Fx3UartTxString("    hsgrant\n");
-
-}
-
-static void Fx3UsbStatus(void)
-{
-	Fx3UartTxString("    status\n");
-
-}
-
-static void Fx3UsbSudav(void)
-{
-	Fx3UartTxString("    sudav\n");
-	uint32_t setupdat0;
-	uint32_t setupdat1;
-	setupdat0 = Fx3ReadReg32(FX3_DEV_SETUPDAT+0);
-	setupdat1 = Fx3ReadReg32(FX3_DEV_SETUPDAT+4);
-
-	uint8_t req_type = setupdat0 >> 0;
-        uint16_t length = setupdat1 >> 	(48 - 32);
-	if ((req_type & FX3_USB_REQTYPE_DIR_MASK) == FX3_USB_REQTYPE_IN)
-		/* IN transfer */
-		Fx3WriteReg32(FX3_DEV_EPI_XFER_CNT, length);
-        else
-        	/* OUT transfer */
-	Fx3WriteReg32(FX3_DEV_EPO_XFER_CNT, length);
-        (*Fx3UsbUserCallbacks->sutok)
-	(req_type, setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
-	 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
-	 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
-	 length);
-
-
-
-}
 
 static void Fx3UsbConnectHighSpeed(void)
 {
@@ -475,38 +420,65 @@ static void Fx3UsbUsbCoreIsr(void)
         if (dev_ctrl_req & (1UL << 8))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 8));
-		Fx3UsbResume();
+		Fx3UartTxString("    resume\n");
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 8));
 	}
 	if (dev_ctrl_req & (1UL << 2))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 2));
-		Fx3UsbSuspend();
+		Fx3UartTxString("    suspend\n");
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 2));
 	}
 
 	if (dev_ctrl_req & (1UL << 3))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 3));
-		Fx3UsbReset();
+		Fx3UartTxString("    reset\n");
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 3));
 	}
 	if (dev_ctrl_req & (1UL << 4))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 4));
-		Fx3UsbHsGrant();
+		Fx3UartTxString("    hsgrant\n");
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 4));
 	}
 	if (dev_ctrl_req & (1UL << 11))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 11));
-		Fx3UsbStatus();
+		Fx3UartTxString("    status\n");
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 11));
 	}
 	if (dev_ctrl_req & (1UL << 6))
 	{
 		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 6));
-		Fx3UsbSudav();
+		Fx3UartTxString("    sudav\n");
+		Fx3WriteReg32(FX3_DEV_EPO_CS + 0, FX3_DEV_EPO_CS_VALID);
+	        Fx3WriteReg32(FX3_DEV_EPI_CS + 0, FX3_DEV_EPI_CS_VALID);
+
+		Fx3DmaAbortSocket(FX3_UIB_DMA_SCK(0));
+	        Fx3DmaAbortSocket(FX3_UIBIN_DMA_SCK(0));
+		Fx3SetReg32(FX3_EEPM_ENDPOINT, FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+	        Fx3UtilDelayUs(10);
+		Fx3ClearReg32(FX3_EEPM_ENDPOINT, FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+
+		uint32_t setupdat0;
+		uint32_t setupdat1;
+		setupdat0 = Fx3ReadReg32(FX3_DEV_SETUPDAT+0);
+		setupdat1 = Fx3ReadReg32(FX3_DEV_SETUPDAT+4);
+
+		uint8_t req_type = setupdat0 >> 0;
+		uint16_t length = setupdat1 >> 	(48 - 32);
+		if ((req_type & FX3_USB_REQTYPE_DIR_MASK) == FX3_USB_REQTYPE_IN)
+			/* IN transfer */
+			Fx3WriteReg32(FX3_DEV_EPI_XFER_CNT, length);
+		else
+			/* OUT transfer */
+			Fx3WriteReg32(FX3_DEV_EPO_XFER_CNT, length);
+		/*	(*Fx3UsbUserCallbacks->sutok)
+			(req_type, setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
+			 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
+			 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
+			 length); */
 		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 6));
 	}
 	if (dev_ctrl_req & (1UL << 7))
