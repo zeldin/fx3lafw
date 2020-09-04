@@ -140,10 +140,62 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
   Fx3UsbStallEp0();
 }
 
+static void SetupDataHS(uint8_t request_type, uint8_t request, uint16_t value,
+          uint16_t index, uint16_t length)
+{
+  char buf[64];
+  snprintf(buf, sizeof(buf),
+     "req: %02x %02x value: %04x index: %04x length: %04x\n",
+     (unsigned)request_type, (unsigned)request,
+     (unsigned)value, (unsigned)index, (unsigned)length);
+  Fx3UartTxString(buf);
+
+  if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) == FX3_USB_REQTYPE_TYPE_VENDOR) {
+    VendorCommand(request_type, request, value, index, length);
+    return;
+  }
+
+  if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) != FX3_USB_REQTYPE_TYPE_STD)
+    goto stall;
+
+  switch(request) {
+  case FX3_USB_STD_REQUEST_GET_DESCRIPTOR:
+    if (request_type !=
+  (FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
+      goto stall;
+    const uint8_t *descr = GetDescriptor(value>>8, value&0xff);
+    if (!descr) goto stall;
+    uint8_t descr_type = descr[1];
+    uint16_t len = (descr_type == FX3_USB_DESCRIPTOR_CONFIGURATION ||
+        descr_type == FX3_USB_DESCRIPTOR_BOS?
+        *(const uint16_t *)(descr+2) : *descr);
+    if (len < length)
+      length = len;
+    Fx3UsbUnstallEp0();
+    Fx3UsbDmaDataIn(0, descr, length);
+    return;
+
+  case FX3_USB_STD_REQUEST_SET_CONFIGURATION:
+    if (request_type !=
+  (FX3_USB_REQTYPE_OUT | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
+      goto stall;
+    if (value != 1)
+      goto stall;
+
+    Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, 1024);
+    Fx3UsbUnstallEp0();
+    return;
+  }
+
+ stall:
+  Fx3UsbStallEp0();
+}
+
 int main(void)
 {
   static const struct Fx3UsbCallbacks callbacks = {
-    .sutok = SetupData
+    .sutok = SetupData,
+    .sudav = SetupDataHS
   };
 
   Fx3CacheEnableCaches();

@@ -166,3 +166,9 @@ const void *GetDescriptor(uint8_t descriptor_type, uint8_t descriptor_no)
   return NULL;
 }
 
+const void *GetDescriptorHS(uint8_t descriptor_type, uint8_t descriptor_no)
+{
+   (void)(descriptor_type);
+   (void)(descriptor_no);
+   return NULL;
+}
