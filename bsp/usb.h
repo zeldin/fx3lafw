@@ -76,6 +76,8 @@ typedef enum {
 struct Fx3UsbCallbacks {
   void (*sutok)(uint8_t request_type, uint8_t request, uint16_t value,
 		uint16_t index, uint16_t length);
+  void (*sudav)(uint8_t request_type, uint8_t request, uint16_t value,
+		uint16_t index, uint16_t length);
 };
 
 extern void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks);

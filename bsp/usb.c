@@ -474,12 +474,12 @@ static void Fx3UsbUsbCoreIsr(void)
 		else
 			/* OUT transfer */
 			Fx3WriteReg32(FX3_DEV_EPO_XFER_CNT, length);
-		/*	(*Fx3UsbUserCallbacks->sutok)
+			(*Fx3UsbUserCallbacks->sudav)
 			(req_type, setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
 			 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
 			 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
-			 length); */
-		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 6));
+			 length); 
+		//Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 6));
 	}
 	if (dev_ctrl_req & (1UL << 7))
 	{
