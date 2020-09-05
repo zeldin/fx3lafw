@@ -171,7 +171,7 @@ static void SetupDataHS(uint8_t request_type, uint8_t request, uint16_t value,
         *(const uint16_t *)(descr+2) : *descr);
     if (len < length)
       length = len;
-    Fx3UsbUnstallEp0();
+    Fx3UsbHSUnstallEp0();
     Fx3UsbDmaDataIn(0, descr, length);
     return;
 

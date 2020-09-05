@@ -310,6 +310,14 @@ void Fx3UsbUnstallEp0(void)
   Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
 }
 
+void Fx3UsbHSUnstallEp0(void)
+{
+  Fx3ClearReg32(FX3_DEV_EPI_CS+0,FX3_DEV_EPI_CS_STALL);
+  Fx3ClearReg32(FX3_DEV_EPO_CS+0,FX3_DEV_EPO_CS_STALL);
+  Fx3UtilDelayUs(1);
+  Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+}
+
 void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer, uint16_t length)
 {
   uint16_t d = Fx3DmaAllocateDescriptor();

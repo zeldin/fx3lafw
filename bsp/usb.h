@@ -84,6 +84,7 @@ extern void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks);
 extern void Fx3UsbConnect(void);
 extern void Fx3UsbStallEp0(void);
 extern void Fx3UsbUnstallEp0(void);
+void Fx3UsbHSUnstallEp0(void);
 extern void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer,
 			     uint16_t length);
 extern void Fx3UsbDmaDataIn(uint8_t ep, const volatile void *buffer,

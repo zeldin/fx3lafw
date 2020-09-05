@@ -1,9 +1,32 @@
 #include <stdint.h>
 #include <stddef.h>
-
+#include <bsp/uart.h>
 #include <bsp/usb.h>
 
 #include "descriptors.h"
+
+static const struct __attribute__((packed)) {
+  uint8_t length, descriptor_type;
+  uint16_t usb_version;
+  uint8_t device_class, sub_class, protocol, max_packet_size;
+  uint16_t vendor, product, dev_version;
+  uint8_t manuf_index, product_index, serial_index, num_configurations;
+} highspeed_device_descriptor = {
+  .length = sizeof(highspeed_device_descriptor),
+  .descriptor_type = FX3_USB_DESCRIPTOR_DEVICE,
+  .usb_version = 0x0200,
+  .device_class = 0xff,
+  .sub_class = 0xff,
+  .protocol = 0xff,
+  .max_packet_size = 64 /* 2^9 */,
+  .vendor = 0x04b4,
+  .product = 0x00f3,
+  .dev_version = 0x0001,
+  .manuf_index = 1,
+  .product_index = 2,
+  .serial_index = 3,
+  .num_configurations = 1
+};
 
 static const struct __attribute__((packed)) {
   uint8_t length, descriptor_type;
@@ -168,7 +191,13 @@ const void *GetDescriptor(uint8_t descriptor_type, uint8_t descriptor_no)
 
 const void *GetDescriptorHS(uint8_t descriptor_type, uint8_t descriptor_no)
 {
-   (void)(descriptor_type);
-   (void)(descriptor_no);
+  switch(descriptor_type) {
+  case FX3_USB_DESCRIPTOR_DEVICE:
+    if (descriptor_no == 0)
+        //Fx3UartTxString("\nim here!\n");
+      return &highspeed_device_descriptor;
+    break;
+   }
+   //(void)(descriptor_no);
    return NULL;
 }
