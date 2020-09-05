@@ -3,3 +3,7 @@
 *.elf
 *.map
 *.img
+*.out
+*.fw
+tags
+*gitignore

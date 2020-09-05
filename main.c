@@ -163,7 +163,7 @@ static void SetupDataHS(uint8_t request_type, uint8_t request, uint16_t value,
     if (request_type !=
   (FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
       goto stall;
-    const uint8_t *descr = GetDescriptor(value>>8, value&0xff);
+    const uint8_t *descr = GetDescriptorHS(value>>8, value&0xff);
     if (!descr) goto stall;
     uint8_t descr_type = descr[1];
     uint16_t len = (descr_type == FX3_USB_DESCRIPTOR_CONFIGURATION ||
