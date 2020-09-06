@@ -166,13 +166,16 @@ static const uint16_t * const string_descriptors[] = {
   [3] = u"\x0312" "12345678",
 };
 
-const void *GetDescriptor(uint8_t descriptor_type, uint8_t descriptor_no)
+const void *GetDescriptor(uint8_t descriptor_type, uint8_t descriptor_no, Fx3UsbSpeed_t s)
 {
   switch(descriptor_type) {
   case FX3_USB_DESCRIPTOR_DEVICE:
-    if (descriptor_no == 0)
-      return &superspeed_device_descriptor;
-    break;
+    if (descriptor_no == 0){
+       if (s == FX3_USB_SUPER_SPEED)
+         return &superspeed_device_descriptor;
+       return &highspeed_device_descriptor;
+     } else
+        break;
   case FX3_USB_DESCRIPTOR_CONFIGURATION:
     if (descriptor_no == 0)
       return &superspeed_configuration_descriptor;
@@ -189,15 +192,3 @@ const void *GetDescriptor(uint8_t descriptor_type, uint8_t descriptor_no)
   return NULL;
 }
 
-const void *GetDescriptorHS(uint8_t descriptor_type, uint8_t descriptor_no)
-{
-  switch(descriptor_type) {
-  case FX3_USB_DESCRIPTOR_DEVICE:
-    if (descriptor_no == 0)
-        //Fx3UartTxString("\nim here!\n");
-      return &highspeed_device_descriptor;
-    break;
-   }
-   //(void)(descriptor_no);
-   return NULL;
-}

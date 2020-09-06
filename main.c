@@ -19,7 +19,7 @@
 static volatile uint8_t DmaBuf[32] __attribute__((aligned(32)));
 
 static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
-			  uint16_t index, uint16_t length)
+			  uint16_t index, uint16_t length, Fx3UsbSpeed_t s)
 {
   switch(request) {
   case CMD_START:
@@ -29,7 +29,7 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     if (value != 0 || index != 0 || length != sizeof(struct cmd_start_acquisition))
       goto stall;
     Fx3UartTxString("CMD_START\n");
-    Fx3UsbUnstallEp0();
+    Fx3UsbUnstallEp0(s);
     Fx3UsbDmaDataOut(0, DmaBuf, sizeof(struct cmd_start_acquisition));
     Fx3CacheInvalidateDCacheEntry(DmaBuf);
     volatile struct cmd_start_acquisition *cmd = (volatile struct cmd_start_acquisition *)DmaBuf;
@@ -69,7 +69,7 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     vinfo->major = 1;
     vinfo->minor = 3;
     Fx3CacheCleanDCacheEntry(DmaBuf);
-    Fx3UsbUnstallEp0();
+    Fx3UsbUnstallEp0(s);
     Fx3UsbDmaDataIn(0, DmaBuf, sizeof(struct version_info));
     return;
   case CMD_GET_REVID_VERSION:
@@ -81,16 +81,16 @@ static void VendorCommand(uint8_t request_type, uint8_t request, uint16_t value,
     Fx3UartTxString("CMD_GET_REVID_VERSION\n");
     DmaBuf[0] = 1;
     Fx3CacheCleanDCacheEntry(DmaBuf);
-    Fx3UsbUnstallEp0();
+    Fx3UsbUnstallEp0(s);
     Fx3UsbDmaDataIn(0, DmaBuf, 1);
     return;
   }
  stall:
-  Fx3UsbStallEp0();
+  Fx3UsbStallEp0(s);
 }
 
 static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
-		      uint16_t index, uint16_t length)
+		      uint16_t index, uint16_t length, Fx3UsbSpeed_t s)
 {
   char buf[64];
   snprintf(buf, sizeof(buf),
@@ -100,7 +100,7 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
   Fx3UartTxString(buf);
 
   if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) == FX3_USB_REQTYPE_TYPE_VENDOR) {
-    VendorCommand(request_type, request, value, index, length);
+    VendorCommand(request_type, request, value, index, length, s);
     return;
   }
 
@@ -112,7 +112,7 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
     if (request_type !=
 	(FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
       goto stall;
-    const uint8_t *descr = GetDescriptor(value>>8, value&0xff);
+    const uint8_t *descr = GetDescriptor(value>>8, value&0xff, s);
     if (!descr) goto stall;
     uint8_t descr_type = descr[1];
     uint16_t len = (descr_type == FX3_USB_DESCRIPTOR_CONFIGURATION ||
@@ -120,7 +120,7 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
 		    *(const uint16_t *)(descr+2) : *descr);
     if (len < length)
       length = len;
-    Fx3UsbUnstallEp0();
+    Fx3UsbUnstallEp0(s);
     Fx3UsbDmaDataIn(0, descr, length);
     return;
 
@@ -132,70 +132,20 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
       goto stall;
 
     Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, 1024);
-    Fx3UsbUnstallEp0();
+    Fx3UsbUnstallEp0(s);
     return;
   }
 
  stall:
-  Fx3UsbStallEp0();
+  Fx3UsbStallEp0(s);
 }
 
-static void SetupDataHS(uint8_t request_type, uint8_t request, uint16_t value,
-          uint16_t index, uint16_t length)
-{
-  char buf[64];
-  snprintf(buf, sizeof(buf),
-     "req: %02x %02x value: %04x index: %04x length: %04x\n",
-     (unsigned)request_type, (unsigned)request,
-     (unsigned)value, (unsigned)index, (unsigned)length);
-  Fx3UartTxString(buf);
 
-  if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) == FX3_USB_REQTYPE_TYPE_VENDOR) {
-    VendorCommand(request_type, request, value, index, length);
-    return;
-  }
-
-  if ((request_type & FX3_USB_REQTYPE_TYPE_MASK) != FX3_USB_REQTYPE_TYPE_STD)
-    goto stall;
-
-  switch(request) {
-  case FX3_USB_STD_REQUEST_GET_DESCRIPTOR:
-    if (request_type !=
-  (FX3_USB_REQTYPE_IN | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
-      goto stall;
-    const uint8_t *descr = GetDescriptorHS(value>>8, value&0xff);
-    if (!descr) goto stall;
-    uint8_t descr_type = descr[1];
-    uint16_t len = (descr_type == FX3_USB_DESCRIPTOR_CONFIGURATION ||
-        descr_type == FX3_USB_DESCRIPTOR_BOS?
-        *(const uint16_t *)(descr+2) : *descr);
-    if (len < length)
-      length = len;
-    Fx3UsbHSUnstallEp0();
-    Fx3UsbDmaDataIn(0, descr, length);
-    return;
-
-  case FX3_USB_STD_REQUEST_SET_CONFIGURATION:
-    if (request_type !=
-  (FX3_USB_REQTYPE_OUT | FX3_USB_REQTYPE_TYPE_STD | FX3_USB_REQTYPE_TGT_DEVICE))
-      goto stall;
-    if (value != 1)
-      goto stall;
-
-    Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, 1024);
-    Fx3UsbUnstallEp0();
-    return;
-  }
-
- stall:
-  Fx3UsbStallEp0();
-}
 
 int main(void)
 {
   static const struct Fx3UsbCallbacks callbacks = {
-    .sutok = SetupData,
-    .sudav = SetupDataHS
+    .sutok = SetupData
   };
 
   Fx3CacheEnableCaches();

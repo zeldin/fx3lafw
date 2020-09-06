@@ -292,31 +292,56 @@ void Fx3UsbConnect(void)
   }
 }
 
-void Fx3UsbStallEp0(void)
+void Fx3UsbStallEp0(Fx3UsbSpeed_t s)
 {
   Fx3UartTxString("STALL EP0!\n");
-  
-  Fx3SetReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
-  Fx3SetReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
-  Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  if (s == FX3_USB_SUPER_SPEED){
+    Fx3SetReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
+    Fx3SetReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  } else {
+    Fx3SetReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_STALL);
+    Fx3SetReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+  }
+
 }
 
-void Fx3UsbUnstallEp0(void)
+/*void Fx3UsbHSStallEp0(void)
 {
-  Fx3ClearReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
-  Fx3ClearReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
+  Fx3UartTxString("STALL HS EP0!\n");
+  
+  Fx3SetReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_STALL);
+  Fx3SetReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_STALL);
   Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+}*/
+
+void Fx3UsbUnstallEp0(Fx3UsbSpeed_t s)
+{
+  if (s == FX3_USB_SUPER_SPEED){
+    Fx3ClearReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
+    Fx3ClearReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  } else {
+    Fx3ClearReg32(FX3_DEV_EPI_CS+0,FX3_DEV_EPI_CS_STALL);
+    Fx3ClearReg32(FX3_DEV_EPO_CS+0,FX3_DEV_EPO_CS_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+  }
+  
 }
 
-void Fx3UsbHSUnstallEp0(void)
+/*void Fx3UsbHSUnstallEp0(void)
 {
   Fx3ClearReg32(FX3_DEV_EPI_CS+0,FX3_DEV_EPI_CS_STALL);
   Fx3ClearReg32(FX3_DEV_EPO_CS+0,FX3_DEV_EPO_CS_STALL);
   Fx3UtilDelayUs(1);
   Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
-}
+}*/
 
 void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer, uint16_t length)
 {
@@ -372,7 +397,7 @@ static void Fx3UsbUsbCoreIsr(void)
 	(req_type, sudat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
 	 sudat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
 	 sudat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
-	 length);
+	 length, FX3_USB_SUPER_SPEED);
     }
     if (prot_req & FX3_PROT_INTR_TIMEOUT_PORT_CFG_EV) {
       Fx3UartTxString("    TIMEOUT_PORT_CFG_EV\n");
@@ -482,11 +507,11 @@ static void Fx3UsbUsbCoreIsr(void)
 		else
 			/* OUT transfer */
 			Fx3WriteReg32(FX3_DEV_EPO_XFER_CNT, length);
-			(*Fx3UsbUserCallbacks->sudav)
+			(*Fx3UsbUserCallbacks->sutok)
 			(req_type, setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
 			 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
 			 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
-			 length); 
+			 length, FX3_USB_HIGH_SPEED); 
 		//Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 6));
 	}
 	if (dev_ctrl_req & (1UL << 7))
