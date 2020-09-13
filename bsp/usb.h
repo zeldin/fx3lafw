@@ -94,7 +94,7 @@ extern void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer,
 extern void Fx3UsbDmaDataIn(uint8_t ep, const volatile void *buffer,
 			    uint16_t length);
 extern void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type,
-				   uint16_t pktsize);
+				   Fx3UsbSpeed_t s);
 extern void Fx3UsbFlushInEndpoint(uint8_t ep);
 
 #endif /* BSP_USB_H_ */

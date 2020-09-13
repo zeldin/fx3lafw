@@ -131,7 +131,7 @@ static void SetupData(uint8_t request_type, uint8_t request, uint16_t value,
     if (value != 1)
       goto stall;
 
-    Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, 1024);
+    Fx3UsbEnableInEndpoint(2, FX3_USB_EP_BULK, s);
     Fx3UsbUnstallEp0(s);
     return;
   }

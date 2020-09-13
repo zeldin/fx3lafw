@@ -679,8 +679,14 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
 		(1UL << FX3_IRQ_GCTL_POWER) | (1UL << FX3_IRQ_USB_CORE) | (1UL << FX3_IRQ_GCTL_CORE));
 }
 
-void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pktsize)
+void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, Fx3UsbSpeed_t s)
 {
+  uint16_t pktsize;
+  if (s == FX3_USB_SUPER_SPEED)
+    pktsize = 1024;
+  else
+    pktsize = 512;
+
   static const uint8_t usb2_type_map[] = {
     [FX3_USB_EP_ISOCHRONOUS] = 1,
     [FX3_USB_EP_INTERRUPT] = 3,
