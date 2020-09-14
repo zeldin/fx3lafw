@@ -147,8 +147,6 @@ static void Fx3UsbConnectHighSpeed(void)
         Fx3ClearReg32(FX3_DEV_PWR_CS, (1UL << 3));
 
 
-
-	Fx3UartTxString("function end HS!\n");
 }
 
 static void Fx3UsbConnectSuperSpeed(void)
@@ -309,15 +307,7 @@ void Fx3UsbStallEp0(Fx3UsbSpeed_t s)
 
 }
 
-/*void Fx3UsbHSStallEp0(void)
-{
-  Fx3UartTxString("STALL HS EP0!\n");
-  
-  Fx3SetReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_STALL);
-  Fx3SetReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_STALL);
-  Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
-}*/
+
 
 void Fx3UsbUnstallEp0(Fx3UsbSpeed_t s)
 {
@@ -335,13 +325,7 @@ void Fx3UsbUnstallEp0(Fx3UsbSpeed_t s)
   
 }
 
-/*void Fx3UsbHSUnstallEp0(void)
-{
-  Fx3ClearReg32(FX3_DEV_EPI_CS+0,FX3_DEV_EPI_CS_STALL);
-  Fx3ClearReg32(FX3_DEV_EPO_CS+0,FX3_DEV_EPO_CS_STALL);
-  Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
-}*/
+
 
 void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer, uint16_t length)
 {
@@ -512,7 +496,7 @@ static void Fx3UsbUsbCoreIsr(void)
 			 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
 			 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
 			 length, FX3_USB_HIGH_SPEED); 
-		//Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 6));
+		
 	}
 	if (dev_ctrl_req & (1UL << 7))
 	{
@@ -681,6 +665,7 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
 
 void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pktsize)
 {
+  
   static const uint8_t usb2_type_map[] = {
     [FX3_USB_EP_ISOCHRONOUS] = 1,
     [FX3_USB_EP_INTERRUPT] = 3,
