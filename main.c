@@ -197,3 +197,40 @@ int main(void)
     Fx3UtilDelayUs(500000);
   }
 }
+
+/* Newlib's assert() calls this function if the assertion fails */
+void
+__assert_func (const char *file,
+        int line,
+        const char *func,
+        const char *failedexpr)
+{
+  if (file != NULL) {
+    char linestrbuf[16], *linestr = &linestrbuf[sizeof(linestrbuf)];
+    Fx3UartTxString(file);
+    Fx3UartTxChar(':');
+    /* Avoid using newlib functions like itoa so as not to trigger
+       a recursive assert... */
+    *--linestr = '\0';
+    while (line >= 10 && linestr != &linestrbuf[1]) {
+      *--linestr = '0' + (line % 10);
+      line /= 10;
+    }
+    *--linestr = '0' + line;
+    Fx3UartTxString(linestr);
+    Fx3UartTxString(": ");
+  }
+  if (func != NULL) {
+    Fx3UartTxString(func);
+    Fx3UartTxString(": ");
+  }
+  Fx3UartTxString("Assertion ");
+  if (failedexpr != NULL) {
+    Fx3UartTxChar('`');
+    Fx3UartTxString(failedexpr);
+    Fx3UartTxString("' ");
+  }
+  Fx3UartTxString("failed.\n");
+  for(;;)
+    ;
+}
