@@ -73,15 +73,22 @@ typedef enum {
   FX3_USB_EP_CONTROL,
 } Fx3UsbEndpointType_t;
 
+typedef enum {
+  FX3_USB_HIGH_SPEED = 0,
+  FX3_USB_SUPER_SPEED,
+} Fx3UsbSpeed_t;
+
 struct Fx3UsbCallbacks {
   void (*sutok)(uint8_t request_type, uint8_t request, uint16_t value,
-		uint16_t index, uint16_t length);
+		uint16_t index, uint16_t length, Fx3UsbSpeed_t s);
 };
 
 extern void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks);
 extern void Fx3UsbConnect(void);
-extern void Fx3UsbStallEp0(void);
-extern void Fx3UsbUnstallEp0(void);
+extern void Fx3UsbStallEp0(Fx3UsbSpeed_t s);
+
+extern void Fx3UsbUnstallEp0(Fx3UsbSpeed_t s);
+
 extern void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer,
 			     uint16_t length);
 extern void Fx3UsbDmaDataIn(uint8_t ep, const volatile void *buffer,

@@ -63,6 +63,92 @@ static void Fx3UsbWritePhyReg(uint16_t phy_addr, uint16_t phy_val)
     ;
 }
 
+
+static void Fx3UsbConnectHighSpeed(void)
+{
+	Fx3UsbWritePhyReg(0x1005, 0x0000);
+	/* Force the link state machine into SS.Disabled. */
+	Fx3WriteReg32(FX3_LNK_LTSSM_STATE,(0UL << (6)) | (1UL << 12));
+
+	/* Change EPM config to full speed */
+	Fx3ClearReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+	Fx3WriteReg32(FX3_GCTL_UIB_CORE_CLK,
+			(2UL << FX3_GCTL_UIB_CORE_CLK_PCLK_SRC_SHIFT) |
+			(2UL << FX3_GCTL_UIB_CORE_CLK_EPMCLK_SRC_SHIFT));
+	Fx3SetReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+
+	/* Switch the EPM to USB 2.0 mode, turn off USB 3.0 PHY and remove Rx Termination. */
+	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSDEV_ENABLE);
+	Fx3UtilDelayUs(5);
+	Fx3ClearReg32(FX3_OTG_CTRL, FX3_OTG_CTRL_SSEPM_ENABLE);
+
+        Fx3ClearReg32(FX3_UIB_INTR_MASK, FX3_UIB_INTR_DEV_CTL_INT |
+					FX3_UIB_INTR_DEV_EP_INT |
+					FX3_UIB_INTR_LNK_INT |
+					FX3_UIB_INTR_PROT_INT |
+					FX3_UIB_INTR_PROT_EP_INT |
+					FX3_UIB_INTR_EPM_URUN);
+
+        *(volatile uint32_t *)(void*)(FX3_LNK_PHY_CONF) &= 0x1FFFFFFFUL;
+        Fx3WriteReg32(FX3_LNK_PHY_MPLL_STATUS,0x910410);
+
+	/* Power cycle the PHY blocks. */
+        Fx3ClearReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_USB_POWER_EN);
+	Fx3UtilDelayUs(5);
+	Fx3SetReg32(FX3_GCTL_CONTROL, FX3_GCTL_CONTROL_USB_POWER_EN);
+	Fx3UtilDelayUs(10);
+
+	/* Clear USB 2.0 interrupts. */
+	Fx3WriteReg32(FX3_DEV_CTRL_INTR, ~0UL);
+	Fx3WriteReg32(FX3_DEV_EP_INTR, ~0UL);
+	Fx3WriteReg32(FX3_OTG_INTR, ~0UL);
+
+	/* Clear and disable USB 3.0 interrupts. */
+	Fx3WriteReg32(FX3_LNK_INTR_MASK, 0UL);
+	Fx3WriteReg32(FX3_LNK_INTR, ~0UL);
+	Fx3WriteReg32(FX3_PROT_INTR_MASK, 0UL);
+	Fx3WriteReg32(FX3_PROT_INTR, ~0UL);
+
+        Fx3SetReg32(FX3_UIB_INTR_MASK, FX3_UIB_INTR_DEV_CTL_INT |
+					FX3_UIB_INTR_DEV_EP_INT |
+					FX3_UIB_INTR_LNK_INT |
+					FX3_UIB_INTR_PROT_INT |
+					FX3_UIB_INTR_PROT_EP_INT |
+					FX3_UIB_INTR_EPM_URUN);
+
+	/* Disable EP0-IN and EP0-OUT (USB-2). */
+        Fx3ClearReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_VALID);
+        Fx3ClearReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_VALID);
+	
+	Fx3WriteReg32(FX3_EHCI_PORTSC, (1UL << 22));
+
+        Fx3WriteReg32(FX3_DEV_PWR_CS, (1UL << 2) | (1UL << 3));
+
+	/* Enable USB 2.0 PHY. */
+	Fx3UtilDelayUs(2);
+	Fx3SetReg32(FX3_OTG_CTRL, (1UL << 13));
+
+	Fx3UtilDelayUs(100);
+        Fx3WriteReg32(FX3_PHY_CONF, 0xd4a480UL);
+        Fx3WriteReg32(FX3_PHY_CLK_AND_TEST, 0xa0000011UL);
+	Fx3UtilDelayUs(80);
+
+	Fx3ClearReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+	Fx3WriteReg32(FX3_GCTL_UIB_CORE_CLK,
+			(2UL << FX3_GCTL_UIB_CORE_CLK_PCLK_SRC_SHIFT) |
+			(0UL << FX3_GCTL_UIB_CORE_CLK_EPMCLK_SRC_SHIFT));
+	Fx3SetReg32(FX3_GCTL_UIB_CORE_CLK, FX3_GCTL_UIB_CORE_CLK_CLK_EN);
+	Fx3UtilDelayUs(5);
+
+	/* For USB 2.0 connections, enable pull-up on D+ pin. */
+        Fx3ClearReg32(FX3_DEV_PWR_CS, (1UL << 3));
+
+
+}
+
 static void Fx3UsbConnectSuperSpeed(void)
 {
   Fx3WriteReg32(FX3_LNK_PHY_TX_TRIM, 0x0b569011UL);
@@ -204,23 +290,42 @@ void Fx3UsbConnect(void)
   }
 }
 
-void Fx3UsbStallEp0(void)
+void Fx3UsbStallEp0(Fx3UsbSpeed_t s)
 {
   Fx3UartTxString("STALL EP0!\n");
-  
-  Fx3SetReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
-  Fx3SetReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
-  Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  if (s == FX3_USB_SUPER_SPEED){
+    Fx3SetReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
+    Fx3SetReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  } else {
+    Fx3SetReg32(FX3_DEV_EPI_CS+0, FX3_DEV_EPI_CS_STALL);
+    Fx3SetReg32(FX3_DEV_EPO_CS+0, FX3_DEV_EPO_CS_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+  }
+
 }
 
-void Fx3UsbUnstallEp0(void)
+
+
+void Fx3UsbUnstallEp0(Fx3UsbSpeed_t s)
 {
-  Fx3ClearReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
-  Fx3ClearReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
-  Fx3UtilDelayUs(1);
-  Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  if (s == FX3_USB_SUPER_SPEED){
+    Fx3ClearReg32(FX3_PROT_EPI_CS1+0, FX3_PROT_EPI_CS1_STALL);
+    Fx3ClearReg32(FX3_PROT_EPO_CS1+0, FX3_PROT_EPO_CS1_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_PROT_CS, FX3_PROT_CS_SETUP_CLR_BUSY);
+  } else {
+    Fx3ClearReg32(FX3_DEV_EPI_CS+0,FX3_DEV_EPI_CS_STALL);
+    Fx3ClearReg32(FX3_DEV_EPO_CS+0,FX3_DEV_EPO_CS_STALL);
+    Fx3UtilDelayUs(1);
+    Fx3SetReg32(FX3_DEV_CS, FX3_DEV_CS_SETUP_CLR_BUSY);
+  }
+  
 }
+
+
 
 void Fx3UsbDmaDataOut(uint8_t ep, volatile void *buffer, uint16_t length)
 {
@@ -276,7 +381,7 @@ static void Fx3UsbUsbCoreIsr(void)
 	(req_type, sudat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
 	 sudat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
 	 sudat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
-	 length);
+	 length, FX3_USB_SUPER_SPEED);
     }
     if (prot_req & FX3_PROT_INTR_TIMEOUT_PORT_CFG_EV) {
       Fx3UartTxString("    TIMEOUT_PORT_CFG_EV\n");
@@ -311,6 +416,7 @@ static void Fx3UsbUsbCoreIsr(void)
     }
     if (lnk_req & FX3_LNK_INTR_LTSSM_DISCONNECT) {
       Fx3UartTxString("    LTSSM_DISCONNECT\n");
+      Fx3UsbConnectHighSpeed();
     }
     if (lnk_req & FX3_LNK_INTR_LTSSM_CONNECT) {
       Fx3UartTxString("    LTSSM_CONNECT\n");
@@ -324,10 +430,79 @@ static void Fx3UsbUsbCoreIsr(void)
     }
   }
   if (req & FX3_UIB_INTR_DEV_CTL_INT) {
-    Fx3UartTxString("  DEV_CTL\n");
-    uint32_t dev_ctrl_req =
-      Fx3ReadReg32(FX3_DEV_CTRL_INTR) & Fx3ReadReg32(FX3_DEV_CTRL_INTR_MASK);
-    Fx3WriteReg32(FX3_DEV_CTRL_INTR, dev_ctrl_req);
+	Fx3UartTxString("  DEV_CTL\n");
+	uint32_t dev_ctrl_req;
+	dev_ctrl_req = Fx3ReadReg32(FX3_DEV_CTRL_INTR) & Fx3ReadReg32(FX3_DEV_CTRL_INTR_MASK);
+        Fx3WriteReg32(FX3_DEV_CTRL_INTR, dev_ctrl_req);
+        if (dev_ctrl_req & (1UL << 8))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 8));
+		Fx3UartTxString("    resume\n");
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 8));
+	}
+	if (dev_ctrl_req & (1UL << 2))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 2));
+		Fx3UartTxString("    suspend\n");
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 2));
+	}
+
+	if (dev_ctrl_req & (1UL << 3))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 3));
+		Fx3UartTxString("    reset\n");
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 3));
+	}
+	if (dev_ctrl_req & (1UL << 4))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 4));
+		Fx3UartTxString("    hsgrant\n");
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 4));
+	}
+	if (dev_ctrl_req & (1UL << 11))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 11));
+		Fx3UartTxString("    status\n");
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 11));
+	}
+	if (dev_ctrl_req & (1UL << 6))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 6));
+		Fx3UartTxString("    sudav\n");
+		Fx3WriteReg32(FX3_DEV_EPO_CS + 0, FX3_DEV_EPO_CS_VALID);
+	        Fx3WriteReg32(FX3_DEV_EPI_CS + 0, FX3_DEV_EPI_CS_VALID);
+
+		Fx3DmaAbortSocket(FX3_UIB_DMA_SCK(0));
+	        Fx3DmaAbortSocket(FX3_UIBIN_DMA_SCK(0));
+		Fx3SetReg32(FX3_EEPM_ENDPOINT, FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+	        Fx3UtilDelayUs(10);
+		Fx3ClearReg32(FX3_EEPM_ENDPOINT, FX3_EEPM_ENDPOINT_SOCKET_FLUSH);
+
+		uint32_t setupdat0;
+		uint32_t setupdat1;
+		setupdat0 = Fx3ReadReg32(FX3_DEV_SETUPDAT+0);
+		setupdat1 = Fx3ReadReg32(FX3_DEV_SETUPDAT+4);
+
+		uint8_t req_type = setupdat0 >> 0;
+		uint16_t length = setupdat1 >> 	(48 - 32);
+		if ((req_type & FX3_USB_REQTYPE_DIR_MASK) == FX3_USB_REQTYPE_IN)
+			/* IN transfer */
+			Fx3WriteReg32(FX3_DEV_EPI_XFER_CNT, length);
+		else
+			/* OUT transfer */
+			Fx3WriteReg32(FX3_DEV_EPO_XFER_CNT, length);
+			(*Fx3UsbUserCallbacks->sutok)
+			(req_type, setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_REQUEST_SHIFT,
+			 setupdat0 >> FX3_PROT_SETUP_DAT_SETUP_VALUE_SHIFT,
+			 setupdat1 >> (FX3_PROT_SETUP_DAT_SETUP_INDEX_SHIFT - 32),
+			 length, FX3_USB_HIGH_SPEED); 
+		
+	}
+	if (dev_ctrl_req & (1UL << 7))
+	{
+		Fx3WriteReg32(FX3_DEV_CTRL_INTR, (1UL << 7));
+		Fx3SetReg32(FX3_DEV_CTRL_INTR_MASK, (1UL << 7));
+	}
   }
 
   Fx3WriteReg32(FX3_VIC_ADDRESS, 0);
@@ -490,6 +665,7 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
 
 void Fx3UsbEnableInEndpoint(uint8_t ep, Fx3UsbEndpointType_t type, uint16_t pktsize)
 {
+  
   static const uint8_t usb2_type_map[] = {
     [FX3_USB_EP_ISOCHRONOUS] = 1,
     [FX3_USB_EP_INTERRUPT] = 3,
