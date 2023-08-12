@@ -198,6 +198,12 @@ int main(void)
   }
 }
 
+/* Workaround for handling newlib being compiled with ssp */
+uintptr_t __stack_chk_guard = 0x00000aff;
+void __stack_chk_fail(void)
+{
+}
+
 /* Newlib's assert() calls this function if the assertion fails */
 void
 __assert_func (const char *file,

@@ -9,7 +9,7 @@ INCLUDE = -I.
 GENDEP = -MMD -MP
 DEFS = -DPLL_FBDIV=20
 
-CFLAGS = -std=c11 $(CGENFLAGS) $(WARN) $(OPTIMIZE) $(INCLUDE) $(GENDEP) $(DEFS)
+CFLAGS = -std=c11 $(CGENFLAGS) $(WARN) $(OPTIMIZE) $(INCLUDE) $(GENDEP) $(DEFS) -fno-stack-protector
 LDFLAGS = -static -nostartfiles -T bsp/fx3.ld -Wl,-z,max-page-size=4096,-Map,$(basename $@).map
 
 VPATH = bsp
