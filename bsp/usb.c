@@ -561,8 +561,9 @@ void Fx3UsbInit(const struct Fx3UsbCallbacks *callbacks)
   Fx3UtilDelayUs(50);
   Fx3SetReg32(FX3_UIB_POWER, FX3_UIB_POWER_RESETN);
   Fx3UtilDelayUs(100);
-  while((Fx3ReadReg32(FX3_UIB_POWER) & FX3_UIB_POWER_ACTIVE) == 0)
-    ;
+  uint32_t timeout = 0;
+  while(++timeout < 1000 && (Fx3ReadReg32(FX3_UIB_POWER) & FX3_UIB_POWER_ACTIVE) == 0)
+    Fx3UtilDelayUs(10);
 
   Fx3WriteReg32(FX3_OTG_CTRL, 0);
 
